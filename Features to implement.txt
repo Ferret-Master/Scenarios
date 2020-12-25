@@ -1,0 +1,48 @@
+1: Spawning in player units without screwing up player control/selections
+
+2: spawning in enemy units with optional alerting the player
+
+3: UI options in lobby to load a scenario
+
+4: Custom Victory Conditions.
+
+5: reading scenario data to modify unit related things to fit a mission. This would be needed if certain unit need to be disabled/enabled for some missions.
+
+Implementing 1/2:
+
+- Either option requires cheats or a second player to be the scenario master. Would be easiest with 2nd player but that goes against the design.
+
+for 1:
+
+- Referencing Puppet Master have cheat commands non visible to the player and the mod can trigger spawning units.
+
+Logic for this is just spawn in the unit lol.
+
+for 2:
+
+This is one of the main features I don't know how to do easily without messing up a player.
+
+Possible Method that fits most criteria(logic statements):
+
+1: Event is triggered that requires enemy spawns.
+
+2: Most of what the player was doing is saved.
+
+3: Player control switches to enemy but the vision remains the same.
+
+4: API spawns/builds in necessary units/event.
+
+5: control switches back and player data restored(selection etc)
+
+
+An modified method for 1/2 would be to have a custom avatar commander that is spawned in at the start do the work, this doesn't allow instant spawns of units but lets me control orientation and may be needed as the paste command requires line of site when I think about it. Issue with this is preventing the economy being affected or powering the builder without using metal. would be fine at the start due to storage limitations but not after.
+
+I could make copies of buildings I want to make with 0 cost but would be annoying.
+
+Notes:
+
+Any methods here need to only let lobby host do the spawns to prevent multiple player messing it up.
+
+Custom Avatar commander would be invisible, have no icon, and not be selectable/controllable.
+
+For things such as player powers the avatar com could build a invisible unit that acts as this power. e.g repair bomb that has a AOE repair blast.

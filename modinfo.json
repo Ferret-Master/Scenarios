@@ -1,0 +1,27 @@
+ {
+   "context": "client",
+   "identifier": "ferretmaster.scenarios",
+   "display_name": "scenarios",
+   "description": "custom scenarios",
+   "author": "ferretmaster",
+   "version": "1.1",
+   "build": "105067",
+   "date": "2017-11-13",
+   "signature": "not yet implemented",
+   "forum": "",
+   "priority": 100,
+   "icon": "",
+   "scenes": {
+    "live_game": [
+            
+            "coui://ui/mods/custom-api/build_preset.js",
+            "coui://ui/mods/custom-api/control_units.js"
+            
+        ]
+        
+        
+    },
+   "category": ["balance"]
+ }
+
+ 
