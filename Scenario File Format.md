@@ -44,17 +44,22 @@ successObjectives: ["control x area"], //links objectives together.
 failureObjectives: ["make x fabs"]
 }],
 
-triggers:[{
+triggers:[{//in future you should be able to use array's for nearly all fields for cool things.
+           // for example if you are using a trigger for ambience effects, you may want to be able to have it change effects throughout the game at particular intervals. 
+
+
 
 name:"spawn tele effect", //the name the trigger is reffered to by objectives/other places
 id : 2, //again to avoid duplicate triggers or something
-type: "effect", //type is used so I can hand off triggers early and not have a massive reader function.
-location: {},
+activation:"landing",//used to determine when to activate triggers not linked to objectives, can be useful for regular events or timed/gamestate related ones. activation = landing ,with delay lets you set it to activate x seconds from landing.
+type: "effect", //used to match a trigger to api's
+location: {}, //info to pass to api's if needed
 duration: {},
 delay: 10, //time after trigger is called that it does it's effect
 model: "", //if needed
 duration: 10, //in the case of any visual trigger this determines how long it is displayed to the player
 fbx: "", //if needed
+prefab: {"planet":0,"units":[['/pa/units/land/bot_factory/bot_factory.json',[-2.0239028930664062, -36.8651123046875, -17.118804931640625],[50,50,50]]]}
 
 
 

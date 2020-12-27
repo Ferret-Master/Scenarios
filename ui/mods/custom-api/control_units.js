@@ -5,7 +5,7 @@ function getRndInteger(min, max) {
   }
 function init_unit_control(api) {
     api.unit_control = {
-        doCommand:function(Planet, id, command, playerIndex,template, targetId){ 
+        doCommand:function(Planet, id, command, playerIndex,template,location, targetId){ 
         
         /*in the case of scenarios this is single unit, 
         will seperpate multiple units prior to calling this if needed. 
@@ -70,7 +70,7 @@ function init_unit_control(api) {
                 break;	
         
         
-        case 'startbuild':
+        case 'buildPreFab':
         
             //console.log("startbuild ran");
           

@@ -1,0 +1,89 @@
+/*
+
+this file contains all the functions that will  be called for checking and displaying objectives
+
+the top half will be objectiveCheckFunctions that check the progress/fulfillment of an objective.
+
+the bottom half are objectiveEffect functions and are ran when an objective becomes active. They are essentially built in triggers for each objective so that the scenario objectives don't require a bunch of starting triggers.
+
+it is possible I will switch to them in future though.
+
+e.g units in area will need an effect circle to signify the area.
+
+*/
+
+
+
+model.objectiveCheckFunctions = {};
+
+model.objectiveEffectFunctions = {};
+
+/*
+------------------------------------------- [Objective Checks] -------------------------------------------
+*/
+
+
+/*
+returns the number of units in an area.
+basis for other area functions such as grabbing the types or id's of units in an area.
+
+TODO needs array checks, same applys to functions it is calling.
+*/
+model.objectiveCheckFunctions["units_in_area"] = function(objectiveObject,playerId){
+
+    var unitCount = objectiveObject.needed;
+    var areaLocation = objectiveObject.location; // planet, center coordinates, and radius
+    var unitType = objectiveObject.unitType; //the units file name
+    var specificUnit = objectiveObject.specificUnit;
+    var specificUnitId = objectiveObject.specificUnitId;
+
+
+    //used for when you want a particular unit moved somewhere. e.g escort/commander
+    //checks through id's past back for the given one.
+
+
+    if(specificUnit == true){ //currently only checks 1 id
+
+        model.unitsInRadius(playerId,unitType,areaLocation).then(function(units){
+
+            if(_.contains(units,specificUnitId)){return true}
+            return 0;
+        });
+        
+    }
+
+    else{
+
+        model.unitsInRadius(playerId,unitType,areaLocation).then(function(units){
+
+        if(units.length>=unitCount){return true}
+        return units.length;
+
+        });
+
+    }    
+
+    
+
+
+}
+
+/*
+------------------------------------------- [Objective Effects] -------------------------------------------
+*/
+
+
+
+
+/*
+spawns a colored ring at a chosen location with a size roughly equal to the circle made by the given radius.
+*/
+model.objectiveEffectFunctions["spawn_ring"] = function(colorName,location,radius,duration){
+
+
+}
+
+
+
+
+

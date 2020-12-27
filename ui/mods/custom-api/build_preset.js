@@ -32,8 +32,15 @@ will be re writing this function when I do the format
 */
 function init_build_preset(api) {
     api.build_preset = {
-    buildCommand: function(unitid,planet,spec,location){
+    buildCommand: function(id,planet,structure){
                           
+        console.log("attempting build command with unitid: " + unitid + " planet: "+planet + " spec: "+ spec+" at location "+ location[0]);
+        // console.log(api.getWorldView(0).sendOrder({units: unitid,command: 'build',location: {planet: planet,multi_pos: [location,location]},spec: spec,queue: true}));
+        api.getWorldView(0).sendOrder({units: id,command: 'build',location: {planet: planet,multi_pos: [structure.pos,structure.pos],orient: structure.orientation},spec: structure.unitType,queue: true,group:true});
+    
+        },
+    buildCommandOld: function(unitid,planet,spec,location){
+                        
         console.log("attempting build command with unitid: " + unitid + " planet: "+planet + " spec: "+ spec+" at location "+ location[0]);
         // console.log(api.getWorldView(0).sendOrder({units: unitid,command: 'build',location: {planet: planet,multi_pos: [location,location]},spec: spec,queue: true}));
         api.getWorldView(0).sendOrder({units: unitid,command: 'build',location: {planet: planet,multi_pos: [location[0],location[0]],orient: location[1]},spec: spec,queue: true,group:true});
@@ -151,29 +158,15 @@ function init_build_preset(api) {
             },
 
 
-    ExactPreFab: function (prefab,build_location,planet,id){//takes in prefab object that defines everything needed
+    exactPreFab: function (id,prefab){//takes in prefab object that defines everything needed
 
-            var world = {id:0};
-           
-           
-         
-            for(var structure = 0; structure<prefab.length;structure++){
+            var planet = prefab.planet;
+            var unitArray = prefab.units;
+            for(var i = 0; i<unitArray.length;i++){
                 
+                var structure = unitArray[i];
                 
-            
-                var structureOffset = prefab[structure][1];
-                
-                var structureLocation = [build_location[0]+structureOffset[0],build_location[1]+structureOffset[1],build_location[2]+structureOffset[2]]; //applies prefab offsets to build location to get actual location
-            
-                
-                
-
-
-                var Blocation = structureLocation;
-                var specname = prefab[structure][0];
-                    
-                console.log("attempting to build prefab with location : "+Blocation)   
-                api.build_preset.buildCommand(id,planet,specname,Blocation);
+                api.build_preset.buildCommand(id,planet,structure);
                 
             }                                     
 

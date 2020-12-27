@@ -1,0 +1,76 @@
+{
+    "name": "exampleName",
+    "description": "a tutorial",
+    "scenarioID": 1,
+    "systemName": "Centax-3",
+    "author": "Ferretmaster",
+    "gameType": "Singleplayer",
+    "playerCount": 3,
+    "aiCount": 2,
+    "winCondition": "Default",
+    "objectives": [
+        {
+            "name": "build_bot_factorys",
+            "description": "build two bot factories in the highlighted area",
+            "type": "units_in_area",
+            "progress": 0,
+            "needed": 2,
+            "location": [
+                {
+                    "planet": 0,
+                    "pos": [
+                        200,
+                        200,
+                        200
+                    ],
+                    "radius": 300
+                }
+            ],
+            "unitType": [
+                "bot_factory"
+            ],
+            "startingObjective": true,
+            "finishDuration": null,
+            "successTriggers": [
+                "spawn_preset"
+            ],
+            "failureTriggers": [
+                ""
+            ],
+            "successObjectives": [
+                ""
+            ],
+            "failureObjectives": [
+                ""
+            ]
+        }
+    ],
+    "triggers": [
+        {
+            "name": "spawn_preset",
+            "id": 1,
+            "playerId": 0,
+            "type": "preset",
+            "location": {},
+            "delay": 3,
+            "prefab": {
+                "planet": 0,
+                "units": [
+                    {
+                        "unitType": "/pa/units/land/bot_factory/bot_factory.json",
+                        "pos": [
+                            -2.0239028930664062,
+                            -36.8651123046875,
+                            -17.118804931640625
+                        ],
+                        "orientation": [
+                            50,
+                            50,
+                            50
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}
