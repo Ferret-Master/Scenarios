@@ -13,18 +13,32 @@ Currently each scenario file contains 3 major areas.
 
 function loadScenario(location){//will be made into an api/observable later , will be loaded by command for testing, followed by checking for system load.
 
-    var scenarioJSON = $.getJSON(location);
+    model.unitKeys = _.keys(model.unitSpecs)
 
-    var scenarioObjectives = scenarioJSON.objectives;
-    var scenarioTriggers = scenarioJSON.triggers;
-    delete scenarioJSON.objectives;
-    delete scenarioJSON.triggers;
-    var scenarioSettings = scenarioJSON;
+    $.getJSON('coui:/mods/scenarios/' + location).then(function(imported) {
+        
+        
+        console.log(JSON.parse(JSON.stringify(imported)))
+
+       
+        console.log(JSON.parse(JSON.stringify(imported["objectives"])))
+        
+        console.log(JSON.parse(JSON.stringify(imported["triggers"])))
+     
+        
+       
+    
+        model.setupTriggers(imported["triggers"]);
+        model.setupScenario(imported);
+        model.setupObjectives(imported);
+
+        
 
 
-    model.setupTriggers(scenarioTriggers);
-    model.setupScenario(scenarioSettings);
-    model.setupObjectives(scenarioObjectives);
+    });
+
+    
+   
 };
 
-loadScenario("coui://ui/mods/scenarios/test_scenario_1.json")
+loadScenario("test_scenario_1.json")

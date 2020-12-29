@@ -5,9 +5,9 @@
 takes in the model name and returns the full path.
 */
 
-world = api.getWorldView(0);
+var world = api.getWorldView(0);
 
-let unitKeys = _.keys(model.unitSpecs);
+model.unitKeys = _.keys(model.unitSpecs);
 
 
 model.executeAsPlayer = function(playerIndex, command, commandVars, timeout){
@@ -25,12 +25,12 @@ model.executeAsPlayer = function(playerIndex, command, commandVars, timeout){
        		
             
         }
-        else{
-            
-        command(commandVars);
+    else{
         
+    command(commandVars);
+    
 
-        }
+    }
 
 
 
@@ -38,14 +38,14 @@ model.executeAsPlayer = function(playerIndex, command, commandVars, timeout){
 
 model.fullUnitName = function(unitName){
 
-
+    if(model.unitKeys == []){ model.unitKeys = _.keys(model.unitSpecs);}
     unitName+=".json";
-    var chosenUnit;
+    var chosenUnit = "";
     
-    for(var i = 0;i<unitKeys.length;i++){
+    for(var i = 0;i<model.unitKeys.length;i++){
         
-        if(unitKeys[i].endsWith(unitName)){
-            chosenUnit = unitKeys[i];
+        if(model.unitKeys[i].endsWith(unitName)){
+            chosenUnit = model.unitKeys[i];
             
         }
     }
@@ -59,47 +59,60 @@ if stateflag is true returns all of the unit states instead.
 
 should probably add a unitflag to this in case I only want one unittypes states.
 
-*/
-model.playerArmy = function(playerId, planetId,unitType, stateFlag){
+model.playerArmy(0,0,"",true).then(function(ready){console.log(ready)}) -test command
 
+*/
+model.playerArmy = function(playerId, planetId,unitType, stateFlag,callback){
+  
+    try{
     if(world){
 
-        if(stateFlag !== true)return world.getArmyUnits(playerId,planetId)
+        if(stateFlag !== true){world.getArmyUnits(playerId,planetId).then(function (result){callback(result)})}
 
         else{
-            world.getArmyUnits(playerId,planetId).then(function (result){ //doubt this works as is.
+                return world.getArmyUnits(playerId,planetId).then(function (result){ //doubt this works as is.
+
                 var unitArray = [];
-                
+               
                 if(result.hasOwnProperty(unitType)){result = result[unitType]}
-                if(stateFlag !== true){return result[unitType]}
+                if(unitType !== ""){callback(result[unitType])}
                 
                 armyKeys = _.keys(result)
                 for(var i = 0;i<armyKeys.length;i++){
-                    unitArray.push(world.getUnitState(result[armyKeys[i]]))
-
+                    unitArray.push(result[armyKeys[i]])
                 }
-                Promise.all(unitArray).then(function (result){return result})
+                unitArray = _.flatten(unitArray)
+                
+               
+
+                world.getUnitState(unitArray).then(function (ready) {
+                    var unitData = this.result;
+                    var one = !_.isArray(unitData);
+                    if (one){
+                            unitData = [unitData];
+
+                    }
+                    
+                    callback(unitData);
+                }
+                
+               
+                )
             })
             
         }
 
 
     }
-
+}
+    catch(err){console.log(err)}
 
 
 }
 
 model.distanceBetween = function(point1,point2,R){
 		
-		
-    //console.log("running distance between")
-    //console.log("calc1: "+Math.pow(Math.cos,-1))
-    //console.log("calc2: "+((point1[0])*(point2[0])+(point1[1])*(point2[1])+(point1[2])*(point2[2])))
-    //console.log("calc3: "+(Math.pow(R,2)))
-    //console.log("calc4: "+point2[2])
-    
-    //console.log(R*Math.acos((((point1[0])*(point2[0])+(point1[1])*(point2[1])+(point1[2])*(point2[2]))/(Math.pow(R,2)))))
+    console.log("distance between ran")
     var DistanceBetweenPoints = R*Math.acos((((point1[0])*(point2[0])+(point1[1])*(point2[1])+(point1[2])*(point2[2]))/(Math.pow(R,2))));
 
     
@@ -108,7 +121,8 @@ model.distanceBetween = function(point1,point2,R){
 }
 
 model.inRadius = function(point,center,R){
-    if (distanceBetween(point,center,R) < R)
+    console.log("inradius ran")
+    if (model.distanceBetween(point,center,R) < R)
         return true;
     
     else
@@ -119,11 +133,7 @@ model.inRadius = function(point,center,R){
 /*
 returns either the number/id's of that unit type in the radius, or if type is not specified, total unit number/id's.
 */
-model.unitsInRadius = function(playerId,unitType, location, dataFlag){// this will be a rough function performance wise if reguarly checked so should be used sparingly.
-    
-    var playerArmy = model.playerArmy(playerId,location.planet,unitType, true)
-    
-    
+model.countUnits = function(playerArmy){
 
     var returnNumber = 0;
 
@@ -131,7 +141,10 @@ model.unitsInRadius = function(playerId,unitType, location, dataFlag){// this wi
 
     if(unitType == ""){// want to return total number of units in that area
         returnValue = 0;
+        console.log("before inradius loop: ");
+        
         for(var i = 0;i<playerArmy.length;i++){
+            console.log("this.in radius loop running")
             var unitPos = playerArmy[i].pos;
             if(this.inRadius(unitPos, location.pos, location.radius) == true){returnValue++;returnArray.push(playerArmy[i])}
         }
@@ -141,6 +154,7 @@ model.unitsInRadius = function(playerId,unitType, location, dataFlag){// this wi
     else{
 
         returnValue = 0;
+        console.log("before inradius loop: ");
         for(var i = 0;i<playerArmy.length;i++){
             var unitPos = playerArmy[i].pos;
             if(this.inRadius(unitPos, location.pos, location.radius) == true){returnValue++;returnArray.push(playerArmy[i])}
@@ -150,6 +164,12 @@ model.unitsInRadius = function(playerId,unitType, location, dataFlag){// this wi
     if(dataFlag == true){return returnArray}
 
     else{return returnNumber}
+
+}
+model.unitsInRadius = function(playerId,unitType, location, dataFlag){// this will be a rough function performance wise if reguarly checked so should be used sparingly.
+
+    model.playerArmy(playerId,location[0].planet,unitType, true, model.countUnits)
+   
 
 
     

@@ -36,16 +36,16 @@ model.objectiveCheckFunctions["units_in_area"] = function(objectiveObject,player
     var unitType = objectiveObject.unitType; //the units file name
     var specificUnit = objectiveObject.specificUnit;
     var specificUnitId = objectiveObject.specificUnitId;
-
-
+    if(unitType == undefined){unitType = ""}
+    console.log("checking if units are in area")
     //used for when you want a particular unit moved somewhere. e.g escort/commander
     //checks through id's past back for the given one.
 
 
     if(specificUnit == true){ //currently only checks 1 id
-
+        console.log("specific unit")
         model.unitsInRadius(playerId,unitType,areaLocation).then(function(units){
-
+            console.log("result of unitsInRadius: "+units);
             if(_.contains(units,specificUnitId)){return true}
             return 0;
         });
@@ -54,12 +54,16 @@ model.objectiveCheckFunctions["units_in_area"] = function(objectiveObject,player
 
     else{
 
+        console.log("non specific")
         model.unitsInRadius(playerId,unitType,areaLocation).then(function(units){
-
+        console.log("result of unitsInRadius: "+units);
+        if(_.isArray(units))    {
         if(units.length>=unitCount){return true}
         return units.length;
 
-        });
+        }
+        else{return units}
+     });
 
     }    
 

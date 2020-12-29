@@ -14,17 +14,15 @@
    "scenes": {
     "live_game": [
             
-            
-            "coui://ui/mods/scenario-core/objective_functions.js",
-            "coui://ui/mods/scenario-core/objective_live_game.js",
             "coui://ui/mods/custom-api/build_preset.js",
             "coui://ui/mods/custom-api/control_units.js",
-            "coui://ui/mods/scenario-core/load_scenario.js",
-            "coui://ui/mods/scenario-core/utility_functions.js",
+            "coui://ui/mods/scenario-core/objective_functions.js",
+            "coui://ui/mods/scenario-core/objective_live_game.js",
             "coui://ui/mods/scenario-core/scenario_live_game.js",
             "coui://ui/mods/scenario-core/trigger_functions.js",
-            "coui://ui/mods/scenario-core/triggers_live_game.js"
-            
+            "coui://ui/mods/scenario-core/triggers_live_game.js",
+            "coui://ui/mods/scenario-core/utility_functions.js",
+            "coui://ui/mods/scenario-core/load_scenario.js"
             
         ]
         

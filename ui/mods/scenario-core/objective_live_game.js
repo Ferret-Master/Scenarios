@@ -29,13 +29,13 @@ function ObjectiveViewModel() {
 
     var self = this;
 
-    self.allObjectives = ko.observable([]);
+    self.allObjectives = ([]);
 
-    self.activeObjectives = ko.observable([]);//an active objective may be hidden and should not show in ui if that is the case.
+    self.activeObjectives = ([]);//an active objective may be hidden and should not show in ui if that is the case.
 
-    self.finishedObjectives = ko.observable([]);
+    self.finishedObjectives = ([]);
 
-    self.scenarioComplete = ko.observable(false); //if true display a ending message or trigger something??
+    self.scenarioComplete = (false); //if true display a ending message or trigger something??
 
 }
 
@@ -59,7 +59,7 @@ function objectiveProgress(objectiveObject,playerId){
 
 if(objectiveObject == "empty"){return null}
 
-var returnPromise = new Promise(result) = function(){return model.objectiveFunctions[objectiveObject.type](objectiveObject,playerId);}
+var returnPromise = new Promise((result) = function(){return model.objectiveCheckFunctions[objectiveObject.type](objectiveObject,playerId);})
 
 var returnArray = [objectiveObject, returnPromise]
 return returnArray;
@@ -82,44 +82,50 @@ model.makeObjectiveActive = function(objectiveObject){
 
 
 }
-model.setupObjectives = function(objectiveArray){
-    
+model.setupObjectives = function(inputObjectiveArray){
+    console.log("objective setup started")
+    var objectiveArray = inputObjectiveArray["objectives"]
+    // console.log(objectiveArray["objectives"])
+    // console.log(newObjectiveArray)
     objectiveModel.playerId = 0;//temp
 
-    for(var i = 0;i<objectivesArray.length;i++){//converts shorthand values to easier to use ones
+    for(var i = 0;i<objectiveArray.length;i++){//converts shorthand values to easier to use ones
 
-        if(objectiveArray[i].unitType !== undefined){objectiveArray[i] = model.fullUnitName(objectiveArray[i].unitType)}
+        if(objectiveArray[i].unitType !== undefined){objectiveArray[i].unitType = model.fullUnitName(objectiveArray[i].unitType)}
 
     }
     //hopefully none of this ends up being async
+    
 
-
-    for(var i = 0;i<objectivesArray.length;i++){
+    for(var i = 0;i<objectiveArray.length;i++){
 
 
         objectiveModel.allObjectives[i] = objectiveArray[i];
         if(objectiveArray[i].startingObjective == true){
             
-            makeObjectiveActive(objectiveArray[i])
+            model.makeObjectiveActive(objectiveArray[i])
         }
 
         totalObjectives++;
     }
 
-model.objectiveLoop;
+model.objectiveLoop();
 }
 
 model.objectiveLoop = function(){
+    var playerId = model.armyId()
     console.log("objective loop running")
     
+    
+
     if(objectiveModel){//if the model is defined
         var active = objectiveModel.activeObjectives;
         for(var i = 0;i<active.length;i++){
             
 
-            objectiveProgress(active[i]).then(function(result){
-
-                if(result[1] == null){continue}
+            objectiveProgress(active[i],playerId).then(function(result){//TODO replace the 0 with playerId
+                console.log("result of progress = "+result)
+                if(result[1] == null){return}
                 if(result[1] == true){//move from active objectives into finished, update ui, activate success triggers
 
                     objectiveModel.finishedObjectives.push(result[0])
@@ -127,7 +133,7 @@ model.objectiveLoop = function(){
                         return item !== value
                     })
                     for(var j = 0;j<result[0].successTriggers;j++){
-
+                        console.log("activating trigger")
                         model.activateTrigger(result[0].successTriggers[j]);
 
                     }
@@ -159,7 +165,8 @@ model.objectiveLoop = function(){
 
     if(model.gameOver !== true){
 
-        setTimeout(model.objectiveLoop,1000);
+        console.log("loop would be repeated here")
+        //setTimeout(model.objectiveLoop,1000);
 
     }
 }

@@ -4,32 +4,33 @@ function TriggerViewModel() {
 
     var self = this;
 
-    self.allTriggers = ko.observable([]);//used to pre assemble api needed at start of match rather than every time.
+    self.allTriggers = ([]);//used to pre assemble api needed at start of match rather than every time.
 
-    self.allTriggernames = ko.observable([]);//names for reference in other functions.
+    self.allTriggernames = ([]);//names for reference in other functions.
 
-    self.nonObjectiveTriggers = ko.observable([]);//these triggers are caused by non objectives. e.g system loaded, spawned in, or pure time delays.
+    self.nonObjectiveTriggers = ([]);//these triggers are caused by non objectives. e.g system loaded, spawned in, or pure time delays.
 
 
 }
 
-var triggerModel = new TriggerViewModel();
+var scenarioTriggerModel = new TriggerViewModel();
 
 model.setupTriggers = function(triggerArray){
-
-    if(triggerModel){
+    console.log("trigger setup started")
+    console.log(triggerArray)
+    if(scenarioTriggerModel){
     for(var i = 0;i<triggerArray.length;i++){
 
-        triggerModel.allTriggers[i] = triggerArray[i];
-        triggerModel.allTriggernames[i] = triggerArray[i].name;
+        scenarioTriggerModel.allTriggers[i] = triggerArray[i];
+        scenarioTriggerModel.allTriggernames[i] = triggerArray[i].name;
     }
     }
 }
 
 model.activateTrigger = function(triggerName){ //this prevents creators breaking things by calling triggers with no defined values.
-
-    for(var i = 0;i<triggerModel.allTriggernames.length;i++){
-        if(triggerModel.allTriggernames[i] == triggerName){
+    console.log("activate trigger called with value "+triggerName)
+    for(var i = 0;i<scenarioTriggerModel["allTriggernames"].length;i++){
+        if(scenarioTriggerModel.allTriggernames[i] == triggerName){
 
 
 
@@ -39,14 +40,14 @@ model.activateTrigger = function(triggerName){ //this prevents creators breaking
 
 }
 
-handlers.setupTriggers = function(payload) {
-    console.log("setup triggers called with "+ payload)
-    triggerModel.allTriggers = payload;
+// handlers.setupTriggers = function(payload) {
+//     console.log("setup triggers called with "+ payload)
+//     triggerModel.allTriggers = payload;
     
-};
+// };
 
-handlers.activateTrigger = function(payload) {
-    console.log("activating trigger "+ payload)
-    triggerModel.allTriggers = payload;
+// handlers.activateTrigger = function(payload) {
+//     console.log("activating trigger "+ payload)
+//     triggerModel.allTriggers = payload;
     
-};
+// };

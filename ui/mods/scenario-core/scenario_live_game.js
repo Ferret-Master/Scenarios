@@ -11,7 +11,9 @@ will probably add some flags so that only the lobby host can issue the cheat com
 */ 
 
 model.setupScenario = function(scenarioJSON){
-
+    // delete scenarioJSON["objectives"];
+    // delete scenarioJSON["triggers"];
+    console.log("scenario settings: "+JSON.stringify(scenarioJSON))
     
-
+return;
 }
