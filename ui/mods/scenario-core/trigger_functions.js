@@ -11,7 +11,7 @@ model.triggerFunctions = {};
 model.triggerFunctions["spawn_preset"] = function(avatarId,playerIndex,preset){
     
 
-
+    console.log("attempting spawn preset trigger")
     model.executeAsPlayer(playerIndex,api.build_preset.exactPreFab,[avatarId,preset,playerIndex])
     //api.build_preset.exactPreFab(avatarId,preset,playerIndex)
 

@@ -11,6 +11,7 @@
     "objectives": [
         {
             "name": "build_bot_factorys",
+            "id":1,
             "description": "build two bot factories in the highlighted area",
             "type": "units_in_area",
             "progress": 0,
