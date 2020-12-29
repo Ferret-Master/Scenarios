@@ -22,6 +22,19 @@ objective types(early):
 
 */
 
+function removeByAttr(arr, attr, value){//courtesy of stack overflow but just what I needed
+    var i = arr.length;
+    while(i--){
+       if( arr[i] 
+           && arr[i].hasOwnProperty(attr) 
+           && (arguments.length > 2 && arr[i][attr] === value ) ){ 
+
+           arr.splice(i,1);
+
+       }
+    }
+    return arr;
+}
 
 function ObjectiveViewModel() {
 
@@ -59,10 +72,40 @@ function objectiveProgress(objectiveObject,playerId){
 
 if(objectiveObject == "empty"){return null}
 
-var returnPromise = new Promise((result) = function(){return model.objectiveCheckFunctions[objectiveObject.type](objectiveObject,playerId);})
+var returnPromise = new Promise(function(resolve,reject){resolve(model.objectiveCheckFunctions[objectiveObject.type](objectiveObject,playerId));})
 
-var returnArray = [objectiveObject, returnPromise]
-return returnArray;
+returnPromise.then(function(result){//TODO replace the 0 with playerId
+    console.log("result of progress = "+result)
+    if(result == null){return}
+    if(result === true){//move from active objectives into finished, update ui, activate success triggers
+
+        objectiveModel.finishedObjectives.push(objectiveObject)
+        objectiveModel.activeObjectives = removeByAttr(objectiveModel.activeObjectives,"id",objectiveObject.id)
+        console.log(objectiveObject)
+        for(var j = 0;j<objectiveObject.successTriggers.length;j++){
+            console.log("activating trigger")
+            model.activateTrigger(objectiveObject.successTriggers[j]);
+
+        }
+
+    }
+    else if(result === false){//move from active to finished, update ui, activate failure triggers. 
+
+        objectiveModel.finishedObjectives.push(objectiveObject)
+        objectiveModel.activeObjectives = objectiveModel.activeObjectives.filter(function(item) {
+            return item !== value
+        })
+
+    }
+    else{//other result should be an update to progress, so update ui
+
+        console.log("progress is "+result)
+
+    }
+    
+    
+    }).catch(function(err){console.log(err)})
+
     
 }
 /*
@@ -113,57 +156,26 @@ model.objectiveLoop();
 }
 
 model.objectiveLoop = function(){
-    var playerId = model.armyId()
+    objectiveModel.playerId = model.armyIndex()
     console.log("objective loop running")
     
     
-
+    console.log(objectiveModel.playerId)
     if(objectiveModel){//if the model is defined
         var active = objectiveModel.activeObjectives;
         for(var i = 0;i<active.length;i++){
             
 
-            objectiveProgress(active[i],playerId).then(function(result){//TODO replace the 0 with playerId
-                console.log("result of progress = "+result)
-                if(result[1] == null){return}
-                if(result[1] == true){//move from active objectives into finished, update ui, activate success triggers
-
-                    objectiveModel.finishedObjectives.push(result[0])
-                    objectiveModel.activeObjectives = objectiveModel.activeObjectives.filter(function(item) {
-                        return item !== value
-                    })
-                    for(var j = 0;j<result[0].successTriggers;j++){
-                        console.log("activating trigger")
-                        model.activateTrigger(result[0].successTriggers[j]);
-
-                    }
-
-                }
-                else if(result[1] == false){//move from active to finished, update ui, activate failure triggers. 
-
-                    objectiveModel.finishedObjectives.push(result[0])
-                    objectiveModel.activeObjectives = objectiveModel.activeObjectives.filter(function(item) {
-                        return item !== value
-                    })
-
-                }
-                else{//other result should be an update to progress, so update ui
-
-
-
-                }
-                
-                
-                })
+            objectiveProgress(active[i],objectiveModel.playerId)
 
         }
 
-
+        console.log("objective loop checked actives")
 
 
     }
 
-    if(model.gameOver !== true){
+    if(model.gameOver() !== true){
 
         console.log("loop would be repeated here")
         //setTimeout(model.objectiveLoop,1000);

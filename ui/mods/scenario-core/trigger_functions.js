@@ -8,10 +8,12 @@ currently it is all under triggerFunctions but may be split by purpose later.
 
 model.triggerFunctions = {};
 //Planet, id, command, playerIndex,template, targetId
-model.triggerFunctions["spawn_preset"] = function(avatarId,playerIndex,preset){
+model.triggerFunctions["preset"] = function(triggerObject){
     
-
-
+    avatarId = scenarioModel.avatarId;
+    playerIndex = model.armyIndex();
+    preset = triggerObject.prefab;
+    console.log("attempting spawn preset trigger")
     model.executeAsPlayer(playerIndex,api.build_preset.exactPreFab,[avatarId,preset,playerIndex])
     //api.build_preset.exactPreFab(avatarId,preset,playerIndex)
 

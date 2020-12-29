@@ -62,57 +62,62 @@ should probably add a unitflag to this in case I only want one unittypes states.
 model.playerArmy(0,0,"",true).then(function(ready){console.log(ready)}) -test command
 
 */
-model.playerArmy = function(playerId, planetId,unitType, stateFlag,callback){
-  
-    try{
-    if(world){
+model.playerArmy = function(playerId, planetId,unitType, stateFlag){
+    console.log(playerId+" | "+planetId+" | "+unitType+" | "+stateFlag)
+    var promise = new Promise(function(resolve,reject){
 
-        if(stateFlag !== true){world.getArmyUnits(playerId,planetId).then(function (result){callback(result)})}
+        if(world){
 
-        else{
-                return world.getArmyUnits(playerId,planetId).then(function (result){ //doubt this works as is.
-
-                var unitArray = [];
-               
-                if(result.hasOwnProperty(unitType)){result = result[unitType]}
-                if(unitType !== ""){callback(result[unitType])}
-                
-                armyKeys = _.keys(result)
-                for(var i = 0;i<armyKeys.length;i++){
-                    unitArray.push(result[armyKeys[i]])
-                }
-                unitArray = _.flatten(unitArray)
-                
-               
-
-                world.getUnitState(unitArray).then(function (ready) {
-                    var unitData = this.result;
-                    var one = !_.isArray(unitData);
-                    if (one){
-                            unitData = [unitData];
-
+            if(stateFlag !== true){world.getArmyUnits(playerId,planetId).then(function (result){resolve(result)})}//TODO add unit filter here
+    
+            else{
+                    var promise2 = world.getArmyUnits(playerId,planetId).then(function(result){ //doubt this works as is.
+    
+                    var unitArray = [];
+                    
+                    if(unitType !== ""){result = result[unitType]}
+                    
+                    armyKeys = _.keys(result)
+                    for(var i = 0;i<armyKeys.length;i++){
+                        unitArray.push(result[armyKeys[i]])
+                    }
+                    unitArray = _.flatten(unitArray)
+                    console.log(unitArray)
+                   
+    
+                    return world.getUnitState(unitArray).then(function (ready) {
+                        var unitData = this.result;
+                        var one = !_.isArray(unitData);
+                        if (one){
+                                unitData = [unitData];
+    
+                        }
+                        
+                      return unitData;
                     }
                     
-                    callback(unitData);
-                }
+                   
+                    )
+                })
                 
-               
-                )
-            })
-            
+            }
+            promise2.then(function(result){resolve(result)})
+    
         }
 
+    })
 
-    }
-}
-    catch(err){console.log(err)}
+    promise.then(function(result){return result})
+    
+    return promise;
+   
 
 
 }
 
 model.distanceBetween = function(point1,point2,R){
 		
-    console.log("distance between ran")
+    
     var DistanceBetweenPoints = R*Math.acos((((point1[0])*(point2[0])+(point1[1])*(point2[1])+(point1[2])*(point2[2]))/(Math.pow(R,2))));
 
     
@@ -121,10 +126,11 @@ model.distanceBetween = function(point1,point2,R){
 }
 
 model.inRadius = function(point,center,R){
-    console.log("inradius ran")
-    if (model.distanceBetween(point,center,R) < R)
+   
+    if (model.distanceBetween(point,center,R) < R){
+        
         return true;
-    
+    }
     else
         return false;
     
@@ -133,37 +139,28 @@ model.inRadius = function(point,center,R){
 /*
 returns either the number/id's of that unit type in the radius, or if type is not specified, total unit number/id's.
 */
-model.countUnits = function(playerArmy){
+model.countArmyInRadius = function(playerArmy,location,dataFlag){
+    //console.log(JSON.stringify(playerArmy))
+  
 
-    var returnNumber = 0;
 
     var returnArray = [];
 
-    if(unitType == ""){// want to return total number of units in that area
         returnValue = 0;
-        console.log("before inradius loop: ");
         
         for(var i = 0;i<playerArmy.length;i++){
-            console.log("this.in radius loop running")
             var unitPos = playerArmy[i].pos;
             if(this.inRadius(unitPos, location.pos, location.radius) == true){returnValue++;returnArray.push(playerArmy[i])}
         }
         
+        
+    
+    if(dataFlag == true){console.log("returning returnArray");return returnArray}
 
-    }
-    else{
+    else{console.log("returning returnValue");return returnValue}
+    
+    
 
-        returnValue = 0;
-        console.log("before inradius loop: ");
-        for(var i = 0;i<playerArmy.length;i++){
-            var unitPos = playerArmy[i].pos;
-            if(this.inRadius(unitPos, location.pos, location.radius) == true){returnValue++;returnArray.push(playerArmy[i])}
-        }
-
-    }
-    if(dataFlag == true){return returnArray}
-
-    else{return returnNumber}
 
 }
 model.unitsInRadius = function(playerId,unitType, location, dataFlag){// this will be a rough function performance wise if reguarly checked so should be used sparingly.
