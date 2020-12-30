@@ -22,7 +22,8 @@ author: "Ferretmaster",
 gameType: "Singleplayer", //some scenarios will not work well with more people or require certain properties
 playerCount: 3,
 aiCount:2, //this and playercount will be checked in lobby to prevent crashes hopefully
-
+requireBuilders:true, //this determines whether avatar fabs should be spawned in at the start of the game for each player.
+requireAIBuilders:true,//determines whether the player will need to spawn in builders for the ai.
 winCondition:"Default", //default is sniping commander, other could include KOTH, Assasination(killing a different units to win), or objectives, where you win after completing a certain objective
 
 objectives: [{
@@ -59,7 +60,7 @@ delay: 10, //time after trigger is called that it does it's effect
 model: "", //if needed
 duration: 10, //in the case of any visual trigger this determines how long it is displayed to the player
 fbx: "", //if needed
-prefab: {"planet":0,"units":[['/pa/units/land/bot_factory/bot_factory.json',[-2.0239028930664062, -36.8651123046875, -17.118804931640625],[50,50,50]]]}
+prefab: {"planet":0,"units":[['/pa/units/land/bot_factory/bot_factory.json',[-2.0239028930664062, -36.8651123046875, -17.118804931640625],[50,50,50]]]}//buildig instructions for trigger
 
 
 

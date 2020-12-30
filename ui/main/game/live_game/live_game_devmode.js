@@ -54,24 +54,24 @@ $(document).ready(function () {
         };
         self.spawnAvatar = function (index) {
             var currentPlayerIndex = undefined;
+            var avatarName = "/pa/units/commanderd/avatar/avatar.json";
             for(var i = 0;i<this.playerControlFlags().length;i++){
         
                 if(this.playerControlFlags()[i] == true){currentPlayerIndex = i;}
         
             }
-            console.log("current player index is "+currentPlayerIndex)
+            if(index = currentPlayerIndex){
+                engine.call('unit.debug.setSpecId',avatarName);
+                engine.call('unit.debug.paste')
+                return;
+            }
             this.updatePlayerControlFlag(index);
-            console.log("player index switched to "+index)
-            var avatarName = "/pa/units/orbital/orbital_fabrication_bot/orbital_fabrication_bot.json";
+           
             
-            console.log("spawning avatar ")
+        
             engine.call('unit.debug.setSpecId',avatarName);
             setTimeout(function(){ engine.call('unit.debug.paste')}, 50);
-            
-            // setTimeout(function(){ engine.call('unit.debug.paste')}, 100);  works with values from 50+
-            
-            console.log("player index switched to "+currentPlayerIndex)
-
+        
             setTimeout(this.updatePlayerControlFlag.bind(null, currentPlayerIndex), 100);
             //this.updatePlayerControlFlag(currentPlayerIndex);
         
@@ -114,6 +114,13 @@ $(document).ready(function () {
         if(time == undefined){time = 500}
 
         model.tempControlSwitch(playerIndex,time)
+
+    }
+    handlers.spawnAvatar = function(playerIndex,time){
+
+        if(time == undefined){time = 500}
+
+        model.spawnAvatar(playerIndex,time)
 
     }
     // inject per scene mods
