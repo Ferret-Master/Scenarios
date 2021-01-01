@@ -16,7 +16,8 @@
             "description": "build two bot factories in the highlighted area",
             "type": "units_in_area",
             "progress": 0,
-            "needed": 2,
+            "needed": 5,
+            "show_area":true,
             "location": [
                 {
                     "planet": 0,
@@ -59,16 +60,43 @@
                 "planet": 0,
                 "units": [
                     {
-                        "unitType": "/pa/units/land/bot_factory/bot_factory.json",
+                        "unitType": "/pa/units/land/titan_structure/titan_structure.json",
                         "pos": [
-                            -2.0239028930664062,
-                            -36.8651123046875,
-                            -17.118804931640625
+                            27.47,
+                            -429.8651123046875,
+                            -101.718804931640625
                         ],
                         "orientation": [
-                            50,
-                            50,
-                            50
+                            0,
+                            0,
+                            0
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "name": "spawn_preset_2",
+            "id": 2,
+            "playerId": 0,
+            "type": "preset",
+            "game_start":true,
+            "location": {},
+            "delay": 15,
+            "prefab": {
+                "planet": 0,
+                "units": [
+                    {
+                        "unitType": "/pa/units/land/titan_structure/titan_structure.json",
+                        "pos": [
+                            27.47,
+                            -429.8651123046875,
+                            -101.718804931640625
+                        ],
+                        "orientation": [
+                            0,
+                            0,
+                            0
                         ]
                     }
                 ]

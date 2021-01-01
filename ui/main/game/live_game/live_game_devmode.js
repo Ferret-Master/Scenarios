@@ -54,13 +54,14 @@ $(document).ready(function () {
         };
         self.spawnAvatar = function (index) {
             var currentPlayerIndex = undefined;
-            var avatarName = "/pa/units/commanderd/avatar/avatar.json";
+            var avatarName = "/pa/units/commanders/avatar/avatar.json";
             for(var i = 0;i<this.playerControlFlags().length;i++){
         
                 if(this.playerControlFlags()[i] == true){currentPlayerIndex = i;}
         
             }
             if(index = currentPlayerIndex){
+               
                 engine.call('unit.debug.setSpecId',avatarName);
                 engine.call('unit.debug.paste')
                 return;

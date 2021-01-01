@@ -26,7 +26,12 @@
             "coui://ui/mods/scenario-core/triggers_live_game.js"
             
             
-        ]
+        ],
+     "live_game_time_bar":[
+
+      "coui://ui/mods/scenario-core/time_since_landing.js"
+
+     ]   
         
         
     },

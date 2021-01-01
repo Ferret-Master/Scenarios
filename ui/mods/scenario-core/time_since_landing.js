@@ -4,7 +4,7 @@ function SendScenarioTime(){
 	//console.log("current time in time bar is "+CurrentTime)
 
 	api.Panel.message(api.Panel.parentId, 'ScenarioTime',CurrentTime)
-	setTimeout(SendTime, 1000);
+	setTimeout(SendScenarioTime, 1000);
 	return
 	}
 (function () {
@@ -12,7 +12,7 @@ function SendScenarioTime(){
 
     //update every second
 
-    setTimeout(SendTime, 1000);
+    setTimeout(SendScenarioTime, 1000);
 
 
 })();

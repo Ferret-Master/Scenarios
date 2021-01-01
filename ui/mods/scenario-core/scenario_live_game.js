@@ -25,24 +25,54 @@ function ScenarioViewModel() {
 
     self.scenarioComplete = (false); //if true display a ending message or trigger something??
 
-}
-var scenarioModel = new ScenarioViewModel();
-function getAvatarId(){
+    self.landTime = 200000;
 
-    avatarPromise = model.playerArmy(model.armyIndex(), model.currentFocusPlanetId(),"/pa/units/commanderd/avatar/avatar.json", false);
-    avatarPromise.then(function(result){ScenarioViewModel().avatarId = result})
+    self.RealTimeSinceLanding = -200000;
+
+    self.fullTime = 0;
+}
+model.scenarioModel = new ScenarioViewModel();
+function getAvatarId(){
+    var planet = model.currentFocusPlanetId();
+    if(planet <0){_.delay(getAvatarId,1000);return}
+    avatarPromise = model.playerArmy(model.armyIndex(), model.currentFocusPlanetId(),"/pa/units/commanders/avatar/avatar.json", false);
+    avatarPromise.then(function(result){model.scenarioModel.avatarId = result})
 
 }
 
 
 model.setupScenario = function(scenarioJSON){
-    
+    var planet = model.currentFocusPlanetId();
+    if(planet <0){_.delay(model.setupScenario,1000,scenarioJSON);return}
     console.log("scenario settings: "+JSON.stringify(scenarioJSON))
 
     if(scenarioJSON["requireBuilders"] == true){
         api.Panel.message("devmode","spawnAvatar",model.armyIndex());
-        setTimeout(getAvatarId,50)
+        setTimeout(getAvatarId,500)
     }
     
 return;
 }
+
+
+
+handlers.ScenarioTime = function(payload) {
+    
+    if(model.scenarioModel !== undefined){
+    model.scenarioModel.fullTime = Math.round(payload);
+    if(model.hasSelection() && model.maxEnergy() > 0 && model.gameOver() == false){
+
+        if( model.scenarioModel.fullTime<model.scenarioModel.landTime &&  model.scenarioModel.fullTime !== 0){model.scenarioModel.landTime =  model.scenarioModel.fullTime}
+
+    }
+    if(model.scenarioModel.landTime !== 200000){
+
+        var realTime = model.scenarioModel.fullTime - model.scenarioModel.landTime;
+        model.scenarioModel.RealTimeSinceLanding = realTime;
+        
+    }}
+    
+};
+
+
+    

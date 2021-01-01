@@ -56,6 +56,7 @@ activation:"landing",//used to determine when to activate triggers not linked to
 type: "effect", //used to match a trigger to api's
 location: {}, //info to pass to api's if needed
 duration: {},
+game_start:true,//execute on game start once avatar is spawned and id checked.
 delay: 10, //time after trigger is called that it does it's effect
 model: "", //if needed
 duration: 10, //in the case of any visual trigger this determines how long it is displayed to the player

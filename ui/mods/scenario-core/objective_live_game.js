@@ -75,13 +75,13 @@ if(objectiveObject == "empty"){return null}
 var returnPromise = new Promise(function(resolve,reject){resolve(model.objectiveCheckFunctions[objectiveObject.type](objectiveObject,playerId));})
 
 returnPromise.then(function(result){//TODO replace the 0 with playerId
-    console.log("result of progress = "+result)
+    //console.log("result of progress = "+result)
     if(result == null){return}
     if(result === true){//move from active objectives into finished, update ui, activate success triggers
 
         objectiveModel.finishedObjectives.push(objectiveObject)
         objectiveModel.activeObjectives = removeByAttr(objectiveModel.activeObjectives,"id",objectiveObject.id)
-        console.log(objectiveObject)
+        //console.log(objectiveObject)
         for(var j = 0;j<objectiveObject.successTriggers.length;j++){
             console.log("activating trigger")
             model.activateTrigger(objectiveObject.successTriggers[j]);
@@ -99,7 +99,7 @@ returnPromise.then(function(result){//TODO replace the 0 with playerId
     }
     else{//other result should be an update to progress, so update ui
 
-        console.log("progress is "+result)
+        //console.log("progress is "+result)
 
     }
     
@@ -156,11 +156,13 @@ model.objectiveLoop();
 }
 
 model.objectiveLoop = function(){
+    if(model.scenarioModel == undefined){setTimeout(model.objectiveLoop,1000);return;
+    }
     objectiveModel.playerId = model.armyIndex()
-    console.log("objective loop running")
+    //console.log("objective loop running")
     
     
-    console.log(objectiveModel.playerId)
+    //console.log(objectiveModel.playerId)
     if(objectiveModel){//if the model is defined
         var active = objectiveModel.activeObjectives;
         for(var i = 0;i<active.length;i++){
@@ -170,15 +172,15 @@ model.objectiveLoop = function(){
 
         }
 
-        console.log("objective loop checked actives")
+        //console.log("objective loop checked actives")
 
 
     }
 
     if(model.gameOver() !== true){
 
-        console.log("loop would be repeated here")
-        //setTimeout(model.objectiveLoop,1000);
+        //console.log("loop would be repeated here")
+        setTimeout(model.objectiveLoop,1000);
 
     }
 }

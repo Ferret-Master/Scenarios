@@ -31,7 +31,7 @@ model.activateTrigger = function(triggerName){ //this prevents creators breaking
     console.log("activate trigger called with value "+triggerName)
     for(var i = 0;i<scenarioTriggerModel["allTriggernames"].length;i++){
         if(scenarioTriggerModel.allTriggernames[i] == triggerName){
-            var triggerObject = TriggerViewModel.allTriggers[i];
+            var triggerObject = scenarioTriggerModel.allTriggers[i];
             model.triggerFunctions[triggerObject.type](triggerObject)
         }
     }

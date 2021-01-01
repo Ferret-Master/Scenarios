@@ -34,11 +34,10 @@ function init_build_preset(api) {
     api.build_preset = {
     buildCommand: function(id,planet,structure){
                           
-        console.log("attempting build command with unitid: " + unitid + " planet: "+planet + " spec: "+ spec+" at location "+ location[0]);
+        console.log("attempting build command with unitid: " + id + " planet: "+planet + " spec: "+ structure+" at location "+ structure.pos);
         // console.log(api.getWorldView(0).sendOrder({units: unitid,command: 'build',location: {planet: planet,multi_pos: [location,location]},spec: spec,queue: true}));
         api.getWorldView(0).sendOrder({units: id,command: 'build',location: {planet: planet,multi_pos: [structure.pos,structure.pos],orient: structure.orientation},spec: structure.unitType,queue: true,group:true});
-    
-        },
+        console.log(api.getWorldView(0).sendOrder({units: id,command: 'build',location: {planet: planet,multi_pos: [structure.pos,structure.pos],orient: structure.orientation},spec: structure.unitType,queue: true,group:true}))},
     buildCommandOld: function(unitid,planet,spec,location){
                         
         console.log("attempting build command with unitid: " + unitid + " planet: "+planet + " spec: "+ spec+" at location "+ location[0]);
@@ -158,8 +157,9 @@ function init_build_preset(api) {
             },
 
 
-    exactPreFab: function (id,prefab){//takes in prefab object that defines everything needed
-
+    exactPreFab: function (preFab){//takes in prefab object that defines everything needed
+            var id = preFab[0]
+            var prefab = preFab[1];
             var planet = prefab.planet;
             var unitArray = prefab.units;
             for(var i = 0; i<unitArray.length;i++){

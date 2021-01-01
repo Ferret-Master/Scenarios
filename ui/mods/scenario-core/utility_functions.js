@@ -13,7 +13,7 @@ model.unitKeys = _.keys(model.unitSpecs);
 model.executeAsPlayer = function(playerIndex, command, commandVars, timeout){
     if(timeout == undefined){var timeout = 50}
     var switchPlayer = false;
-    if(playerIndex !== "" && playerIndex !== undefined){switchPlayer = true}
+    if(playerIndex !== "" && playerIndex !== undefined && playerIndex !== model.armyIndex()){switchPlayer = true}
 
     if(switchPlayer == true){
                             
@@ -26,8 +26,9 @@ model.executeAsPlayer = function(playerIndex, command, commandVars, timeout){
             
         }
     else{
-        
+    console.log("running command as player")    
     command(commandVars);
+    
     
 
     }
@@ -63,15 +64,35 @@ model.playerArmy(0,0,"",true).then(function(ready){console.log(ready)}) -test co
 
 */
 model.playerArmy = function(playerId, planetId,unitType, stateFlag){
-    console.log(playerId+" | "+planetId+" | "+unitType+" | "+stateFlag)
+    //console.log(playerId+" | "+planetId+" | "+unitType+" | "+stateFlag)
     var promise = new Promise(function(resolve,reject){
 
         if(world){
 
-            if(stateFlag !== true){world.getArmyUnits(playerId,planetId).then(function (result){resolve(result)})}//TODO add unit filter here
+            if(stateFlag !== true){
+                
+                
+                
+                var promise2 = world.getArmyUnits(playerId,planetId).then(function (result){
+                    
+                   // console.log(result)
+                    if(unitType !== ""){result = result[unitType]}
+                   // console.log(result)
+                    return result
+                
+                
+                
+                
+                })
+                //console.log(promise2.then(function(result){console.log(result)}))
+                resolve(promise2)
+            
+            
+            
+            }//TODO add unit filter here
     
             else{
-                    var promise2 = world.getArmyUnits(playerId,planetId).then(function(result){ //doubt this works as is.
+                    var promise2 = world.getArmyUnits(playerId,planetId).then(function(result){ 
     
                     var unitArray = [];
                     
@@ -82,7 +103,7 @@ model.playerArmy = function(playerId, planetId,unitType, stateFlag){
                         unitArray.push(result[armyKeys[i]])
                     }
                     unitArray = _.flatten(unitArray)
-                    console.log(unitArray)
+                    //console.log(unitArray)
                    
     
                     return world.getUnitState(unitArray).then(function (ready) {
@@ -155,9 +176,9 @@ model.countArmyInRadius = function(playerArmy,location,dataFlag){
         
         
     
-    if(dataFlag == true){console.log("returning returnArray");return returnArray}
+    if(dataFlag == true){return returnArray}
 
-    else{console.log("returning returnValue");return returnValue}
+    else{return returnValue}
     
     
 

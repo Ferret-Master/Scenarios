@@ -10,11 +10,17 @@ model.triggerFunctions = {};
 //Planet, id, command, playerIndex,template, targetId
 model.triggerFunctions["preset"] = function(triggerObject){
     
-    avatarId = scenarioModel.avatarId;
+    var avatarId = model.scenarioModel["avatarId"];
+    console.log("avatarId: "+avatarId)
+    
+    if(avatarId == undefined || avatarId == -1){_.delay(model.triggerFunctions["preset"],1000,triggerObject);return}
+    if(triggerObject["delay"]>0){var newTriggerObject = triggerObject;newTriggerObject.delay = 0 ;_.delay(model.triggerFunctions["preset"],(triggerObject["delay"]*1000),triggerObject)}
     playerIndex = model.armyIndex();
-    preset = triggerObject.prefab;
+    console.log("triggerObject:"+JSON.stringify(triggerObject))
+    var preset = triggerObject.prefab;
+    console.log("prefab:"+JSON.stringify(preset))
     console.log("attempting spawn preset trigger")
-    model.executeAsPlayer(playerIndex,api.build_preset.exactPreFab,[avatarId,preset,playerIndex])
+    model.executeAsPlayer(playerIndex,api.build_preset.exactPreFab,[avatarId[0],preset])
     //api.build_preset.exactPreFab(avatarId,preset,playerIndex)
 
 
@@ -27,15 +33,17 @@ model.triggerFunctions["preset"] = function(triggerObject){
 //the below was an api but I prefer having these functions in core as they mainly use api rather than making it up.
     //     api.trigger = {
     
-    //         buildPreset: function(){},
-    
-    //         spawnAvatar: function(){},
+    //         Preset: function(){},
     
     //         spawnPuppet: function(){},
+
+    //         spawnPuppetWithEffect: function(){},
     
     //         spawnEffect: function(){},
     
     //         spawnVision: function(){},
+
+    //         spawnRadar: function(){},
     
     //         deleteUnitType: function(){},
     
