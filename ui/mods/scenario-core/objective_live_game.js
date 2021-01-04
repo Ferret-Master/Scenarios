@@ -80,6 +80,8 @@ returnPromise.then(function(result){//TODO replace the 0 with playerId
     if(result === true){//move from active objectives into finished, update ui, activate success triggers
 
         objectiveModel.finishedObjectives.push(objectiveObject)
+
+        //TODO activate linked objectives
         objectiveModel.activeObjectives = removeByAttr(objectiveModel.activeObjectives,"id",objectiveObject.id)
         //console.log(objectiveObject)
         for(var j = 0;j<objectiveObject.successTriggers.length;j++){

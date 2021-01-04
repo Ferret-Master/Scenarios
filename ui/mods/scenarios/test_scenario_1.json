@@ -15,6 +15,7 @@
             "id":1,
             "description": "build two bot factories in the highlighted area",
             "type": "units_in_area",
+            "effect":"radius_ring",
             "progress": 0,
             "needed": 5,
             "show_area":true,

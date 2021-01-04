@@ -37,18 +37,10 @@ model.objectiveCheckFunctions["units_in_area"] = function (objectiveObject, play
     var specificUnit = objectiveObject.specificUnit;
     var specificUnitId = objectiveObject.specificUnitId;
     if (unitType == undefined) { unitType = "" }
-    //console.log("checking if units are in area")
 
-
-
-    //used for when you want a particular unit moved somewhere. e.g escort/commander
-    //checks through id's past back for the given one.
-
-
+    //needs to be expanded for this to be useful
     if (specificUnit == true) { //currently only checks 1 id
-        //console.log("specific unit")
         model.unitsInRadius(playerId, unitType, areaLocation).then(function (units) {
-            //console.log("result of unitsInRadius: " + units);
             if (_.contains(units, specificUnitId)) { return true }
             return 0;
         });
@@ -57,37 +49,28 @@ model.objectiveCheckFunctions["units_in_area"] = function (objectiveObject, play
 
     else {
 
-        //console.log("non specific")
-        // console.log(playerId)
-        // console.log(" | " + JSON.stringify(areaLocation) + " | " + unitType + " | " + true)
         var armyPromise = model.playerArmy(playerId, areaLocation[0].planet, unitType, true)
-        //console.log(armyPromise)
+
         return armyPromise.then(function (playerArmy) {
-           // console.log(playerArmy)
+
             var radiusPromise = new Promise(function (resolve, reject) { resolve(model.countArmyInRadius(playerArmy, areaLocation[0])); })
 
            return radiusPromise.then(function (units) {
-                //console.log("countArmyInRadius finished")
-               // console.log("result of unitsInRadius: " + units);
-               // console.log(units + " | " + unitCount)
+
                 if (_.isArray(units)) {
                     if (units.length >= unitCount) { return true }
                     return units.length;
 
                 }
-
                 else {
 
-
-                   // console.log("returning units"); 
                     if (units >= unitCount) { return true }
                     else { return units }
 
 
                 }
             }).catch(function (err) { console.log(err) });
-
-            
+   
         }).catch(function (err) { console.log(err) })
 
 
@@ -105,7 +88,7 @@ model.objectiveCheckFunctions["units_in_area"] = function (objectiveObject, play
 /*
 spawns a colored ring at a chosen location with a size roughly equal to the circle made by the given radius.
 */
-model.objectiveEffectFunctions["spawn_ring"] = function (colorName, location, radius, duration) {
+model.objectiveEffectFunctions["radius_ring"] = function (colorName, location, radius, duration) {
 
 
 }
