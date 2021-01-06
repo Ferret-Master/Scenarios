@@ -29,6 +29,49 @@ basis for other area functions such as grabbing the types or id's of units in an
 
 TODO needs array checks, same applys to functions it is calling.
 */
+
+
+model.objectiveCheckFunctions["timed"] = function (timedObject){
+
+    if(timedObject.activationTime == undefined && model.scenarioModel.fullTime !== 0){
+
+        timedObject.activationTime = model.scenarioModel.fullTime
+    }
+    
+    if((model.scenarioModel.fullTime - timedObject.activationTime)>timedObject.time){console.log("timed objective finished");return true}
+
+}
+
+model.objectiveCheckFunctions["gather"] = function (timedObject){//ammassing a certain amount of metal/power
+
+    return;
+
+}
+
+model.objectiveCheckFunctions["survive_time"] = function (timedObject){
+
+    return;
+
+}
+
+model.objectiveCheckFunctions["build_units"] = function (timedObject){
+
+    return;
+
+}
+
+model.objectiveCheckFunctions["destroy_units"] = function (timedObject){
+
+    return;
+
+}
+
+model.objectiveCheckFunctions["control_location"] = function (timedObject){
+
+    return;
+
+}
+
 model.objectiveCheckFunctions["units_in_area"] = function (objectiveObject, playerId) {
 
     var unitCount = objectiveObject.needed;
@@ -80,6 +123,8 @@ model.objectiveCheckFunctions["units_in_area"] = function (objectiveObject, play
 
 /*
 ------------------------------------------- [Objective Effects] -------------------------------------------
+
+these are activated when objectives move to active and removed when the objective is finished
 */
 
 
@@ -88,10 +133,42 @@ model.objectiveCheckFunctions["units_in_area"] = function (objectiveObject, play
 /*
 spawns a colored ring at a chosen location with a size roughly equal to the circle made by the given radius.
 */
-model.objectiveEffectFunctions["radius_ring"] = function (colorName, location, radius, duration) {
+model.objectiveEffectFunctions["radius_ring"] = function (objectLocation, duration) {
+
+    
+    var location = {};
+    location.planet = objectLocation[0].planet;
+    location.pos = objectLocation[0].pos;
+    location.radius = objectLocation[0].radius;
+    //given location is planet and position
+    
+    console.log(JSON.stringify(location)+" | "+duration)
+    
+
+    /*
+     spawn puppeteted ring effect at location for duration. if duration not specified set to not delete
+
+     returns puppetid so it can be deleted if objective is completed.
+
+     size is calculated and changed via scale
+      
+      
+     */
+
+
+    //edit location to contain needed scale
+    
+    location.scale = location.radius/6;
+    //location.scale = 1;
+    delete location.radius;
+    
+    var effectPromise = api.puppet.createEffect("pingRed",location,duration,true);
+
+    return effectPromise;
 
 
 }
+
 
 
 

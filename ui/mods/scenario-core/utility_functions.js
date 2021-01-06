@@ -138,9 +138,12 @@ model.playerArmy = function(playerId, planetId,unitType, stateFlag){
 
 model.distanceBetween = function(point1,point2,R){
 		
-    
-    var DistanceBetweenPoints = R*Math.acos((((point1[0])*(point2[0])+(point1[1])*(point2[1])+(point1[2])*(point2[2]))/(Math.pow(R,2))));
+    //couldnt get great circle distance working/may have messed up taking it from previous code of mine so switching to straight line distance
+    //it does mean area checks will not work well on small planets though. this would allow me to put the check point above the terrain to somewhat allievate it
+    //var DistanceBetweenPoints = R*Math.acos((((point1[0])*(point2[0])+(point1[1])*(point2[1])+(point1[2])*(point2[2]))/(Math.pow(R,2))));
+    var DistanceBetweenPoints = Math.pow((Math.pow((point2[0] - point1[0]),2) + Math.pow((point2[1] - point1[1]),2) + Math.pow((point2[2] - point1[2]),2)),0.5) 
 
+    if(DistanceBetweenPoints == NaN ){console.log(point1 +" | "+ point2)}
     
     
     return DistanceBetweenPoints;

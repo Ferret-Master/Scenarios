@@ -29,6 +29,7 @@ winCondition:"Default", //default is sniping commander, other could include KOTH
 objectives: [{
 
 name: "GameStart",
+hidden: "false", //if hidden is true the objective will not be displayed to the player
 description: "build some stuff",
 type: "build x in area", //many objective types but they will be hardcoded
 location: [{planet, pos, radius}], //this can be blank or missing values depending on what is needed.

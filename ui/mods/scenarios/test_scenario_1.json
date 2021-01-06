@@ -16,6 +16,7 @@
             "description": "build two bot factories in the highlighted area",
             "type": "units_in_area",
             "effect":"radius_ring",
+            "effectDuration":0,
             "progress": 0,
             "needed": 5,
             "show_area":true,
@@ -23,11 +24,11 @@
                 {
                     "planet": 0,
                     "pos": [
-                        200,
-                        200,
-                        200
+                        -155,
+                        25,
+                        356
                     ],
-                    "radius": 300
+                    "radius": 240
                 }
             ],
             "unitType": [
@@ -37,6 +38,27 @@
             "finishDuration": null,
             "successTriggers": [
                 "spawn_preset"
+            ],
+            "failureTriggers": [
+                ""
+            ],
+            "successObjectives": [
+                ""
+            ],
+            "failureObjectives": [
+                ""
+            ]
+        },
+        {
+            "name": "timed_objective",
+            "id":1,
+            "description": "does things after a timer started when they are activated",
+            "hidden":true,
+            "type": "timed",
+            "time":12,
+            "startingObjective": true,
+            "successTriggers": [
+                "spawn_preset_2"
             ],
             "failureTriggers": [
                 ""

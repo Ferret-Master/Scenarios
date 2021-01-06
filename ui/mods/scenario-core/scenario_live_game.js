@@ -1,4 +1,35 @@
 
+
+
+
+
+    var originalCall = engine.call
+    engine.call = function(method) {
+ 
+      if (method == 'unit.debug.copy') {
+        console.log("not allowed for player")
+        return undefined;
+      }
+
+      if (method == 'unit.debug.paste') {
+        console.log("not allowed for player")
+        return undefined;
+      } else if (method == 'unit.debug.setScenarioSpecId') {
+        method = 'unit.debug.setSpecId';
+        return originalCall.apply(this, arguments);
+      }
+        else if (method == 'unit.debug.scenarioPaste') {
+            method = 'unit.debug.paste';
+            return originalCall.apply(this, arguments);
+           
+      } else {
+        return originalCall.apply(this, arguments);
+      }
+    }
+
+
+
+
 /*
 so far this will probably be used mainly for verifying the scenario so it does not run with incorrect lobby/ game setups.
 

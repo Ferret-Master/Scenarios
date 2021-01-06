@@ -18,6 +18,7 @@
             "coui://ui/mods/scenario-core/objective_functions.js",
             "coui://ui/mods/scenario-core/objective_live_game.js",
             "coui://ui/mods/custom-api/build_preset.js",
+            "coui://ui/mods/custom-api/puppet_api.js",
             "coui://ui/mods/custom-api/control_units.js",
             "coui://ui/mods/scenario-core/load_scenario.js",
             "coui://ui/mods/scenario-core/utility_functions.js",
@@ -27,6 +28,9 @@
             
             
         ],
+      "global_mod_list": [
+        "coui://ui/mods/scenario-core/global.js"
+      ],
      "live_game_time_bar":[
 
       "coui://ui/mods/scenario-core/time_since_landing.js"

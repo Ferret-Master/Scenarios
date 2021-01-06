@@ -72,13 +72,25 @@ function objectiveProgress(objectiveObject,playerId){
 
 if(objectiveObject == "empty"){return null}
 
+if(objectiveObject.activeEffect !== true && objectiveObject.effect !== undefined){
+    
+    console.log("activating objective")
+    
+    console.log(JSON.stringify(objectiveObject.location))
+    var effectPuppetId = model.objectiveEffectFunctions[objectiveObject.effect](objectiveObject.location,objectiveObject.effectDuration);
+    objectiveObject.activeEffect = true;
+    objectiveObject.effectPuppetId = effectPuppetId;
+}
 var returnPromise = new Promise(function(resolve,reject){resolve(model.objectiveCheckFunctions[objectiveObject.type](objectiveObject,playerId));})
 
 returnPromise.then(function(result){//TODO replace the 0 with playerId
     //console.log("result of progress = "+result)
     if(result == null){return}
     if(result === true){//move from active objectives into finished, update ui, activate success triggers
-
+        if(objectiveObject.effectPuppetId !== undefined){
+            console.log(objectiveObject.effectPuppetId);
+            objectiveObject.effectPuppetId.then(function(result){api.puppet.killPuppet(result)})
+        }
         objectiveModel.finishedObjectives.push(objectiveObject)
 
         //TODO activate linked objectives
@@ -101,7 +113,7 @@ returnPromise.then(function(result){//TODO replace the 0 with playerId
     }
     else{//other result should be an update to progress, so update ui
 
-        //console.log("progress is "+result)
+        console.log("progress is "+result)
 
     }
     

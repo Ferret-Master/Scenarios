@@ -8,7 +8,7 @@ function TriggerViewModel() {
 
     self.allTriggernames = ([]);//names for reference in other functions.
 
-    self.nonObjectiveTriggers = ([]);//these triggers are caused by non objectives. e.g system loaded, spawned in, or pure time delays.
+    //self.nonObjectiveTriggers = ([]);//tese are uneeded as a timed objective accomplishes the same thing neater
 
 
 }
@@ -32,6 +32,8 @@ model.activateTrigger = function(triggerName){ //this prevents creators breaking
     for(var i = 0;i<scenarioTriggerModel["allTriggernames"].length;i++){
         if(scenarioTriggerModel.allTriggernames[i] == triggerName){
             var triggerObject = scenarioTriggerModel.allTriggers[i];
+            
+            if(triggerObject.delay !== undefined || triggerObject.delay == 0){_.delay(model.triggerFunctions[triggerObject.type],(triggerObject.delay*1000),triggerObject); return}
             model.triggerFunctions[triggerObject.type](triggerObject)
         }
     }

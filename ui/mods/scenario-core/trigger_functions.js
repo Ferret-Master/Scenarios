@@ -27,6 +27,108 @@ model.triggerFunctions["preset"] = function(triggerObject){
 
 }
 
+model.triggerFunctions["preset"] = function(triggerObject){
+   
+    return;
+
+}
+
+model.triggerFunctions["spawn_supply"] = function(triggerObject){
+   
+    return;
+
+}
+
+model.triggerFunctions["vision"] = function(triggerObject){
+   
+    return;
+
+}
+
+model.triggerFunctions["radar"] = function(triggerObject){
+   
+    return;
+
+}
+
+model.triggerFunctions["destroy_unit"] = function(triggerObject){
+   
+    return;
+
+}
+
+model.triggerFunctions["repair"] = function(triggerObject){
+   
+    return;
+
+}
+
+model.triggerFunctions["destroy_enemy_unit"] = function(triggerObject){
+   
+    return;
+
+}
+
+model.triggerFunctions["clear_trees"] = function(triggerObject){
+   
+    return;
+
+}
+
+model.triggerFunctions["spawn_puppet"] = function(triggerObject){
+   
+    return;
+
+}
+
+model.triggerFunctions["play_audio"] = function(triggerObject){
+   
+    return;
+
+}
+
+model.triggerFunctions["play_video"] = function(triggerObject){
+   
+    return;
+
+}
+
+model.triggerFunctions["show_image"] = function(triggerObject){
+   
+    return;
+
+}
+
+model.triggerFunctions["move_camera"] = function(triggerObject){
+   
+    return;
+
+}
+
+model.triggerFunctions["save_selection"] = function(triggerObject){
+   
+    return;
+
+}
+
+model.triggerFunctions["save_camera"] = function(triggerObject){
+   
+    return;
+
+}
+
+model.triggerFunctions["select_unit"] = function(triggerObject){
+   
+    return;
+
+}
+
+model.triggerFunctions["spawn_effect"] = function(triggerObject){
+   
+    return;
+
+}
+
 
 
 

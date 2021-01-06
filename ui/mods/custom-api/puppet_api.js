@@ -2,7 +2,9 @@
 //taken from contextual pings, will need re write
 
 //for effects just needs another function that doesn't need the model, will include effects in this api.
-function createPuppet(puppetName, location,animation,effectsType,color,pingDuration){ //takes in name of unit in file, and contextual info then generates the rest of create puppet
+function init_puppet_control(api) {
+api.puppet = {
+createPuppet: function(puppetName, location,animation,effectsType,color,pingDuration){ //takes in name of unit in file, and contextual info then generates the rest of create puppet
 		
 
 	
@@ -26,7 +28,7 @@ function createPuppet(puppetName, location,animation,effectsType,color,pingDurat
 				
 					{
 					  "type": "energy",
-					  "filename": "/pa/effects/custom_specs/"+effectsType+".pfx",
+					  "filename": "/pa/effects/scenario_specs/"+effectsType+".pfx",
 					  "offset": [
 						0,
 						0,
@@ -62,65 +64,92 @@ function createPuppet(puppetName, location,animation,effectsType,color,pingDurat
 			}}
 		
 			api.getWorldView(0).puppet(config, true).then((function(result){
+				
 				setTimeout(function() { killPuppet(result[0].id); }, pingDuration*1000);
+				return result[0].id;
 			}));
 		
 		
 	});
-}
+},
+createEffect: function(effectName, location,duration, snap){
 
-function killPuppet(puppetid){
+			if(snap == true){location.snap = true}
+			if(duration == undefined || duration == 0){duration = 21600}//set to 6 hours if unspecified
+			var config = [{}];
+			config[0].fx_offsets =  
+				
+					{
+					  "type": "energy",
+					  "filename": "/pa/effects/scenario_specs/"+effectName+".pfx",
+					  "offset": [
+						0,
+						0,
+						-2
+					  ],
+					  "orientation": [
+						0,
+						0,
+						0
+					  ]
+					}
+				  
+			
+			
+		
+			config[0].location = location;
+			config[0].material = { //unsure if needed for just effect
+			"shader":"pa_unit_ghost",
+			"constants":{
+			   "GhostColor":[0,0,0,0] ,
+			   "BuildInfo":[
+				  0,
+				  0,
+				  0,
+				  0
+			   ]
+			},
+			"textures":{
+			   "Diffuse":"/pa/effects/textures/diffuse.papa"
+			}}
+		
+			return api.getWorldView(0).puppet(config, true).then((function(result){
+				setTimeout(function() { api.puppet.killPuppet(result[0].id); }, duration*1000);
+				return result[0].id;
+			}));
 
+
+
+},
+
+	killPuppet:function (puppetid){
+		console.log("attempting to kill puppet "+puppetid)
 	api.getWorldView(0).unPuppet(puppetid);
-}
+},
 
-var mutePings = false;
-handlers.spawnPuppet = function(payload) { //modified for ping mod
-	
+// var mutePings = false; may need to be re added
 
-	//if model is an array then spawn a puppet for each one, made to allow multiple colors
-	console.log("spawnpuppet called with"+payload)
-	payload = JSON.parse(payload);
-	var audioFile = payload.audio;
-	var model = payload.modelName;
-	var color = payload.color;
-	var pingDuration = payload.puppetDuration;
-	var effect = payload.effect;
-	if(effect == undefined){effect = "pingWhite"}
-	delete payload.effect;
-	delete payload.audio;
-	delete payload.duration;
-	delete payload.modelName;
-	delete payload.color;
-	if( audioFile.length>1 & mutePings == false){
-		playAudio(audioFile)
-	}
-	createPuppet(model,payload,"idle",effect,color,pingDuration)
-	api.Panel.message(api.panels.unit_alert.id, 'triggerPingAlert',payload)
-
-	};
 	
 
 
-handlers.mutePings = function() {
-	mutePings = !mutePings;
-}
 
-function playAudio(filename){
+playAudio: function(filename){
 	api.audio.playSoundFromFile(filename);
-}
-
-function killPuppets(){
+},
+killAllPuppets:function(){
 	
 	
 	if(model.maxEnergy() > 0){
 		
-		clearAllPuppets();
+		api.getWorldView(0).clearPuppets();
 		return;
 	}
-	else{setTimeout(killPuppets, 1000);
+	else{setTimeout(killAllPuppets, 1000);
 	return;}
 	
 	
 	}
 
+};
+}
+init_puppet_control(window.api);

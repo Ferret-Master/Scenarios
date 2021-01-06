@@ -62,8 +62,8 @@ $(document).ready(function () {
             }
             if(index = currentPlayerIndex){
                
-                engine.call('unit.debug.setSpecId',avatarName);
-                engine.call('unit.debug.paste')
+                engine.call('unit.debug.setScenarioSpecId',avatarName);
+                engine.call('unit.debug.scenarioPaste')
                 return;
             }
             this.updatePlayerControlFlag(index);
