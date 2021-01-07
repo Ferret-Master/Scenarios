@@ -27,7 +27,7 @@ model.triggerFunctions["preset"] = function(triggerObject){
 
 }
 
-model.triggerFunctions["preset"] = function(triggerObject){
+model.triggerFunctions["dynamic_preset"] = function(triggerObject){
    
     return;
 

@@ -54,7 +54,7 @@ $(document).ready(function () {
         };
         self.spawnAvatar = function (index) {
             var currentPlayerIndex = undefined;
-            var avatarName = "/pa/units/commanders/avatar/avatar.json";
+            var avatarName = "/pa/units/commanders/scenario_avatar/scenario_avatar.json";
             for(var i = 0;i<this.playerControlFlags().length;i++){
         
                 if(this.playerControlFlags()[i] == true){currentPlayerIndex = i;}

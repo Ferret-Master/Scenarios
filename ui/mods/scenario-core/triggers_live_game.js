@@ -29,11 +29,13 @@ model.setupTriggers = function(triggerArray){
 
 model.activateTrigger = function(triggerName){ //this prevents creators breaking things by calling triggers with no defined values.
     console.log("activate trigger called with value "+triggerName)
+    console.log(scenarioTriggerModel["allTriggernames"])
     for(var i = 0;i<scenarioTriggerModel["allTriggernames"].length;i++){
         if(scenarioTriggerModel.allTriggernames[i] == triggerName){
             var triggerObject = scenarioTriggerModel.allTriggers[i];
-            
+            console.log(triggerObject)
             if(triggerObject.delay !== undefined || triggerObject.delay == 0){_.delay(model.triggerFunctions[triggerObject.type],(triggerObject.delay*1000),triggerObject); return}
+           
             model.triggerFunctions[triggerObject.type](triggerObject)
         }
     }

@@ -66,7 +66,7 @@ model.scenarioModel = new ScenarioViewModel();
 function getAvatarId(){
     var planet = model.currentFocusPlanetId();
     if(planet <0){_.delay(getAvatarId,1000);return}
-    avatarPromise = model.playerArmy(model.armyIndex(), model.currentFocusPlanetId(),"/pa/units/commanders/avatar/avatar.json", false);
+    avatarPromise = model.playerArmy(model.armyIndex(), model.currentFocusPlanetId(),"/pa/units/commanders/scenario_avatar/scenario_avatar.json");
     avatarPromise.then(function(result){model.scenarioModel.avatarId = result})
 
 }

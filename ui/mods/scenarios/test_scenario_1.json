@@ -51,7 +51,7 @@
         },
         {
             "name": "timed_objective",
-            "id":1,
+            "id":2,
             "description": "does things after a timer started when they are activated",
             "hidden":true,
             "type": "timed",
