@@ -1,86 +1,45 @@
-//as scenarios work almost entirely of objectives having the ui based on them makes it more simple and understandable.
-
-//I will use floatzone to begin with as there is not really free real eastate for menu's currently. mabye below players.
-//actually given I disable the sandbox player control ui I can replace it with my own that has the same dropdown functionality.
-
-var model;
-var handlers = {};
-
-$(document).ready(function () {
-    
-    function DevModeViewModel() {
-        var self = this;
-
-        self.state = ko.observable({});
-        self.cheatAllowChangeVision = ko.computed(function() { return !!self.state().cheatVision; });
-        self.cheatAllowChangeControl = ko.computed(function() { return !!self.state().cheatControl; });
-        self.players = ko.computed(function() { return self.state().players || []; });
-        self.playerVisionFlags = ko.computed(function() { return self.state().vision || []; });
-        self.playerControlFlags = ko.computed(function() { return self.state().control || []; });
-
-        self.updatePlayerVisionFlag = function (index) {
-
-            if (!self.cheatAllowChangeVision())
-                return;
-
-            var newFlags = self.playerVisionFlags().slice(0);
-            newFlags[index] = !newFlags[index];
-
-            // Tell the server
-            self.send_message('change_vision_flags', { 'vision_flags': newFlags });
-            
-            // Tell the parent panel
-            api.Panel.message(api.Panel.parentId, 'panel.invoke', ['playerVisionFlags', newFlags]);
-        };
-        
-        self.updatePlayerControlFlag = function (index) {
-            if (!self.cheatAllowChangeControl())
-                return;
-            
-            var newControlFlags = _.times(self.players().length, _.constant(false));
-            newControlFlags[index] = true;
-            
-            var newVisionFlags = self.playerVisionFlags().slice(0);
-            newVisionFlags[index] = true;
-            
-            var clientControlFlags = _.map(newControlFlags, function(flag) { return flag ? 1 : 0; });
-            var clientVisionFlags = _.map(newVisionFlags, function(flag) { return flag ? 1 : 0; });
-            
-            // Tell the server
-            self.send_message('change_control_flags', { 'control_flags': newControlFlags });
-            self.send_message('change_vision_flags', { 'vision_flags': newVisionFlags });
+(function() {
+	createFloatingFrame("scenario_frame", 400, 250, {"snap":false, "top": 42,"rememberPosition":"false"});//this top offset is so player bar with eco mods doesn't overlap
+	
+	
+	//do a computed to show selected icon
+	
+	
 
 
-            // Tell the parent panel
-            api.Panel.message(api.Panel.parentId, 'panel.invoke', ['playerControlFlags', newControlFlags]);
-            api.Panel.message(api.Panel.parentId, 'panel.invoke', ['playerVisionFlags', newVisionFlags]);
-        };
+/*
+"<div class='data_util_select_opponent' data-bind='click: function() { api.select.commander(); api.camera.track(true); }'>" +
+									"<img src='coui://ui/mods/ArmyUtil/floatzone/icon_si_commander.png'/>" +
+									
+								"</div>" +
+								
+								
+								"<div class='status_bar_frame_commanderHP'>" +
+										"<div class='status_bar_commanderHP' data-bind='style: {width: \"\" + (model.commanderHealth() * 158) + \"px\"}'></div>" +
+									"</div>" +
 
-        self.active = ko.observable(true);
-        
-        self.setup = function () {
-            $(window).focus(function() { self.active(true); });
-            $(window).blur(function() { self.active(false); });
-            
-            api.Panel.query(api.Panel.parentId, 'panel.invoke', ['devModeState']).then(self.state);
-        };
-    }
-    model = new DevModeViewModel();
 
-    handlers.state = function (payload) {
-        model.state(payload);
-    };
+*/
 
-    // inject per scene mods
-    if (scene_mod_list['live_game_devmode'])
-        loadMods(scene_mod_list['live_game_devmode']);
-
-    // setup send/recv messages and signals
-    app.registerWithCoherent(model, handlers);
-
-    // Activates knockout.js
-    ko.applyBindings(model);
-
-    // run start up logic
-    model.setup();
+$.get("coui://ui/mods/scenario-ui/objective_ui_live_game.html", function(data){
+    $("#scenario_frame").html(data);
 });
+
+$("<link/>", {
+    rel: "stylesheet",
+    type: "text/css",
+    href: "coui://ui/mods/scenario-ui/objective_ui_live_game.css"
+ }).appendTo("head");
+	
+	
+})();
+forgetFramePosition("scenario_frame");
+lockFrame("scenario_frame");
+//probably a better method but manually making a function per ping for now
+
+
+//keeping one for reference
+// model.AntiNukePing = function(){
+	
+// 	api.Panel.message(api.Panel.parentId,'chosenPing','antiNukePing')
+// }

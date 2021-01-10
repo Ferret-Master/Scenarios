@@ -42,5 +42,13 @@ Scenario name/creator near the top.
 
 An ingame timer on it somewhere.
 
+if you finish an objective it should linger for a bit/notify you it was finished(sound/flashing?).
 
-for multiplayer teamate progress mabye.
+for multiplayer teammate progress mabye.
+
+
+Implementation(UI):
+
+ill have an observable per visible active objective up to a limit of 4(may be increased later)
+
+table will be either either static or dynamically made for this number and updated using ko computed.
