@@ -24,7 +24,11 @@
             "coui://ui/mods/scenario-core/utility_functions.js",
             "coui://ui/mods/scenario-core/scenario_live_game.js",
             "coui://ui/mods/scenario-core/trigger_functions.js",
-            "coui://ui/mods/scenario-core/triggers_live_game.js"
+            "coui://ui/mods/scenario-core/triggers_live_game.js",
+            "coui://ui/mods/scenario-ui/objective_ui_live_game.js",
+            "coui://ui/mods/scenario-ui/objective_ui_live_game.html"
+            
+            
             
             
         ],
