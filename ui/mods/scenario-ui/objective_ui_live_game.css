@@ -13,10 +13,14 @@
  	width: 33.33%;
   }
   
-.ping_lock_icon {
-	height: 20px;
-	position: absolute;
-	left: 100px;
-	bottom: 1px;
+.scenario_author {
+	color:DodgerBlue;
+	font-weight:bold;
+	font-size:100%;
+}
+.scenario_time {
+	color:DodgerBlue;
+	font-weight:bold;
+	font-size:100%;
 }
 

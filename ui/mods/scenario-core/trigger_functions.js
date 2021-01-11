@@ -11,15 +11,13 @@ model.triggerFunctions = {};
 model.triggerFunctions["preset"] = function(triggerObject){
     
     var avatarId = model.scenarioModel["avatarId"];
-    console.log("avatarId: "+avatarId)
-    
+ 
     if(avatarId == undefined || avatarId == -1){_.delay(model.triggerFunctions["preset"],1000,triggerObject);return}
     if(triggerObject["delay"]>0){var newTriggerObject = triggerObject;newTriggerObject.delay = 0 ;_.delay(model.triggerFunctions["preset"],(triggerObject["delay"]*1000),triggerObject)}
     playerIndex = model.armyIndex();
-    console.log("triggerObject:"+JSON.stringify(triggerObject))
+
     var preset = triggerObject.prefab;
-    console.log("prefab:"+JSON.stringify(preset))
-    console.log("attempting spawn preset trigger")
+ 
     model.executeAsPlayer(playerIndex,api.build_preset.exactPreFab,[avatarId[0],preset])
     //api.build_preset.exactPreFab(avatarId,preset,playerIndex)
 

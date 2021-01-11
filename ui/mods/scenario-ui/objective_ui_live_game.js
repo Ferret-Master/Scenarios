@@ -16,7 +16,7 @@ function createScenarioFrame() {
         href: "coui://ui/mods/scenario-ui/objective_ui_live_game.css"
     }).appendTo("head");
 
-    $("<script src='coui://ui/mods/scenario-ui/objective_ui_live_game.js' type='text/javascript'></script>").appendTo(document.body)
+    
 //forgetFramePosition("scenario_frame");
 
 lockFrame("scenario_frame");
@@ -24,7 +24,6 @@ lockFrame("scenario_frame");
 //-----------------------------------------------------------------Objective Display Functions---------------------------------------------------
 model.alreadyMadeFrame = true;
 }}
-
 
 model.objectiveDescriptions =[];
 model.objectiveProgresses = [];
@@ -45,12 +44,12 @@ handlers.objectiveUpdate = function(payload) {
            
             var objective = payload[i];
             var visible = objective.visible;
-            var result = objective.visible;
+            var result = objective.result;
             var description = objective.description;
             var needed = objective.needed;
             var progress = objective.progress;
             
-            if(objective === undefined || visible === undefined || result === undefined || description === undefined || needed === undefined || progress === undefined){console.log("one of these was undefined"+" | "+objective+" | "+visible+" | "+result+" | "+description+" | "+needed+" | "+progress)}
+            if(objective === undefined || visible === undefined || result === undefined || description === undefined || needed === undefined || progress === undefined){;}
             else{
                 newObjectiveDescriptions.push(description)
                 newObjectiveProgresses.push(progress)
@@ -66,6 +65,8 @@ handlers.objectiveUpdate = function(payload) {
         for(var i = 0;i<4;i++){
             var tempCheck = updateCheckArray[i];
             var tempReal = realCheckArray[i];
+        
+           
             if(tempCheck.length == tempReal.length){
 
                 for(var j = 0;j<tempCheck.length;j++){
@@ -80,14 +81,17 @@ handlers.objectiveUpdate = function(payload) {
         }
         
         function updateSpan (className, array){
-            
+            if(array.length <4){for(var i = array.length;i<4;i++){array[i] = " "}}
             for(var i = 0;i<array.length;i++){
-                //console.log(className+ " | "+i+" | "+array[i])
-                $("."+className+i).innerHTML = array[i];
+                
+                
+                $("."+className+i).html(array[i])
+              
+
         }
             }
             
-
+        needsUpdating = [true,true,true,true]
         //updating objectives if they have changed
         if(needsUpdating[0] == true){
             model.objectiveDescriptions= newObjectiveDescriptions
@@ -103,10 +107,38 @@ handlers.objectiveUpdate = function(payload) {
         }
         if(needsUpdating[3] == true){
             model.objectiveResults = newObjectiveResults
-            updateSpan("results",model.objectiveResults)
+            updateSpan("result",model.objectiveResults)
         }
         
     }
         
      };
     })();
+
+    //adds the author and scenario name to the ui
+    handlers.scenarioDetails = function(payload) {
+        console.log(payload)
+        $(".author").html(payload[0])
+        $(".scenarioName").html(payload[1]+" by ")
+
+
+    }
+
+    //updates the ingame clock on the scenario ui
+    handlers.scenarioTime = function(payload) {
+
+        var displayedMinutesSinceLanding = Math.floor(payload/60)
+        var displayedSecondsSinceLanding = Math.round(payload%60);
+        if(displayedSecondsSinceLanding < 10){displayedSecondsSinceLanding =  "0"+displayedSecondsSinceLanding}
+       
+        $(".landingTime").html(displayedMinutesSinceLanding+":"+displayedSecondsSinceLanding)
+
+      
+		
+            
+            
+            
+            
+      
+        
+    }

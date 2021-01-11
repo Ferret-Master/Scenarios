@@ -61,6 +61,10 @@ function ScenarioViewModel() {
     self.RealTimeSinceLanding = -200000;
 
     self.fullTime = 0;
+
+    self.author = "author";
+
+    self.scenarioName = "scenario name";
 }
 model.scenarioModel = new ScenarioViewModel();
 function getAvatarId(){
@@ -81,7 +85,8 @@ model.setupScenario = function(scenarioJSON){
         api.Panel.message("devmode","spawnAvatar",model.armyIndex());
         setTimeout(getAvatarId,500)
     }
-    
+    model.scenarioModel.author = scenarioJSON["author"]
+    model.scenarioModel.scenarioName = scenarioJSON["name"]
 return;
 }
 
@@ -100,6 +105,8 @@ handlers.ScenarioTime = function(payload) {
 
         var realTime = model.scenarioModel.fullTime - model.scenarioModel.landTime;
         model.scenarioModel.RealTimeSinceLanding = realTime;
+        api.Panel.message("LiveGame_FloatZone", 'scenarioTime',realTime)
+        api.Panel.message("LiveGame_FloatZone", 'scenarioDetails',[model.scenarioModel["author"],model.scenarioModel["scenarioName"]])
         
     }}
     

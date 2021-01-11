@@ -73,10 +73,7 @@ function objectiveProgress(objectiveObject,playerId){
 if(objectiveObject == "empty"){return null}
 
 if(objectiveObject.activeEffect !== true && objectiveObject.effect !== undefined){
-    
-    console.log("activating objective")
-    
-    console.log(JSON.stringify(objectiveObject.location))
+      
     var effectPuppetId = model.objectiveEffectFunctions[objectiveObject.effect](objectiveObject.location,objectiveObject.effectDuration);
     objectiveObject.activeEffect = true;
     objectiveObject.effectPuppetId = effectPuppetId;
@@ -88,7 +85,7 @@ returnPromise.then(function(result){//TODO replace the 0 with playerId
     if(result == null){return}
     if(result === true){//move from active objectives into finished, update ui, activate success triggers
         if(objectiveObject.effectPuppetId !== undefined){
-            console.log(objectiveObject.effectPuppetId);
+            
             objectiveObject.effectPuppetId.then(function(result){api.puppet.killPuppet(result)})
         }
         objectiveModel.finishedObjectives.push(objectiveObject)
@@ -97,8 +94,13 @@ returnPromise.then(function(result){//TODO replace the 0 with playerId
         objectiveModel.activeObjectives = removeByAttr(objectiveModel.activeObjectives,"id",objectiveObject.id)
         //console.log(objectiveObject)
         for(var j = 0;j<objectiveObject.successTriggers.length;j++){
-            console.log("activating trigger")
+           
             model.activateTrigger(objectiveObject.successTriggers[j]);
+
+        }
+        for(var j = 0;j<objectiveObject.successObjectives.length;j++){
+           
+            model.makeObjectiveActiveByName(objectiveObject.successObjectives[j])
 
         }
 
@@ -113,7 +115,7 @@ returnPromise.then(function(result){//TODO replace the 0 with playerId
     }
     else{//other result should be an update to progress, so update ui
 
-        console.log("progress is "+result)
+        objectiveObject.progress = result;
 
     }
     
@@ -135,6 +137,15 @@ also triggers the needed ui components.
 model.makeObjectiveActive = function(objectiveObject){ 
 
     objectiveModel.activeObjectives.push(objectiveObject);
+
+}
+
+model.makeObjectiveActiveByName = function(objectiveName){ 
+    console.log(objectiveName)
+    for(var i = 0;i<objectiveModel.allObjectives.length;i++){
+        console.log(objectiveModel.allObjectives[i].name +" | "+objectiveName)
+        if(objectiveModel.allObjectives[i].name === objectiveName){model.makeObjectiveActive(objectiveModel.allObjectives[i])}
+    }
 
 
 

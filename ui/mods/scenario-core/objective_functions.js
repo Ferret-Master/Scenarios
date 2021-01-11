@@ -60,13 +60,13 @@ model.objectiveCheckFunctions["build_units"] = function (timedObject){
 
 }
 
-model.objectiveCheckFunctions["destroy_units"] = function (timedObject){
+model.objectiveCheckFunctions["destroy_units"] = function (timedObject){//likely in area tracking id's is annoying
 
     return;
 
 }
 
-model.objectiveCheckFunctions["control_location"] = function (timedObject){
+model.objectiveCheckFunctions["control_location"] = function (timedObject){//combines units in area and timed checks
 
     return;
 

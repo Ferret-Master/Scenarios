@@ -37,8 +37,8 @@
      ],
     
       "LiveGame_FloatZone": [
-        "coui://ui/mods/scenario-ui/objective_ui_live_game.js",
-        "coui://ui/mods/scenario-ui/objective_ui_live_game.html"
+        "coui://ui/mods/scenario-ui/objective_ui_live_game.js"
+  
       ]
       
         
