@@ -49,6 +49,6 @@ for multiplayer teammate progress mabye.
 
 Implementation(UI):
 
-ill have an observable per visible active objective up to a limit of 4(may be increased later)
+it ll have an observable per visible active objective up to a limit of 4(may be increased later)
 
 table will be either either static or dynamically made for this number and updated using ko computed.

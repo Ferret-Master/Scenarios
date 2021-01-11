@@ -13,12 +13,14 @@
         {
             "name": "build_bot_factorys",
             "id":1,
+            "visible":true,
             "description": "build two bot factories in the highlighted area",
             "type": "units_in_area",
             "effect":"radius_ring",
             "effectDuration":0,
             "progress": 0,
             "needed": 5,
+            "result":"spawn ragnarock",
             "show_area":true,
             "location": [
                 {

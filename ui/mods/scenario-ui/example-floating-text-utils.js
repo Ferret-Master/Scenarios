@@ -1,29 +1,11 @@
 (function() {
 	createFloatingFrame("data_util_frame", 240, 50, {"offset": "topRight", "left": -240});
 	
-	model.enemyMetalDestroyed = ko.observable(0);
-	model.metalLost = ko.observable(0);
-	model.t1metal = ko.observable(0);
-	model.t2metal = ko.observable(0);
-	model.t1power = ko.observable(0);
-	model.t2power = ko.observable(0);
-	model.armyCount = ko.observable(0);
-	model.fabCount = ko.observable(0);
-	model.facCount = ko.observable(0);
-	model.RealTimeSinceLanding = ko.observable(0);
+	
+	model.activeObjectives = ko.observable(0);
 
-	addLinkageLiveGame("model.enemyMetalDestroyed()", "model.enemyMetalDestroyed");
-	addLinkageLiveGame("model.metalLost()", "model.metalLost");
-	addLinkageLiveGame("model.t1metal()","model.t1metal");
-	addLinkageLiveGame("model.t2metal()","model.t2metal");
-	addLinkageLiveGame("model.t1power()","model.t1power");
-	addLinkageLiveGame("model.t2power()","model.t2power");
-
-	addLinkageLiveGame("model.armyCount()","model.armyCount");
-	addLinkageLiveGame("model.fabCount()","model.fabCount");
-	addLinkageLiveGame("model.facCount()","model.facCount");
-
-	addLinkageLiveGame("model.RealTimeSinceLanding()","model.RealTimeSinceLanding");
+	
+	
 
 	
 	model.commanderHealth = ko.observable(0);

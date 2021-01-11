@@ -197,6 +197,8 @@ model.objectiveLoop = function(){
         setTimeout(model.objectiveLoop,1000);
 
     }
+    api.Panel.message("LiveGame_FloatZone", 'objectiveUpdate',objectiveModel.activeObjectives)
+    
 }
 
 
