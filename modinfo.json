@@ -1,5 +1,5 @@
  {
-   "context": "client",
+   "context": "server",
    "identifier": "com.pa.ferretmaster.scenarios",
    "display_name": "scenarios(PRE ALPHA)",
    "description": "custom scenarios PRE ALPHA",

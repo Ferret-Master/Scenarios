@@ -52,6 +52,10 @@ function ScenarioViewModel() {
 
     self.avatarId  = -1;
 
+    self.playerNameArray = []; //contains the player names matches in order with the id's for reference, mostly for the ui.
+
+    self.playerArray = []; //contains the player id for everyone in lobby, stored here so other code can use this as a stable reference
+
     self.aiArray = ([])//would contain an object for each ai with things like armyindex, avatarid
 
     self.scenarioComplete = (false); //if true display a ending message or trigger something??
@@ -67,11 +71,18 @@ function ScenarioViewModel() {
     self.scenarioName = "scenario name";
 }
 model.scenarioModel = new ScenarioViewModel();
+
+
 function getAvatarId(){
     var planet = model.currentFocusPlanetId();
     if(planet <0){_.delay(getAvatarId,1000);return}
     avatarPromise = model.playerArmy(model.armyIndex(), model.currentFocusPlanetId(),"/pa/units/commanders/scenario_avatar/scenario_avatar.json");
     avatarPromise.then(function(result){model.scenarioModel.avatarId = result})
+    var playerAmount = model.playerListState().players.length;
+    for(var i = 0;i<playerAmount;i++){
+      model.scenarioModel.playerArray.push(i)
+      model.scenarioModel.playerNameArray.push(model.players()[i].name)
+    }
 
 }
 
@@ -89,7 +100,6 @@ model.setupScenario = function(scenarioJSON){
     model.scenarioModel.scenarioName = scenarioJSON["name"]
 return;
 }
-
 
 
 handlers.ScenarioTime = function(payload) {

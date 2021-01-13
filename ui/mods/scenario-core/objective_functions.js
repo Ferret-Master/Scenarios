@@ -66,12 +66,87 @@ model.objectiveCheckFunctions["destroy_units"] = function (timedObject){//likely
 
 }
 
-model.objectiveCheckFunctions["control_location"] = function (timedObject){//combines units in area and timed checks
 
-    return;
+/**
+ this function checks an arae for every players units and depending on settings will return who controls it, progress will be tracked by adding time whenever checked.
+
+
+ it should return true if the player has controlled for needed time, otherwise increment the progress array for the player in control(this is annoying and will require seperate ui)
+ */
+model.objectiveCheckFunctions["control_area"] = function (objectiveObject, playerId){
+
+
+    //for each player get the units within an area, if only 1 player has units within the area they get their time incremented
+    for(var i = 0;i<objectiveObject.progress.length;i++){if(objectiveObject.progress[i]>=objectiveObject.needed && i == model.armyIndex()){return true}}
+    var unitCount = objectiveObject.needed;
+    var areaLocation = objectiveObject.location; // planet, center coordinates, and radius
+    var allPlayerIds = model.scenarioModel.playerArray;
+    for(var i = 0;i<allPlayerIds.length;i++){console.log(objectiveObject.progress);if(objectiveObject.progress[i] === undefined){objectiveObject.progress[i] = 0}}
+    var promiseArray = [];
+    for(var i = 0;i<allPlayerIds.length;i++){
+
+        var armyPromise = model.playerArmy(allPlayerIds[i], areaLocation[0].planet, "", true)
+
+       promiseArray.push(armyPromise.then(function (playerArmy) {
+
+        var radiusPromise = new Promise(function (resolve, reject) { resolve(model.countArmyInRadius(playerArmy, areaLocation[0])); })
+
+           return radiusPromise.then(function (units) {
+
+                if (_.isArray(units)) {
+                    if (units.length >= unitCount) { return true }
+                
+                    return units.length;
+
+                }
+                else {
+                
+                    if (units >= unitCount) { return true }
+                    else { return units }
+
+
+                }
+            }).catch(function (err) { console.log(err) });
+   
+        }).catch(function (err) { console.log(err) }))
+
+       
+    }
+    var returnVar = Promise.all(promiseArray)
+    
+   
+    return returnVar.then(function(armyArray){
+
+        //checks if a singular army controls the area, if so returns a new progress array
+        //likely I will need to return player id's with the army functions to match the promise up
+        
+        var singleArmy = 0;
+        for(var i = 0;i<allPlayerIds.length;i++){
+            var unitCount = armyArray[i];
+            if(unitCount>(0+objectiveObject.dont_count)){singleArmy++}
+           
+        }
+        
+        //return updated control array
+        if(singleArmy === 1){
+
+            for(var i = 0;i<armyArray.length;i++){
+
+                if(armyArray[i] > (0+objectiveObject.dont_count)){objectiveObject.progress[i]+=1;return objectiveObject.progress}
+            }
+
+        }
+    })
+   
+   
 
 }
 
+
+/**
+ this function checks what units are within a defined area and depending on the objective will return whether they meet criteria
+
+ */
 model.objectiveCheckFunctions["units_in_area"] = function (objectiveObject, playerId) {
 
     var unitCount = objectiveObject.needed;

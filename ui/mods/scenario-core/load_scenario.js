@@ -40,5 +40,5 @@ function loadScenario(location){//will be made into an api/observable later , wi
     
    
 };
-function loadTestScenario(){loadScenario("test_scenario_1.json")}
-setTimeout(loadTestScenario,5000)
+function loadTestScenario(){loadScenario("test_scenario_2.json")}
+setTimeout(loadTestScenario,1000)

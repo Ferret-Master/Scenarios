@@ -82,6 +82,7 @@ var returnPromise = new Promise(function(resolve,reject){resolve(model.objective
 
 returnPromise.then(function(result){//TODO replace the 0 with playerId
     //console.log("result of progress = "+result)
+    
     if(result == null){return}
     if(result === true){//move from active objectives into finished, update ui, activate success triggers
         if(objectiveObject.effectPuppetId !== undefined){
@@ -114,9 +115,15 @@ returnPromise.then(function(result){//TODO replace the 0 with playerId
 
     }
     else{//other result should be an update to progress, so update ui
+        console.log(result)
+        if(objectiveObject.type == "control_area"){
+            
+            objectiveObject.progress = result;
 
-        objectiveObject.progress = result;
-
+        }
+        else{
+            objectiveObject.progress = result;
+        }
     }
     
     
@@ -194,6 +201,8 @@ model.objectiveLoop = function(){
             
 
             objectiveProgress(active[i],objectiveModel.playerId)
+            if(objectiveModel.activeObjectives[i].playerNames == undefined){objectiveModel.activeObjectives[i].playerNames = model.scenarioModel.playerNameArray}
+            if(objectiveModel.activeObjectives[i].playerName == undefined){objectiveModel.activeObjectives[i].playerName = model.playerName()}
 
         }
 
