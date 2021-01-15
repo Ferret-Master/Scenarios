@@ -195,6 +195,12 @@ model.triggerFunctions["spawn_effect"] = function(triggerObject){
 
 }
 
+model.triggerFunctions["prevent_unit_selection"] = function(triggerObject){//prevents the selection of a particular unit
+   
+    return;
+
+}
+
 
 
 
