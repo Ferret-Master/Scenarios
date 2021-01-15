@@ -69,9 +69,45 @@ function ScenarioViewModel() {
     self.author = "author";
 
     self.scenarioName = "scenario name";
+
+    self.noSelection = ["/pa/units/commanders/scenario_avatar/scenario_avatar.json"];
 }
 model.scenarioModel = new ScenarioViewModel();
 
+var selectionChecker = ko.computed(function(){//locks up the game atm, likely causing an update to itself constantly, may switch to a fast script instead but its risky, easier to probably de select unit types that should not be allowed like no build
+  var noSelect = model.scenarioModel.noSelection;
+  var unwantedId = [];
+  if(model.selection() == undefined){return}
+  var selectionId = model.selection().spec_ids;
+  for(var i = 0;noSelect.length;i++){
+
+    if(selectionId[noSelect[i]] !== undefined){
+
+      for(var j = 0;j<selectionId[noSelect[i]].length;j++){
+        unwantedId.push(selectionId[noSelect[i]][j])
+      } 
+
+    }
+
+  }
+
+  var wantedId = [];
+
+  var selectedKeys = _.keys(selectionId)
+
+  for(var i = 0;selectedkeys.length;i++)
+  {
+
+    for(var j = 0;j<selectedId[selectedKeys[i]].length;j++){
+      wantedId.push(selectedId[selectedKeys[i]][j])
+    }
+  }
+  wantedId = _.difference(wantedId,unwantedId)
+  api.select.unitsById(wantedId);
+
+
+
+})
 
 function getAvatarId(){
     var planet = model.currentFocusPlanetId();
