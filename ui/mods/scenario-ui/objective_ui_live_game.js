@@ -96,7 +96,7 @@ handlers.objectiveUpdate = function(payload) {
                         if(playerName == payload[0].playerNames[j]){playerNumber =  array[i][j]}
                     }
                    
-                    finalString += (playerName+":"+playerNumber+"Leader:\r\n"+topPlayerString+" with "+highestNum)
+                    finalString += (playerName+":"+playerNumber+"\r\n"+"Leader:"+topPlayerString+" with "+highestNum)
                     array[i] = finalString;
 
 

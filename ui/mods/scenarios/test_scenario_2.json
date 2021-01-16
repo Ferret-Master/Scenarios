@@ -1,5 +1,5 @@
 {
-    "name": "King of the hill test",
+    "name": "King of the hill multiplayer test",
     "description": "A early test of a king of the hill gamemode",
     "scenarioID": 1,
     "systemName": "Centax-3",
@@ -14,7 +14,7 @@
             "name": "king_of_the_hill",
             "id":1,
             "visible":true,
-            "description": "Control the marked area for 5 minutes total to win.",
+            "description": "Control the marked area for 5 minutes/300 seconds total to win.",
             "type": "control_area",
             "effect":"radius_ring",
             "effectDuration":0,
@@ -28,11 +28,11 @@
                 {
                     "planet": 0,
                     "pos": [
-                        -155,
-                        25,
-                        356
+                        0.19706711173057556,
+                        -1.5809801816940308,
+                        635.1109008789062
                     ],
-                    "radius": 200
+                    "radius": 180
                 }
             ],
             "startingObjective": true,
@@ -56,7 +56,7 @@
             "description": "sets up the king of the hill area",
             "hidden":true,
             "type": "timed",
-            "time":1,
+            "time":5,
             "startingObjective": true,
             "successTriggers": [
                 "area_vision"
@@ -86,9 +86,9 @@
                 {
                     "planet": 0,
                     "pos": [
-                        -155,
-                        25,
-                        356
+                        0.19706711173057556,
+                        -1.5,
+                        635
                     ]
                    
                 }

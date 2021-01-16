@@ -115,7 +115,7 @@ returnPromise.then(function(result){//TODO replace the 0 with playerId
 
     }
     else{//other result should be an update to progress, so update ui
-        console.log(result)
+
         if(objectiveObject.type == "control_area"){
             
             objectiveObject.progress = result;

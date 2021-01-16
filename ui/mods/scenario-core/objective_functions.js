@@ -81,7 +81,7 @@ model.objectiveCheckFunctions["control_area"] = function (objectiveObject, playe
     var unitCount = objectiveObject.needed;
     var areaLocation = objectiveObject.location; // planet, center coordinates, and radius
     var allPlayerIds = model.scenarioModel.playerArray;
-    for(var i = 0;i<allPlayerIds.length;i++){console.log(objectiveObject.progress);if(objectiveObject.progress[i] === undefined){objectiveObject.progress[i] = 0}}
+    for(var i = 0;i<allPlayerIds.length;i++){if(objectiveObject.progress[i] === undefined){objectiveObject.progress[i] = 0}}
     var promiseArray = [];
     for(var i = 0;i<allPlayerIds.length;i++){
 

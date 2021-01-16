@@ -74,15 +74,16 @@ function ScenarioViewModel() {
 }
 model.scenarioModel = new ScenarioViewModel();
 
-var selectionChecker = ko.computed(function(){//locks up the game atm, likely causing an update to itself constantly, may switch to a fast script instead but its risky, easier to probably de select unit types that should not be allowed like no build
+  var selectionChecker = ko.computed(function(){//locks up the game atm, likely causing an update to itself constantly, may switch to a fast script instead but its risky, easier to probably de select unit types that should not be allowed like no build
   var noSelect = model.scenarioModel.noSelection;
   var unwantedId = [];
-  if(model.selection() == undefined){return}
+  if(model.selection() == undefined || model.selection() == null){return}
   var selectionId = model.selection().spec_ids;
-  for(var i = 0;noSelect.length;i++){
+  
+  for(var i = 0;i<noSelect.length;i++){
 
     if(selectionId[noSelect[i]] !== undefined){
-
+     
       for(var j = 0;j<selectionId[noSelect[i]].length;j++){
         unwantedId.push(selectionId[noSelect[i]][j])
       } 
@@ -94,15 +95,21 @@ var selectionChecker = ko.computed(function(){//locks up the game atm, likely ca
   var wantedId = [];
 
   var selectedKeys = _.keys(selectionId)
-
-  for(var i = 0;selectedkeys.length;i++)
+ 
+  for(var i = 0;i<selectedKeys.length;i++)
   {
 
-    for(var j = 0;j<selectedId[selectedKeys[i]].length;j++){
-      wantedId.push(selectedId[selectedKeys[i]][j])
+    for(var j = 0;j<selectionId[selectedKeys[i]].length;j++){
+      wantedId.push(selectionId[selectedKeys[i]][j])
     }
   }
+ 
+  oldWantedId = wantedId;
+
   wantedId = _.difference(wantedId,unwantedId)
+
+  if(oldWantedId.length <= wantedId.length){return oldWantedId}
+
   api.select.unitsById(wantedId);
 
 
