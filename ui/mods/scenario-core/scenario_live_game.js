@@ -120,12 +120,17 @@ function getAvatarId(){
     var planet = model.currentFocusPlanetId();
     if(planet <0){_.delay(getAvatarId,1000);return}
     avatarPromise = model.playerArmy(model.armyIndex(), model.currentFocusPlanetId(),"/pa/units/commanders/scenario_avatar/scenario_avatar.json");
-    avatarPromise.then(function(result){model.scenarioModel.avatarId = result})
+    avatarPromise.then(function(result){
+      if(result == undefined){_.delay(getAvatarId,1000);return}
+      model.scenarioModel.avatarId = result
+    
+    })
     var playerAmount = model.playerListState().players.length;
     for(var i = 0;i<playerAmount;i++){
       model.scenarioModel.playerArray.push(i)
       model.scenarioModel.playerNameArray.push(model.players()[i].name)
     }
+
 
 }
 
@@ -148,6 +153,7 @@ return;
 handlers.ScenarioTime = function(payload) {
     
     if(model.scenarioModel !== undefined){
+      
     model.scenarioModel.fullTime = Math.round(payload);
     if(model.hasSelection() && model.maxEnergy() > 0 && model.gameOver() == false){
 

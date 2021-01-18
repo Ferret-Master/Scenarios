@@ -20,8 +20,26 @@ model.triggerFunctions["preset"] = function(triggerObject){
     playerIndex = model.armyIndex();
 
     var preset = triggerObject.prefab;
- 
+    console.log(playerIndex)
+    console.log("running build preset")
     model.executeAsPlayer(playerIndex,api.build_preset.exactPreFab,[avatarId[0],preset])
+    //api.build_preset.exactPreFab(avatarId,preset,playerIndex)
+
+
+
+}
+
+model.triggerFunctions["preset_unit"] = function(triggerObject){//different version as units
+    
+    var avatarId = model.scenarioModel["avatarId"];
+ 
+    if(avatarId == undefined || avatarId == -1){_.delay(model.triggerFunctions["preset"],1000,triggerObject);return}
+    if(triggerObject["delay"]>0){var newTriggerObject = triggerObject;newTriggerObject.delay = 0 ;_.delay(model.triggerFunctions["preset"],(triggerObject["delay"]*1000),triggerObject)}
+    playerIndex = model.armyIndex();
+
+    var preset = triggerObject.prefab;
+ 
+    model.executeAsPlayer(playerIndex,api.build_preset.exactPreFabUnit,[avatarId[0],preset])
     //api.build_preset.exactPreFab(avatarId,preset,playerIndex)
 
 
@@ -49,18 +67,20 @@ model.triggerFunctions["wipe_planet"] = function(triggerObject){//spawns a unit 
 //vision will have duration and three size presets(for now)
 
 model.triggerFunctions["vision_medium"] = function(triggerObject){ 
-
+    console.log("vison medium ran")
 
     //will return id's later but need a way to track specific unit id's in game to destroy etc if the duration is forever. e.g vision dissapears after an objective is completed, but only one set.
     //assignjing name/id to each vision trigger to a new thing in objective model could work. then can delete them with triggers given their name/id
     var avatarId = model.scenarioModel["avatarId"];
  
     if(avatarId == undefined || avatarId == -1){_.delay(model.triggerFunctions["vision_medium"],1000,triggerObject);return}
-    if(triggerObject["delay"]>0){var newTriggerObject = triggerObject;newTriggerObject.delay = 0 ;_.delay(model.triggerFunctions["preset"],(triggerObject["delay"]*1000),triggerObject)}
+    if(triggerObject["delay"]>0){var newTriggerObject = triggerObject;newTriggerObject.delay = 0 ;_.delay(model.triggerFunctions["preset_unit"],(triggerObject["delay"]*1000),triggerObject)}
     playerIndex = model.armyIndex();
 
     var locations = triggerObject.location;
     console.log("locations: "+locations)
+    console.log(playerIndex)
+    console.log("running vision medium")
     for(var i = 0;i<locations.length;i++){
         var location = locations[i];
         var preset = {
@@ -78,7 +98,7 @@ model.triggerFunctions["vision_medium"] = function(triggerObject){
 
 
         }
-        model.executeAsPlayer(playerIndex,api.build_preset.exactPreFab,[avatarId[0],preset])
+        model.executeAsPlayer(playerIndex,api.build_preset.exactPreFabUnit,[avatarId[0],preset])
     }
     return;
 

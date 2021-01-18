@@ -37,7 +37,20 @@ function init_build_preset(api) {
         console.log("attempting build command with unitid: " + id + " planet: "+planet + " spec: "+ structure+" at location "+ structure.pos);
         // console.log(api.getWorldView(0).sendOrder({units: unitid,command: 'build',location: {planet: planet,multi_pos: [location,location]},spec: spec,queue: true}));
         api.getWorldView(0).sendOrder({units: id,command: 'build',location: {planet: planet,multi_pos: [structure.pos,structure.pos],orient: structure.orientation},spec: structure.unitType,queue: true,group:true});
-        console.log(api.getWorldView(0).sendOrder({units: id,command: 'build',location: {planet: planet,multi_pos: [structure.pos,structure.pos],orient: structure.orientation},spec: structure.unitType,queue: true,group:true}))},
+        console.log(api.getWorldView(0).sendOrder({units: id,command: 'build',location: {planet: planet,multi_pos: [structure.pos,structure.pos],orient: structure.orientation},spec: structure.unitType,queue: true,group:true
+    
+    
+    }))},
+
+    buildCommandUnit: function(id,planet,structure){
+                          
+        console.log("attempting build command with unitid: " + id + " planet: "+planet + " spec: "+ structure+" at location "+ structure.pos);
+        // console.log(api.getWorldView(0).sendOrder({units: unitid,command: 'build',location: {planet: planet,multi_pos: [location,location]},spec: spec,queue: true}));
+        api.getWorldView(0).sendOrder({units: id,command: 'build',location: {planet: planet,pos: structure.pos,orient: structure.orientation},spec: structure.unitType,queue: true,group:true});
+        //console.log(api.getWorldView(0).sendOrder({units: id,command: 'build',location: {planet: planet,multi_pos: [structure.pos,structure.pos],orient: structure.orientation},spec: structure.unitType,queue: true,group:true
+    
+    
+    },
     buildCommandOld: function(unitid,planet,spec,location){
                         
         console.log("attempting build command with unitid: " + unitid + " planet: "+planet + " spec: "+ spec+" at location "+ location[0]);
@@ -170,7 +183,21 @@ function init_build_preset(api) {
                 
             }                                     
 
-    }
+    },
+    exactPreFabUnit: function (preFab){//takes in prefab object that defines everything needed, unit edition
+        var id = preFab[0]
+        var prefab = preFab[1];
+        var planet = prefab.planet;
+        var unitArray = prefab.units;
+        for(var i = 0; i<unitArray.length;i++){
+            
+            var structure = unitArray[i];
+            
+            api.build_preset.buildCommandUnit(id,planet,structure);
+            
+        }                                     
+
+}
         }
 };
 init_build_preset(window.api);

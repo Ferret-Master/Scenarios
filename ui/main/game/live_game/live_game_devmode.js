@@ -52,7 +52,7 @@ $(document).ready(function () {
             api.Panel.message(api.Panel.parentId, 'panel.invoke', ['playerControlFlags', newControlFlags]);
      
         };
-        self.spawnAvatar = function (index) {
+        self.spawnAvatarOld = function (index) {
             var currentPlayerIndex = undefined;
             var avatarName = "/pa/units/commanders/scenario_avatar/scenario_avatar.json";
             for(var i = 0;i<this.playerControlFlags().length;i++){
@@ -60,7 +60,7 @@ $(document).ready(function () {
                 if(this.playerControlFlags()[i] == true){currentPlayerIndex = i;}
         
             }
-            if(index = currentPlayerIndex){
+            if(index == currentPlayerIndex){
                
                 engine.call('unit.debug.setScenarioSpecId',avatarName);
                 engine.call('unit.debug.scenarioPaste')
@@ -77,6 +77,18 @@ $(document).ready(function () {
             //this.updatePlayerControlFlag(currentPlayerIndex);
         
         };
+
+        self.spawnAvatar = function(){//using as other version had multiplayer issues and want that work
+
+            var avatarName = "/pa/units/commanders/scenario_avatar/scenario_avatar.json";
+            engine.call('unit.debug.setScenarioSpecId',avatarName);
+            engine.call('unit.debug.scenarioPaste')
+
+            engine.call('unit.debug.setSpecId',avatarName);
+            setTimeout(function(){ engine.call('unit.debug.paste')}, 50);
+            return;
+
+        }
 
         self.tempControlSwitch = function (index,time) {
             var currentPlayerIndex = undefined;

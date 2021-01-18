@@ -16,7 +16,7 @@ model.executeAsPlayer = function(playerIndex, command, commandVars, timeout){
     if(playerIndex !== "" && playerIndex !== undefined && playerIndex !== model.armyIndex()){switchPlayer = true}
 
     if(switchPlayer == true){
-                            
+        console.log("attempting to switch player")                    
         api.Panel.message("devmode","switchControl",playerIndex);
 
         var tempFunc = function(commandVars){command(commandVars);}
@@ -62,8 +62,11 @@ should probably add a unitflag to this in case I only want one unittypes states.
 
 model.playerArmy(0,0,"",true).then(function(ready){console.log(ready)}) -test command
 
+//adding unit types as an option would be good, e.g all fabs or all factorys
+//unit type is things like Mobile, Construction, Etc
+
 */
-model.playerArmy = function(playerId, planetId,unitType, stateFlag){
+model.playerArmy = function(playerId, planetId,unitType, stateFlag,unitTypeValue){
     //console.log(playerId+" | "+planetId+" | "+unitType+" | "+stateFlag)
     var promise = new Promise(function(resolve,reject){
 

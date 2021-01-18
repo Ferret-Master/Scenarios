@@ -60,6 +60,56 @@ model.objectiveCheckFunctions["build_units"] = function (timedObject){
 
 }
 
+//takes in a range of units, and whether it should trigger within or outside this range, does not return progress.
+//if unittypes is true, units will be assumed to contain those and they will be used instead.
+model.objectiveCheckFunctions["unit_range"] = function (timedObject){
+
+    if(timedObject.unit_types == true){//TODO
+        var unitTypes = timedObject.units.split(",");
+        model.playerArmy(allPlayerIds[i], planet, "")
+    }
+    else{
+        var unitNames = timedObject.units.split(",");
+        
+        var armyPromise = model.playerArmy(allPlayerIds[i], planet, unitNames[i])
+        promiseArray.push(armyPromise.then(function (playerArmy) {
+
+            unitKey = _.keys(playerArmy)
+            if(unitKey.length == 1){
+
+                return playerArmy[unitKey[0]].length;
+            }
+
+            else{return 0}
+        }));
+        var returnVar = Promise.all(promiseArray)
+    
+   
+    return returnVar.then(function(unitNumberArray){
+
+        //checks if a singular army controls the area, if so returns a new progress array
+        //likely I will need to return player id's with the army functions to match the promise up
+        
+        var unitTotal= 0;
+        for(var i = 0;i<unitNames.length;i++){
+            var unitCount = unitNumberArray[i];
+            unitTotal += unitCount;
+           
+        }
+        
+        //return updated control array
+        if(timedObject.range_type == "inside"){
+            if(unitCount <= timedObject.range_higher && unitCount >= timedObject.range_lower){return true}
+        }
+        else{
+            if(unitCount > timedObject.range_higher && unitCount < timedObject.range_lower){return true}
+        }
+    })
+    }
+    
+
+}
+
 model.objectiveCheckFunctions["destroy_units"] = function (timedObject){//likely in area tracking id's is annoying
 
     return;

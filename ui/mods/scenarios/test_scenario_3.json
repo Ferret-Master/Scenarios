@@ -1,7 +1,7 @@
 {
-    "name": "King of the hill multiplayer test",
-    "description": "A early test of a king of the hill gamemode",
-    "scenarioID": 2,
+    "name": "Anhilation Gamemode Test",
+    "description": "A early test of a the anhilation gamemode",
+    "scenarioID": 3,
     "systemName": "Centax-3",
     "author": "Ferretmaster",
     "gameType": "Multiplayer",
@@ -11,34 +11,26 @@
     "requireBuilders":true,
     "objectives": [
         {
-            "name": "king_of_the_hill",
+            "name": "Anhilation",
             "id":1,
             "visible":true,
-            "description": "Control the marked area for 5 minutes/300 seconds total to win.",
-            "type": "control_area",
-            "effect":"radius_ring",
-            "effectDuration":0,
-            "progress": [0],
-            "needed": 60,
-            "syntax":"king",
-            "dont_count":2,
-            "result":"win game",
-            "show_area":true,
-            "location": [
-                {
-                    "planet": 0,
-                    "pos": [
-                        0.19706711173057556,
-                        -1.5809801816940308,
-                        635.1109008789062
-                    ],
-                    "radius": 180
-                }
-            ],
+            "description": "destroy all of a players factorys/fabricators.",
+            "type": "unit_range",
+            
+       
+          
+            "range_lower": 0,
+            "range_higher": 0,
+            "range_type":"inside",
+            "unit_types":"",
+            "units":"",
+            "result":"that player will lose",
+           
+         
             "startingObjective": true,
             "finishDuration": null,
             "successTriggers": [
-                "win_game"
+                "delete_com"
             ],
             "failureTriggers": [
                 ""
