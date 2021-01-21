@@ -186,5 +186,15 @@ handlers.ScenarioTime = function(payload) {
     
 };
 
+handlers.ScenarioLandingZones = function(payload) {
 
+
+
+}
+
+handlers.ScenarioLandingPosition = function(payload) {
+
+
+
+}
     
