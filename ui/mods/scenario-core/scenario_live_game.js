@@ -70,6 +70,21 @@ function ScenarioViewModel() {
 
     self.scenarioName = "scenario name";
 
+    self.playerSpawn = {
+
+      pos:[],
+
+      radius:undefined,
+
+      chosenPos:undefined
+
+
+    }
+
+    self.playerCommanderType = undefined;
+
+    self.playerCommanderId = undefined;
+
     self.noSelection = ["/pa/units/commanders/scenario_avatar/scenario_avatar.json"];
 }
 model.scenarioModel = new ScenarioViewModel();

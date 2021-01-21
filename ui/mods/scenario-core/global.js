@@ -26,3 +26,5 @@ if (window.location.href != 'coui://ui/main/game/live_game/live_game.html') {
       }
     }
   })}
+
+  //I think the above is uneeded as I call this in live game already and this may have not been working for whatever reason.
