@@ -17,28 +17,15 @@ function loadScenario(location){//will be made into an api/observable later , wi
 
     $.getJSON('coui:/mods/scenarios/' + location).then(function(imported) {
         
-        
-        console.log(JSON.parse(JSON.stringify(imported)))
-
        
-        console.log(JSON.parse(JSON.stringify(imported["objectives"])))
-        
-        console.log(JSON.parse(JSON.stringify(imported["triggers"])))
-     
-        
-       
-    
         model.setupTriggers(imported["triggers"]);
         model.setupScenario(imported);
         model.setupObjectives(imported);
-
-        
-
 
     });
 
     
    
 };
-function loadTestScenario(){loadScenario("test_scenario_2.json")}
+function loadTestScenario(){loadScenario("test_scenario_3.json")}
 setTimeout(loadTestScenario,5000)

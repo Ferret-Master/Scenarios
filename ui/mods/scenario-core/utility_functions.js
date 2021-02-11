@@ -66,7 +66,19 @@ model.playerArmy(0,0,"",true).then(function(ready){console.log(ready)}) -test co
 //unit type is things like Mobile, Construction, Etc
 
 */
+var unitJsons = model.unitSpecs//I think this has a list of unit keys that then have types
 model.playerArmy = function(playerId, planetId,unitType, stateFlag,unitTypeValue){
+    if(unitJsons == undefined){unitJsons = model.unitSpecs}
+    var one = !_.isArray(unitType);
+    if (one){
+        unitType = [unitType];
+
+    }
+    var one = !_.isArray(unitTypeValue);
+    if (one){
+        unitTypeValue = [unitTypeValue];
+
+    }
     //console.log(playerId+" | "+planetId+" | "+unitType+" | "+stateFlag)
     var promise = new Promise(function(resolve,reject){
 
@@ -77,17 +89,48 @@ model.playerArmy = function(playerId, planetId,unitType, stateFlag,unitTypeValue
                 
                 
                 var promise2 = world.getArmyUnits(playerId,planetId).then(function (result){
-                    
-                   // console.log(result)
-                    if(unitType !== ""){result = result[unitType]}
-                   // console.log(result)
+                   
+                   
+                    if(unitType.length>0 && unitType[0] !== "" && unitType[0] !== undefined){
+                        console.log(result)
+                        var finalResult = {};
+                        
+                        for(var i = 0;i<unitType.length;i++){
+
+                            finalResult[unitType[i]] = result[unitType[i]]
+
+                        }
+                       
+                        result =  finalResult;
+                    }
+                   
+                    if(unitTypeValue.length>0 && unitTypeValue[0] !== "" && unitTypeValue[0] !== undefined){
+         
+                        var finalResult = {};
+                        var jsonKeys = _.keys(unitJsons)
+                        for(var i = 0;i<jsonKeys.length;i++){
+                            var matchedValue = 0;
+                            for(var j = 0;j<unitTypeValue.length;j++){
+                                
+                                if(_.contains(unitJsons[jsonKeys[i]].types,unitTypeValue[j])){//check if each unit json contains every type in the value array
+                                    matchedValue++;
+                             
+                                }
+                            }
+                            if(matchedValue == unitTypeValue.length && result[jsonKeys[i]] !== undefined){finalResult[jsonKeys[i]] = result[jsonKeys[i]]}
+                        }
+                        result = finalResult;
+
+                    }
+
+
                     return result
                 
                 
                 
                 
                 })
-                //console.log(promise2.then(function(result){console.log(result)}))
+           
                 resolve(promise2)
             
             
@@ -99,16 +142,44 @@ model.playerArmy = function(playerId, planetId,unitType, stateFlag,unitTypeValue
     
                     var unitArray = [];
                     
-                    if(unitType !== ""){result = result[unitType]}
+                    if(unitType.length>0 && unitType[0] !== "" && unitType[0] !== undefined){
+                        
+                        var finalResult = {};
+                        
+                        for(var i = 0;i<unitType.length;i++){
+
+                            finalResult[unitType[i]] = result[unitType[i]]
+
+                        }
+                      
+                        result =  finalResult;
+                    }
+
+                    if(unitTypeValue.length>0 && unitTypeValue[0] !== "" && unitTypeValue[0] !== undefined){
+         
+                        var finalResult = {};
+                        var jsonKeys = _.keys(unitJsons)
+                        for(var i = 0;i<jsonKeys.length;i++){
+                            var matchedValue = 0;
+                            for(var j = 0;j<unitTypeValue.length;j++){
+                                
+                                if(_.contains(unitJsons[jsonKeys[i]].types,unitTypeValue[j])){//check if each unit json contains every type in the value array
+                                    matchedValue++;
+                             
+                                }
+                            }
+                            if(matchedValue == unitTypeValue.length && result[jsonKeys[i]] !== undefined){finalResult[jsonKeys[i]] = result[jsonKeys]}
+                        }
+                        result = finalResult;
+
+                    }
                     
                     armyKeys = _.keys(result)
                     for(var i = 0;i<armyKeys.length;i++){
                         unitArray.push(result[armyKeys[i]])
                     }
                     unitArray = _.flatten(unitArray)
-                    //console.log(unitArray)
-                   
-    
+
                     return world.getUnitState(unitArray).then(function (ready) {
                         var unitData = this.result;
                         var one = !_.isArray(unitData);

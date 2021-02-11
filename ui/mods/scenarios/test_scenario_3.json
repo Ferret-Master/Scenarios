@@ -17,20 +17,20 @@
             "description": "destroy all of a players factorys/fabricators.",
             "type": "unit_range",
             
-       
+            "delay": 30,
           
-            "range_lower": 0,
-            "range_higher": 0,
-            "range_type":"inside",
-            "unit_types":"",
+            "range_lower": 5,
+            "range_higher": 1000,
+            "range_type":"outside",
+            "unit_types":"UNITTYPE_Construction",
             "units":"",
             "result":"that player will lose",
            
          
-            "startingObjective": true,
+            "startingObjective": false,
             "finishDuration": null,
             "successTriggers": [
-                "delete_com"
+                "kill_player_delayed"
             ],
             "failureTriggers": [
                 ""
@@ -43,15 +43,38 @@
             ]
         },
         {
-            "name": "setup_area",
+            "name": "spawn loader",
             "id":2,
-            "description": "sets up the king of the hill area",
+            "description": "sets annhilation up",
             "hidden":true,
             "type": "timed",
-            "time":5,
+            "time":0,
             "startingObjective": true,
             "successTriggers": [
-                "area_vision"
+                "spawn_loader"
+            ],
+            "failureTriggers": [
+                ""
+            ],
+            "successObjectives": [
+                "load_commander",
+                "Anhilation"
+            ],
+            "failureObjectives": [
+                ""
+            ]
+        },
+        {
+            "name": "load_commander",
+            "id":3,
+            "description": "loads commander for safety",
+            "hidden":true,
+            "type": "timed",
+            "time":0,
+            "startingObjective": false,
+            "successTriggers": [
+                "load_com",
+                "spawn_replacement"
             ],
             "failureTriggers": [
                 ""
@@ -66,25 +89,33 @@
     ],
     "triggers": [
         {
-            "name": "win_game",
+            "name": "spawn_loader",
             "id": 1,
-            "type": "wipe_planet"
+            "type": "paste_unit",
+            "unit":"/pa/units/air/scenario_loader/scenario_loader.json"
         },
         {
-            "name": "area_vision",
+            "name": "load_com",
             "id": 2,
-            "type": "vision_medium",
-            "location": [
-                {
-                    "planet": 0,
-                    "pos": [
-                        0.19706711173057556,
-                        -1.5,
-                        635
-                    ]
-                   
-                }
-            ]
+            "planet":0,
+            "type": "load_commander"
+        },
+        {
+            "name": "spawn_replacement",
+            "id": 3,
+            "type": "build_at_existing_unit",
+            "special":"playerCom"
+            
+        },
+        {
+            "name": "kill_player_delayed",
+            "id": 4,
+            "delay": 5,
+            "type": "destroy_unit",
+            "amount": "all"
+            
+            
         }
+        
     ]
 }

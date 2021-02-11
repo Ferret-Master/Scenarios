@@ -34,7 +34,7 @@ model.activateTrigger = function(triggerName){ //this prevents creators breaking
         if(scenarioTriggerModel.allTriggernames[i] == triggerName){
             var triggerObject = scenarioTriggerModel.allTriggers[i];
             console.log(triggerObject)
-            var delayMilliseconds = triggerObject.delay*1000;
+            var delayMilliseconds = triggerObject["delay"]*1000;
             if(triggerObject.delay !== undefined || triggerObject.delay == 0){_.delay(model.triggerFunctions[triggerObject.type],delayMilliseconds,triggerObject); return}
            console.log("running the trigger")
            console.log(triggerObject.type)

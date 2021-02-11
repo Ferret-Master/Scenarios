@@ -38,15 +38,14 @@ var client_state = handlers.client_state; handlers.client_state = function (clie
 
 };
 
-
+var commanderid = undefined;
 
 var server_state = handlers.server_state; handlers.server_state = function(msg) { 
 
 server_state(msg);
 
 if (msg.data) {
-
-
+    
 switch (msg.state) {
     case 'landing':
 

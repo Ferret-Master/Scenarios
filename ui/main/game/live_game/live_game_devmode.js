@@ -89,7 +89,17 @@ $(document).ready(function () {
             return;
 
         }
+        self.spawnUnit = function(unit){//using as other version had multiplayer issues and want that work
 
+            var avatarName = unit;
+            engine.call('unit.debug.setScenarioSpecId',avatarName);
+            engine.call('unit.debug.scenarioPaste')
+
+            engine.call('unit.debug.setSpecId',avatarName);
+            setTimeout(function(){ engine.call('unit.debug.paste')}, 50);
+            return;
+
+        }
         self.tempControlSwitch = function (index,time) {
             var currentPlayerIndex = undefined;
             for(var i = 0;i<this.playerControlFlags().length;i++){
@@ -133,7 +143,14 @@ $(document).ready(function () {
 
         if(time == undefined){time = 500}
 
-        model.spawnAvatar(playerIndex,time)
+        model.spawnAvatar()
+
+    }
+    handlers.spawnUnit = function(unit){
+
+        
+
+        model.spawnUnit(unit)
 
     }
     // inject per scene mods

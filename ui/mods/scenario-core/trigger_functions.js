@@ -11,6 +11,31 @@ currently it is all under triggerFunctions but may be split by purpose later.
 
 model.triggerFunctions = {};
 //Planet, id, command, playerIndex,template, targetId
+model.triggerFunctions["paste_unit"] = function(triggerObject){
+    api.Panel.message("devmode","spawnUnit",triggerObject.unit);
+}
+
+model.triggerFunctions["load_commander"] = function(triggerObject){
+    var transportIdPromise =  model.playerArmy(model.armyIndex(), 0,"/pa/units/air/scenario_loader/scenario_loader.json" ,false)
+    transportIdPromise.then(function(result){
+        
+       
+        for(property in result){result = result[property]}
+
+        if(result === undefined || model.scenarioModel.playerCommanderId === undefined){_.delay(model.triggerFunctions["load_commander"],1000,triggerObject);return}
+     
+        for(var i = 0;i<model.scenarioModel.playerCommanderId.length;i++){
+       
+            if(model.scenarioModel.playerCommanderId[i] === undefined || result[i] === undefined){_.delay(model.triggerFunctions["load_commander"],1000,triggerObject);return}
+         
+            api.getWorldView(0).sendOrder({units: result[i],command: 'load',location: {planet: triggerObject.planet,entity: model.scenarioModel.playerCommanderId[i]},queue: true,group:true});
+
+        }
+        
+
+    })
+}
+
 model.triggerFunctions["preset"] = function(triggerObject){
     
     var avatarId = model.scenarioModel["avatarId"];
@@ -33,12 +58,59 @@ model.triggerFunctions["preset_unit"] = function(triggerObject){//different vers
     
     var avatarId = model.scenarioModel["avatarId"];
  
-    if(avatarId == undefined || avatarId == -1){_.delay(model.triggerFunctions["preset"],1000,triggerObject);return}
-    if(triggerObject["delay"]>0){var newTriggerObject = triggerObject;newTriggerObject.delay = 0 ;_.delay(model.triggerFunctions["preset"],(triggerObject["delay"]*1000),triggerObject)}
+    if(avatarId == undefined || avatarId == -1){_.delay(model.triggerFunctions["preset_unit"],1000,triggerObject);return}
+    if(triggerObject["delay"]>0){var newTriggerObject = triggerObject;newTriggerObject.delay = 0 ;_.delay(model.triggerFunctions["preset_unit"],(triggerObject["delay"]*1000),triggerObject)}
     playerIndex = model.armyIndex();
 
     var preset = triggerObject.prefab;
  
+    model.executeAsPlayer(playerIndex,api.build_preset.exactPreFabUnit,[avatarId[0],preset])
+    //api.build_preset.exactPreFab(avatarId,preset,playerIndex)
+
+
+
+}
+
+// this function will build the unitToBuild at the location of every unit specified by existing unit. useful when you want player control over a build location, recomended to only use with units rather than structures.
+// might need to modify to allow for it to build all the units but if re ran not repeat it for already done ones(so only affect new spots)
+// neat way to allow unit spawning at captured locations more easily
+// main reason for use is replacing commander currently, may be more work than needed if I only use it for that.
+/*{"name": "spawn_replacement",
+"id": 3,
+"type": "build_at_existing_unit",
+"special":"playerCom"}
+*/
+model.triggerFunctions["build_at_existing_unit"] = function(triggerObject){
+    console.log("builda at existing unit running")
+    var avatarId = model.scenarioModel["avatarId"];
+ 
+    if(avatarId == undefined || avatarId == -1){_.delay(model.triggerFunctions["build_at_existing_unit"],1000,triggerObject);return}
+    if(triggerObject["delay"]>0){var newTriggerObject = triggerObject;newTriggerObject.delay = 0 ;_.delay(model.triggerFunctions["build_at_existing_unit"],(triggerObject["delay"]*1000),triggerObject)}
+    playerIndex = model.armyIndex();
+    var buildLocation;
+    var planet;
+    var unitToBuild;
+    triggerObject.prefab = {};
+    if(triggerObject.special == "playerCom"){
+        console.log(model.scenarioModel.playerCommanderType)
+        console.log(model.scenarioModel.playerSpawn.chosenPos)
+        console.log(model.scenarioModel.playerSpawn.chosenPlanet)
+        if(model.scenarioModel.playerCommanderType == undefined || model.scenarioModel.playerSpawn.chosenPos == undefined || model.scenarioModel.playerSpawn.chosenPlanet === undefined){_.delay(model.triggerFunctions["build_at_existing_unit"],1000,triggerObject);return}
+        triggerObject.prefab.units = [{"unitType":model.scenarioModel.playerCommanderType,"pos":model.scenarioModel.playerSpawn.chosenPos,"orientation": [0, 0, 0 ]}]
+        triggerObject.prefab.planet = model.scenarioModel.playerSpawn.chosenPlanet
+        
+     
+    }
+    else{// TODO expand for general use
+
+        var unitToBuild = triggerObject.unitName;
+        var unitToBuildAt = triggerObject.existing_unit;
+    }
+    console.log("sending build order ")
+    console.log(triggerObject)
+    var preset = triggerObject.prefab;
+    console.log(preset)
+    console.log(avatarId)
     model.executeAsPlayer(playerIndex,api.build_preset.exactPreFabUnit,[avatarId[0],preset])
     //api.build_preset.exactPreFab(avatarId,preset,playerIndex)
 
@@ -67,7 +139,7 @@ model.triggerFunctions["wipe_planet"] = function(triggerObject){//spawns a unit 
 //vision will have duration and three size presets(for now)
 
 model.triggerFunctions["vision_medium"] = function(triggerObject){ 
-    console.log("vison medium ran")
+  
 
     //will return id's later but need a way to track specific unit id's in game to destroy etc if the duration is forever. e.g vision dissapears after an objective is completed, but only one set.
     //assignjing name/id to each vision trigger to a new thing in objective model could work. then can delete them with triggers given their name/id

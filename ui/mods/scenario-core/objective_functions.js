@@ -63,15 +63,33 @@ model.objectiveCheckFunctions["build_units"] = function (timedObject){
 //takes in a range of units, and whether it should trigger within or outside this range, does not return progress.
 //if unittypes is true, units will be assumed to contain those and they will be used instead.
 model.objectiveCheckFunctions["unit_range"] = function (timedObject){
+    var promiseArray = [];
+    if(timedObject["unit_types"] !== undefined){//TODO
+        var unitTypes = timedObject.unit_types;
+        var armyPromise = model.playerArmy(model.armyIndex(), 0, "",false,unitTypes)
+   
+        promiseArray.push(armyPromise.then(function (playerArmy) {
 
-    if(timedObject.unit_types == true){//TODO
-        var unitTypes = timedObject.units.split(",");
-        model.playerArmy(allPlayerIds[i], planet, "")
+            unitKey = _.keys(playerArmy)
+            if(unitKey.length > 0){
+                var unitAmount = 0;
+                for(var i = 0;i<unitKey.length;i++){
+
+                    unitAmount += playerArmy[unitKey[i]].length;
+                }
+
+                return unitAmount;
+            }
+
+            else{return 0}
+        }));
+        var returnVar = Promise.all(promiseArray)
+  
     }
     else{
         var unitNames = timedObject.units.split(",");
         
-        var armyPromise = model.playerArmy(allPlayerIds[i], planet, unitNames[i])
+        var armyPromise = model.playerArmy(model.armyIndex(), 0, unitNames[i])
         promiseArray.push(armyPromise.then(function (playerArmy) {
 
             unitKey = _.keys(playerArmy)
@@ -83,29 +101,34 @@ model.objectiveCheckFunctions["unit_range"] = function (timedObject){
             else{return 0}
         }));
         var returnVar = Promise.all(promiseArray)
-    
+    }
    
     return returnVar.then(function(unitNumberArray){
-
-        //checks if a singular army controls the area, if so returns a new progress array
-        //likely I will need to return player id's with the army functions to match the promise up
+       
         
         var unitTotal= 0;
-        for(var i = 0;i<unitNames.length;i++){
+        var numberArrayKeys = _.keys(unitNumberArray)
+        console.log(unitNumberArray)
+        for(var i = 0;i<unitNumberArray.length;i++){
+          
             var unitCount = unitNumberArray[i];
             unitTotal += unitCount;
            
         }
-        
+      
         //return updated control array
+        console.log(unitCount)
+        console.log("unit count above")
         if(timedObject.range_type == "inside"){
-            if(unitCount <= timedObject.range_higher && unitCount >= timedObject.range_lower){return true}
+            if(unitCount <= timedObject.range_higher && unitCount >= timedObject.range_lower){ console.log("would have returned true")}
+        
         }
         else{
-            if(unitCount > timedObject.range_higher && unitCount < timedObject.range_lower){return true}
+            if(unitCount > timedObject.range_higher || unitCount < timedObject.range_lower){ console.log("would have returned true")}
+          
         }
     })
-    }
+    
     
 
 }

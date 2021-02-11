@@ -91,17 +91,21 @@ returnPromise.then(function(result){//TODO replace the 0 with playerId
         }
         objectiveModel.finishedObjectives.push(objectiveObject)
 
-        //TODO activate linked objectives
+       
         objectiveModel.activeObjectives = removeByAttr(objectiveModel.activeObjectives,"id",objectiveObject.id)
-        //console.log(objectiveObject)
+   
         for(var j = 0;j<objectiveObject.successTriggers.length;j++){
            
             model.activateTrigger(objectiveObject.successTriggers[j]);
 
         }
         for(var j = 0;j<objectiveObject.successObjectives.length;j++){
-           
-            model.makeObjectiveActiveByName(objectiveObject.successObjectives[j])
+            
+          
+             
+                model.makeObjectiveActiveByName(objectiveObject.successObjectives[j])
+                
+            
 
         }
 
@@ -142,9 +146,19 @@ also triggers the needed ui components.
 */
 
 model.makeObjectiveActive = function(objectiveObject){ 
+    if(objectiveObject["delay"]>0){
 
-    objectiveModel.activeObjectives.push(objectiveObject);
+        var delayMilliseconds = objectiveObject["delay"]*1000;
+        console.log("activating objective with delay of "+ objectiveObject["delay"])
 
+        if(objectiveObject["delay"] !== undefined || objectiveObject["delay"] == 0){
+
+            _.delay(objectiveModel.activeObjectives.push,delayMilliseconds,objectiveObject); return}
+        
+        }
+        else{
+            objectiveModel.activeObjectives.push(objectiveObject);
+        }
 }
 
 model.makeObjectiveActiveByName = function(objectiveName){ 
@@ -188,8 +202,12 @@ model.objectiveLoop();
 }
 
 model.objectiveLoop = function(){
+    
     if(model.scenarioModel == undefined){setTimeout(model.objectiveLoop,1000);return;
     }
+    var avatarId = model.scenarioModel["avatarId"];
+ 
+    if(avatarId == undefined || avatarId == -1){setTimeout(model.objectiveLoop,1000);return}
     objectiveModel.playerId = model.armyIndex()
     //console.log("objective loop running")
     
