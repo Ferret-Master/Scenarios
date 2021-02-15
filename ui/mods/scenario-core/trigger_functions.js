@@ -22,11 +22,11 @@ model.triggerFunctions["load_commander"] = function(triggerObject){
        
         for(property in result){result = result[property]}
 
-        if(result === undefined || model.scenarioModel.playerCommanderId === undefined){_.delay(model.triggerFunctions["load_commander"],1000,triggerObject);return}
+        if(result === undefined || model.scenarioModel.playerCommanderId === undefined){_.delay(model.triggerFunctions["load_commander"],100,triggerObject);return}
      
         for(var i = 0;i<model.scenarioModel.playerCommanderId.length;i++){
        
-            if(model.scenarioModel.playerCommanderId[i] === undefined || result[i] === undefined){_.delay(model.triggerFunctions["load_commander"],1000,triggerObject);return}
+            if(model.scenarioModel.playerCommanderId[i] === undefined || result[i] === undefined){_.delay(model.triggerFunctions["load_commander"],100,triggerObject);return}
          
             api.getWorldView(0).sendOrder({units: result[i],command: 'load',location: {planet: triggerObject.planet,entity: model.scenarioModel.playerCommanderId[i]},queue: true,group:true});
 
@@ -59,7 +59,7 @@ model.triggerFunctions["preset_unit"] = function(triggerObject){//different vers
     var avatarId = model.scenarioModel["avatarId"];
  
     if(avatarId == undefined || avatarId == -1){_.delay(model.triggerFunctions["preset_unit"],1000,triggerObject);return}
-    if(triggerObject["delay"]>0){var newTriggerObject = triggerObject;newTriggerObject.delay = 0 ;_.delay(model.triggerFunctions["preset_unit"],(triggerObject["delay"]*1000),triggerObject)}
+    if(triggerObject["delay"]>0){var newTriggerObject = triggerObject;newTriggerObject.delay = 0 ;_.delay(model.triggerFunctions["preset_unit"],(triggerObject["delay"]*1000),newtriggerObject);return}
     playerIndex = model.armyIndex();
 
     var preset = triggerObject.prefab;
@@ -85,7 +85,7 @@ model.triggerFunctions["build_at_existing_unit"] = function(triggerObject){
     var avatarId = model.scenarioModel["avatarId"];
  
     if(avatarId == undefined || avatarId == -1){_.delay(model.triggerFunctions["build_at_existing_unit"],1000,triggerObject);return}
-    if(triggerObject["delay"]>0){var newTriggerObject = triggerObject;newTriggerObject.delay = 0 ;_.delay(model.triggerFunctions["build_at_existing_unit"],(triggerObject["delay"]*1000),triggerObject)}
+    if(triggerObject["delay"]>0){var newTriggerObject = triggerObject;newTriggerObject.delay = 0 ;_.delay(model.triggerFunctions["build_at_existing_unit"],(triggerObject["delay"]*1000),newTriggerObject);return}
     playerIndex = model.armyIndex();
     var buildLocation;
     var planet;
@@ -210,7 +210,21 @@ model.triggerFunctions["radar"] = function(triggerObject){
 }
 
 model.triggerFunctions["destroy_unit"] = function(triggerObject){
-   
+   if(triggerObject["amount"]== "commander"){//destroys the players commander
+
+    api.getWorldView(0).sendOrder({units: model.scenarioModel.playerCommanderId,command: 'self_destruct',queue: true,group:true});
+
+    var transportIdPromise = playerArmy(model.armyIndex,model.scenarioModel.chosenPlanet,"/pa/units/air/scenario_loader/scenario_loader.json")
+
+    transportIdPromise.then(function(ready){
+
+        
+        api.getWorldView(0).sendOrder({units: ready["/pa/units/air/scenario_loader/scenario_loader.json"],command: 'self_destruct',queue: true,group:true});
+
+
+    })
+
+   }
     return;
 
 }

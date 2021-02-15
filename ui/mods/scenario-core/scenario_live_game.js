@@ -2,7 +2,6 @@
 
 
 
-
     var originalCall = engine.call
     engine.call = function(method) {
  
@@ -168,15 +167,37 @@ function getCommanderId(){
   })
 }
 
+var cursor_x = -1;
+var cursor_y = -1;
+document.onmousemove = function(event)
+{
+
+cursor_x = event.pageX;
+cursor_y = event.pageY;
+}
+
 model.setupScenario = function(scenarioJSON){
+  
+
     var planet = model.currentFocusPlanetId();
     if(planet <0){_.delay(model.setupScenario,1000,scenarioJSON);return}
     console.log("scenario settings: "+JSON.stringify(scenarioJSON))
 
     if(scenarioJSON["requireBuilders"] == true){
-        api.Panel.message("devmode","spawnAvatar",model.armyIndex());
-        setTimeout(getAvatarId,500)
-        setTimeout(getCommanderId,2000)
+      var hdeck = model.holodeck;
+      hdeck.raycastTerrain(cursor_x, cursor_y).then(function(loc3D) {
+          if (loc3D.pos) {
+
+            if(loc3D.pos[0]>100 || loc3D.pos[0]<-100 ){
+            api.Panel.message("devmode","spawnAvatar",model.armyIndex());
+            setTimeout(getAvatarId,500)
+            setTimeout(getCommanderId,2000)
+            }
+            else{_.delay(model.setupScenario,1000,scenarioJSON);return}
+          }
+          else{_.delay(model.setupScenario,1000,scenarioJSON);return}
+        })
+       
     }
     model.scenarioModel.author = scenarioJSON["author"]
     model.scenarioModel.scenarioName = scenarioJSON["name"]

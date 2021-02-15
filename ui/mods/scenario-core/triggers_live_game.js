@@ -33,8 +33,10 @@ model.activateTrigger = function(triggerName){ //this prevents creators breaking
     for(var i = 0;i<scenarioTriggerModel["allTriggernames"].length;i++){
         if(scenarioTriggerModel.allTriggernames[i] == triggerName){
             var triggerObject = scenarioTriggerModel.allTriggers[i];
-            console.log(triggerObject)
+            
             var delayMilliseconds = triggerObject["delay"]*1000;
+            var delay_type = triggerObject["delay_type"] 
+            if(delay_type == "spawn" && model.scenarioModel.landTime == 200000){_.delay(model.activateTrigger,1000,triggerObject.name); return}
             if(triggerObject.delay !== undefined || triggerObject.delay == 0){_.delay(model.triggerFunctions[triggerObject.type],delayMilliseconds,triggerObject); return}
            console.log("running the trigger")
            console.log(triggerObject.type)

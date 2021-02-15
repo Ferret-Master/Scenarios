@@ -63,6 +63,7 @@ model.objectiveCheckFunctions["build_units"] = function (timedObject){
 //takes in a range of units, and whether it should trigger within or outside this range, does not return progress.
 //if unittypes is true, units will be assumed to contain those and they will be used instead.
 model.objectiveCheckFunctions["unit_range"] = function (timedObject){
+    console.log("unit range running")
     var promiseArray = [];
     if(timedObject["unit_types"] !== undefined){//TODO
         var unitTypes = timedObject.unit_types;

@@ -17,7 +17,7 @@
             "description": "destroy all of a players factorys/fabricators.",
             "type": "unit_range",
             
-            "delay": 30,
+            "delay":30,
           
             "range_lower": 5,
             "range_higher": 1000,
@@ -98,11 +98,15 @@
             "name": "load_com",
             "id": 2,
             "planet":0,
+            "delay": 0,
+            "delay_type":"spawn",
             "type": "load_commander"
         },
         {
             "name": "spawn_replacement",
             "id": 3,
+            "delay": 0.5,
+            "delay_type":"spawn",
             "type": "build_at_existing_unit",
             "special":"playerCom"
             
@@ -112,7 +116,7 @@
             "id": 4,
             "delay": 5,
             "type": "destroy_unit",
-            "amount": "all"
+            "amount": "commander"
             
             
         }
