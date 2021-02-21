@@ -81,10 +81,11 @@ model.triggerFunctions["preset_unit"] = function(triggerObject){//different vers
 "special":"playerCom"}
 */
 model.triggerFunctions["build_at_existing_unit"] = function(triggerObject){
-    console.log("builda at existing unit running")
+    // console.log("builda at existing unit running")
+    // console.log(model.scenarioModel.landTime)
     var avatarId = model.scenarioModel["avatarId"];
  
-    if(avatarId == undefined || avatarId == -1){_.delay(model.triggerFunctions["build_at_existing_unit"],1000,triggerObject);return}
+    if(avatarId == undefined || avatarId == -1){_.delay(model.triggerFunctions["build_at_existing_unit"],100,triggerObject);return}
     if(triggerObject["delay"]>0){var newTriggerObject = triggerObject;newTriggerObject.delay = 0 ;_.delay(model.triggerFunctions["build_at_existing_unit"],(triggerObject["delay"]*1000),newTriggerObject);return}
     playerIndex = model.armyIndex();
     var buildLocation;
@@ -92,10 +93,10 @@ model.triggerFunctions["build_at_existing_unit"] = function(triggerObject){
     var unitToBuild;
     triggerObject.prefab = {};
     if(triggerObject.special == "playerCom"){
-        console.log(model.scenarioModel.playerCommanderType)
-        console.log(model.scenarioModel.playerSpawn.chosenPos)
-        console.log(model.scenarioModel.playerSpawn.chosenPlanet)
-        if(model.scenarioModel.playerCommanderType == undefined || model.scenarioModel.playerSpawn.chosenPos == undefined || model.scenarioModel.playerSpawn.chosenPlanet === undefined){_.delay(model.triggerFunctions["build_at_existing_unit"],1000,triggerObject);return}
+        // console.log(model.scenarioModel.playerCommanderType)
+        // console.log(model.scenarioModel.playerSpawn.chosenPos)
+        // console.log(model.scenarioModel.playerSpawn.chosenPlanet)
+        if(model.scenarioModel.playerCommanderType == undefined || model.scenarioModel.playerSpawn.chosenPos == undefined || model.scenarioModel.playerSpawn.chosenPlanet === undefined){_.delay(model.triggerFunctions["build_at_existing_unit"],100,triggerObject);return}
         triggerObject.prefab.units = [{"unitType":model.scenarioModel.playerCommanderType,"pos":model.scenarioModel.playerSpawn.chosenPos,"orientation": [0, 0, 0 ]}]
         triggerObject.prefab.planet = model.scenarioModel.playerSpawn.chosenPlanet
         

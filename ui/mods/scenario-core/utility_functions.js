@@ -65,6 +65,8 @@ model.playerArmy(0,0,"",true).then(function(ready){console.log(ready)}) -test co
 //adding unit types as an option would be good, e.g all fabs or all factorys
 //unit type is things like Mobile, Construction, Etc
 
+
+//TODO make planet optional and if not defined it checks every planet
 */
 var unitJsons = model.unitSpecs//I think this has a list of unit keys that then have types
 model.playerArmy = function(playerId, planetId,unitType, stateFlag,unitTypeValue){
@@ -287,4 +289,27 @@ model.randomLocations = function(amount,radius){ // returns array of random loca
     }
     
     return posArray;
+}
+
+//for non shared, mostly if the handler is not fired or ui is refreshed 
+    
+// gets commander data to update model when needed
+model.getCommanderData = function(){
+    var commanderId = model.scenarioModel.playerCommanderId
+    var commanderData = api.getWorldView(0).getUnitState(commanderId)
+    commanderData.then(function(result){
+        console.log(result)
+        for(i in result){
+            console.log(result[i])
+            if(result[i]["unit_spec"]){
+                console.log(result[i]["unit_spec"])
+                if(model.scenarioModel.playerSpawn.chosenPos == undefined){model.scenarioModel.playerSpawn.chosenPos = result[i].pos}
+                if(model.scenarioModel.playerSpawn.chosenPlanet == undefined){model.scenarioModel.playerSpawn.chosenPlanet = result[i].planet}
+    
+            }
+        }
+
+    })
+    
+
 }

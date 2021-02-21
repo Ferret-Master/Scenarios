@@ -146,6 +146,10 @@ also triggers the needed ui components.
 */
 
 model.makeObjectiveActive = function(objectiveObject){ 
+    if(objectiveObject["delay_type"] == "spawn"){
+
+        if(model.scenarioModel.landTime == 200000){_.delay(model.makeObjectiveActive,100,objectiveObject);return}
+    }
     if(objectiveObject["delay"]>0){
 
         var delayMilliseconds = objectiveObject["delay"]*1000;
