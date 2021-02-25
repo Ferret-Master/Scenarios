@@ -28,28 +28,33 @@ model.selectedCommander = ko.computed(function () {
     var index = model.selectedCommanderIndex();
 
     if (index === -1) { /* if nothing is selected, either use the preferred cmdr or the first cmdr in the list */
-        if (model.preferredCommanderValid())
-        {
+        if (model.preferredCommanderValid()){
+
             var commander = model.preferredCommander();
             if (_.has(commander, 'UnitSpec')){
                 if(model.scenarioCommanderNeeded == true){
-            model.send_message('update_commander',
-            {
-                commander: model.scenarioCommanderSpec
-            }); _.delay(fixComImage,200)
-        }
+                    
+                      model.send_message('update_commander',
+                     {
+                         commander: model.scenarioCommanderSpec
+                     }); _.delay(fixComImage,200)
+                }
 
-        model.selectedCommanderSpec(commander.UnitSpec);
-                return commander.UnitSpec;}
+                model.selectedCommanderSpec(commander.UnitSpec);
+                return commander.UnitSpec;
+            }
             else{
                 if(model.scenarioCommanderNeeded == true){
                     model.send_message('update_commander',
                     {
                         commander: model.scenarioCommanderSpec
-                    }); _.delay(fixComImage,200)
-                    
+                    });
+                     _.delay(fixComImage,200)
+                     
+                     model.selectedCommanderSpec(model.preferredCommander());
                 }
-                return commander;}
+                return commander;
+            }
         }
         index = 0;
     }
@@ -108,4 +113,4 @@ _.delay(function () {
             commander: model.scenarioCommanderSpec
         });
         _.delay(fixComImage,200)
-  },5000,);
+  },5000);

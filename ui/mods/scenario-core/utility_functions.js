@@ -69,7 +69,45 @@ model.playerArmy(0,0,"",true).then(function(ready){console.log(ready)}) -test co
 //TODO make planet optional and if not defined it checks every planet
 */
 var unitJsons = model.unitSpecs//I think this has a list of unit keys that then have types
+
+model.allPlayerArmy = function(playerId,unitType, stateFlag,unitTypeValue){
+    var planets = model.planetListState()
+    var promiseArray = [];
+    for(planet in planets.planets){
+        planet = planets.planets[planet]
+        if(planet.id !== undefined || planet.id === 0){
+            var chosenPlanet = planet.index;
+        }
+        else{continue}
+        console.log("army promise called with planet ",chosenPlanet)
+        promiseArray.push(model.playerArmy(playerId, chosenPlanet,unitType, stateFlag,unitTypeValue))
+    }
+    var allPlanetArmyPromise = Promise.all(promiseArray)
+    return allPlanetArmyPromise.then(function(result){
+        var finalUnits = {};
+        for(army in result){
+            var armyKeys = _.keys(result[army])
+            for(unit in armyKeys){
+              
+                if(!(armyKeys[unit] in finalUnits)){finalUnits[armyKeys[unit]] = []};
+              
+                
+                for(i in result[army][armyKeys[unit]]){
+                 
+                    finalUnits[armyKeys[unit]].push(result[army][armyKeys[unit]][i])
+                }
+               
+            
+        }
+    }
+      
+        return finalUnits;
+
+    })
+
+}
 model.playerArmy = function(playerId, planetId,unitType, stateFlag,unitTypeValue){
+
     if(unitJsons == undefined){unitJsons = model.unitSpecs}
     var one = !_.isArray(unitType);
     if (one){
@@ -81,14 +119,14 @@ model.playerArmy = function(playerId, planetId,unitType, stateFlag,unitTypeValue
         unitTypeValue = [unitTypeValue];
 
     }
-    //console.log(playerId+" | "+planetId+" | "+unitType+" | "+stateFlag)
+    console.log(playerId+" | "+planetId+" | "+unitType+" | "+stateFlag + " | " +unitTypeValue)
     var promise = new Promise(function(resolve,reject){
 
         if(world){
 
             if(stateFlag !== true){
                 
-                
+                console.log(playerId,planetId)
                 
                 var promise2 = world.getArmyUnits(playerId,planetId).then(function (result){
                    
@@ -107,6 +145,7 @@ model.playerArmy = function(playerId, planetId,unitType, stateFlag,unitTypeValue
                     }
                    
                     if(unitTypeValue.length>0 && unitTypeValue[0] !== "" && unitTypeValue[0] !== undefined){
+                        console.log("unittype value of: ",unitTypeValue)
          
                         var finalResult = {};
                         var jsonKeys = _.keys(unitJsons)
@@ -140,6 +179,7 @@ model.playerArmy = function(playerId, planetId,unitType, stateFlag,unitTypeValue
             }//TODO add unit filter here
     
             else{
+                console.log(playerId,planetId)
                     var promise2 = world.getArmyUnits(playerId,planetId).then(function(result){ 
     
                     var unitArray = [];
@@ -305,6 +345,7 @@ model.getCommanderData = function(){
                 console.log(result[i]["unit_spec"])
                 if(model.scenarioModel.playerSpawn.chosenPos == undefined){model.scenarioModel.playerSpawn.chosenPos = result[i].pos}
                 if(model.scenarioModel.playerSpawn.chosenPlanet == undefined){model.scenarioModel.playerSpawn.chosenPlanet = result[i].planet}
+                if(_.isEqual(model.scenarioModel.playerSpawn.chosenOrientation,[0,0,0])){model.scenarioModel.playerSpawn.chosenOrientation = result[i].orient}
     
             }
         }

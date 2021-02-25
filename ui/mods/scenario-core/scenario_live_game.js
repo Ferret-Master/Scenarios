@@ -77,7 +77,9 @@ function ScenarioViewModel() {
 
       chosenPos:undefined,
 
-      chosenPlanet: undefined
+      chosenPlanet: undefined,
+
+      chosenOrientation: [0,0,0]
 
 
     }
@@ -90,7 +92,7 @@ function ScenarioViewModel() {
 }
 model.scenarioModel = new ScenarioViewModel();
 
-  var selectionChecker = ko.computed(function(){//locks up the game atm, likely causing an update to itself constantly, may switch to a fast script instead but its risky, easier to probably de select unit types that should not be allowed like no build
+  var selectionChecker = ko.computed(function(){
   var noSelect = model.scenarioModel.noSelection;
   var unwantedId = [];
   if(model.selection() == undefined || model.selection() == null){return}
@@ -133,20 +135,20 @@ model.scenarioModel = new ScenarioViewModel();
 })
 
 function getAvatarId(){
-    var planet = model.currentFocusPlanetId();
-    if(planet <0){_.delay(getAvatarId,1000);return}
-    avatarPromise = model.playerArmy(model.armyIndex(), model.currentFocusPlanetId(),"/pa/units/commanders/scenario_avatar/scenario_avatar.json");
+    
+    avatarPromise = model.allPlayerArmy(model.armyIndex(),"/pa/units/commanders/scenario_avatar/scenario_avatar.json");
     avatarPromise.then(function(result){
+    
       try{
-      if(result["/pa/units/commanders/scenario_avatar/scenario_avatar.json"] == undefined){_.delay(getAvatarId,1000);return}
-     
+      if(result["/pa/units/commanders/scenario_avatar/scenario_avatar.json"] == undefined || _.isEmpty(result["/pa/units/commanders/scenario_avatar/scenario_avatar.json"])){_.delay(getAvatarId,1000);return}
+     console.log("got avatar id")
       //model.scenarioModel.avatarId = result["/pa/units/commanders/scenario_avatar/scenario_avatar.json"]
-      console.log("avatar result below")
-      console.table(result)
+      
       model.scenarioModel.avatarId = result["/pa/units/commanders/scenario_avatar/scenario_avatar.json"]
     }
       catch(err){console.log(err)}
-      var playerAmount = model.playerListState().players.length;
+
+    var playerAmount = model.playerListState().players.length;
     for(var i = 0;i<playerAmount;i++){
       model.scenarioModel.playerArray.push(i)
       model.scenarioModel.playerNameArray.push(model.players()[i].name)
@@ -157,13 +159,19 @@ function getAvatarId(){
 }
 
 function getCommanderId(){
-  var planet = model.currentFocusPlanetId();
-  if(planet <0){_.delay(getCommanderId,1000);return}
-  commanderPromise = model.playerArmy(model.armyIndex(), model.currentFocusPlanetId(),"",false,"UNITTYPE_Commander");
+  
+  commanderPromise = model.allPlayerArmy(model.armyIndex(),"",false,"UNITTYPE_Commander");
   commanderPromise.then(function(result){
     console.log(result)
     if(result == undefined || _.isEmpty(result)){_.delay(getCommanderId,1000);return}
-    for(var property in result){model.scenarioModel.playerCommanderId = result[property]}
+    model.scenarioModel.playerCommanderId = [];
+    for(var property in result){
+      for(commanderIndex in result[property]){
+        model.scenarioModel.playerCommanderId.push(result[property][commanderIndex])
+
+      }
+      
+    }
  
   
   })
@@ -183,7 +191,7 @@ model.setupScenario = function(scenarioJSON){
 
     var planet = model.currentFocusPlanetId();
     if(planet <0){_.delay(model.setupScenario,100,scenarioJSON);return}
-    console.log("scenario settings: "+JSON.stringify(scenarioJSON))
+ 
 
     if(scenarioJSON["requireBuilders"] == true){
       var hdeck = model.holodeck;

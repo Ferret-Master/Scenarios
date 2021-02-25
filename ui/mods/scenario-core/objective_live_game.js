@@ -89,6 +89,7 @@ returnPromise.then(function(result){//TODO replace the 0 with playerId
             
             objectiveObject.effectPuppetId.then(function(result){api.puppet.killPuppet(result)})
         }
+      
         objectiveModel.finishedObjectives.push(objectiveObject)
 
        
@@ -102,7 +103,7 @@ returnPromise.then(function(result){//TODO replace the 0 with playerId
         for(var j = 0;j<objectiveObject.successObjectives.length;j++){
             
           
-             
+             console.log("making objective active: "+objectiveObject.successObjectives[j])
                 model.makeObjectiveActiveByName(objectiveObject.successObjectives[j])
                 
             
@@ -111,7 +112,7 @@ returnPromise.then(function(result){//TODO replace the 0 with playerId
 
     }
     else if(result === false){//move from active to finished, update ui, activate failure triggers. 
-
+     
         objectiveModel.finishedObjectives.push(objectiveObject)
         objectiveModel.activeObjectives = objectiveModel.activeObjectives.filter(function(item) {
             return item !== value
@@ -145,6 +146,11 @@ also triggers the needed ui components.
 
 */
 
+function pushObjective(objeciveObject){
+
+    objectiveModel.activeObjectives.push(objeciveObject)
+}
+
 model.makeObjectiveActive = function(objectiveObject){ 
     if(objectiveObject["delay_type"] == "spawn"){
 
@@ -156,11 +162,13 @@ model.makeObjectiveActive = function(objectiveObject){
         console.log("activating objective with delay of "+ objectiveObject["delay"])
 
         if(objectiveObject["delay"] !== undefined || objectiveObject["delay"] == 0){
-
-            _.delay(objectiveModel.activeObjectives.push,delayMilliseconds,objectiveObject); return}
+ 
+            _.delay(pushObjective,delayMilliseconds,objectiveObject); return}
         
         }
         else{
+            console.log("activating objective")
+     
             objectiveModel.activeObjectives.push(objectiveObject);
         }
 }

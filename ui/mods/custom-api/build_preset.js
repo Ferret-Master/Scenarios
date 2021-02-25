@@ -45,6 +45,7 @@ function init_build_preset(api) {
     buildCommandUnit: function(id,planet,structure){
                           
         console.log("attempting build command with unitid: " + id + " planet: "+planet + " spec: "+ structure+" at location "+ structure.pos);
+        console.log(JSON.stringify(structure))
         // console.log(api.getWorldView(0).sendOrder({units: unitid,command: 'build',location: {planet: planet,multi_pos: [location,location]},spec: spec,queue: true}));
         api.getWorldView(0).sendOrder({units: id,command: 'build',location: {planet: planet,pos: structure.pos,orient: structure.orientation},spec: structure.unitType,queue: true,group:true});
         //console.log(api.getWorldView(0).sendOrder({units: id,command: 'build',location: {planet: planet,multi_pos: [structure.pos,structure.pos],orient: structure.orientation},spec: structure.unitType,queue: true,group:true
@@ -70,7 +71,7 @@ function init_build_preset(api) {
         I will have the option for dynamic vs static placement within the templates which will determine whether they are build at
         the exact location specified(a static template that was made on the map) or dynamic meaning the template will be fixed up to ensure
         it gets built. although the spacing may end up off.
-
+ 
         */
 
 

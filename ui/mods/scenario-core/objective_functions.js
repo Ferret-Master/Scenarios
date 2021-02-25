@@ -67,8 +67,8 @@ model.objectiveCheckFunctions["unit_range"] = function (timedObject){
     var promiseArray = [];
     if(timedObject["unit_types"] !== undefined){//TODO
         var unitTypes = timedObject.unit_types;
-        var armyPromise = model.playerArmy(model.armyIndex(), 0, "",false,unitTypes)
-   
+        var armyPromise = model.allPlayerArmy(model.armyIndex(), "",false,unitTypes)
+        console.log("promise array push")
         promiseArray.push(armyPromise.then(function (playerArmy) {
 
             unitKey = _.keys(playerArmy)
@@ -91,6 +91,7 @@ model.objectiveCheckFunctions["unit_range"] = function (timedObject){
         var unitNames = timedObject.units.split(",");
         
         var armyPromise = model.playerArmy(model.armyIndex(), 0, unitNames[i])
+        console.log("second promise array push")
         promiseArray.push(armyPromise.then(function (playerArmy) {
 
             unitKey = _.keys(playerArmy)
@@ -121,11 +122,11 @@ model.objectiveCheckFunctions["unit_range"] = function (timedObject){
         console.log(unitCount)
         console.log("unit count above")
         if(timedObject.range_type == "inside"){
-            if(unitCount <= timedObject.range_higher && unitCount >= timedObject.range_lower){ console.log("would have returned true")}
+            if(unitCount <= timedObject.range_higher && unitCount >= timedObject.range_lower){ return true;console.log("would have returned true")}
         
         }
         else{
-            if(unitCount > timedObject.range_higher || unitCount < timedObject.range_lower){ console.log("would have returned true")}
+            if(unitCount > timedObject.range_higher || unitCount < timedObject.range_lower){ return true;console.log("would have returned true")}
           
         }
     })

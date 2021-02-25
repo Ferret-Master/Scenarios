@@ -82,10 +82,10 @@ $(document).ready(function () {
 
             var avatarName = "/pa/units/commanders/scenario_avatar/scenario_avatar.json";
             engine.call('unit.debug.setScenarioSpecId',avatarName);
-            engine.call('unit.debug.scenarioPaste')
-
-            engine.call('unit.debug.setSpecId',avatarName);
-            setTimeout(function(){ engine.call('unit.debug.paste')}, 50);
+            engine.call('unit.debug.setSpecId',avatarName)
+ 
+            setTimeout(function(){ engine.call('unit.debug.scenarioPaste')}, 100);
+            setTimeout(function(){ engine.call('unit.debug.paste')}, 100);
             return;
 
         }

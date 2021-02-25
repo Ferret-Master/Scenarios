@@ -17,9 +17,9 @@
             "description": "destroy all of a players factorys/fabricators.",
             "type": "unit_range",
             
-            "delay":30,
+            "delay":5,
           
-            "range_lower": 5,
+            "range_lower": 1,
             "range_higher": 1000,
             "range_type":"outside",
             "unit_types":"UNITTYPE_Construction",
@@ -82,7 +82,7 @@
                 ""
             ],
             "successObjectives": [
-                ""
+                "Anhilation"
             ],
             "failureObjectives": [
                 ""
@@ -112,7 +112,7 @@
         {
             "name": "kill_player_delayed",
             "id": 4,
-            "delay": 5,
+            "delay": 10,
             "type": "destroy_unit",
             "amount": "commander"
             

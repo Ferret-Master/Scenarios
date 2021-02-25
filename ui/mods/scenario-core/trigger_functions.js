@@ -96,8 +96,9 @@ model.triggerFunctions["build_at_existing_unit"] = function(triggerObject){
         // console.log(model.scenarioModel.playerCommanderType)
         // console.log(model.scenarioModel.playerSpawn.chosenPos)
         // console.log(model.scenarioModel.playerSpawn.chosenPlanet)
-        if(model.scenarioModel.playerCommanderType == undefined || model.scenarioModel.playerSpawn.chosenPos == undefined || model.scenarioModel.playerSpawn.chosenPlanet === undefined){_.delay(model.triggerFunctions["build_at_existing_unit"],100,triggerObject);return}
-        triggerObject.prefab.units = [{"unitType":model.scenarioModel.playerCommanderType,"pos":model.scenarioModel.playerSpawn.chosenPos,"orientation": [0, 0, 0 ]}]
+        if(model.scenarioModel.playerSpawn.chosenPos == undefined || model.scenarioModel.playerSpawn.chosenPlanet === undefined){_.delay(model.triggerFunctions["build_at_existing_unit"],100,triggerObject);return}
+        if(model.scenarioModel.playerCommanderType == -1){model.scenarioModel.playerCommanderType = "/pa/units/commanders/raptor_rallus/raptor_rallus.json";}
+        triggerObject.prefab.units = [{"unitType":model.scenarioModel.playerCommanderType,"pos":model.scenarioModel.playerSpawn.chosenPos,"orientation": model.scenarioModel.playerSpawn.chosenOrientation}]
         triggerObject.prefab.planet = model.scenarioModel.playerSpawn.chosenPlanet
         
      
@@ -215,15 +216,15 @@ model.triggerFunctions["destroy_unit"] = function(triggerObject){
 
     api.getWorldView(0).sendOrder({units: model.scenarioModel.playerCommanderId,command: 'self_destruct',queue: true,group:true});
 
-    var transportIdPromise = playerArmy(model.armyIndex,model.scenarioModel.chosenPlanet,"/pa/units/air/scenario_loader/scenario_loader.json")
+    // var transportIdPromise = playerArmy(model.armyIndex,model.scenarioModel.chosenPlanet,"/pa/units/air/scenario_loader/scenario_loader.json")
 
-    transportIdPromise.then(function(ready){
+    // transportIdPromise.then(function(ready){
 
         
-        api.getWorldView(0).sendOrder({units: ready["/pa/units/air/scenario_loader/scenario_loader.json"],command: 'self_destruct',queue: true,group:true});
+    //     api.getWorldView(0).sendOrder({units: ready["/pa/units/air/scenario_loader/scenario_loader.json"],command: 'self_destruct',queue: true,group:true});
 
 
-    })
+    // })
 
    }
     return;
