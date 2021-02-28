@@ -22,10 +22,12 @@ function loadScenario(location){//will be made into an api/observable later , wi
 
     $.getJSON('coui:/mods/scenarios/' + location).then(function(imported) {
         
-       
+       try{
         model.setupTriggers(imported["triggers"]);
         model.setupScenario(imported);
         model.setupObjectives(imported);
+    }
+    catch(err){console.log(err)}
 
     });
 

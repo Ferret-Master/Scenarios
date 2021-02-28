@@ -19,10 +19,10 @@
             
             "delay":5,
           
-            "range_lower": 1,
-            "range_higher": 1000,
+            "range_lower": 3,
+            "range_higher": 10000,
             "range_type":"outside",
-            "unit_types":"UNITTYPE_Construction",
+            "unit_types":"UNITTYPE_Mobile",
             "units":"",
             "result":"that player will lose",
            
@@ -112,7 +112,7 @@
         {
             "name": "kill_player_delayed",
             "id": 4,
-            "delay": 10,
+            "delay": 0,
             "type": "destroy_unit",
             "amount": "commander"
             

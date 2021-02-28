@@ -119,20 +119,20 @@ model.playerArmy = function(playerId, planetId,unitType, stateFlag,unitTypeValue
         unitTypeValue = [unitTypeValue];
 
     }
-    console.log(playerId+" | "+planetId+" | "+unitType+" | "+stateFlag + " | " +unitTypeValue)
+
     var promise = new Promise(function(resolve,reject){
 
         if(world){
 
             if(stateFlag !== true){
                 
-                console.log(playerId,planetId)
+            
                 
                 var promise2 = world.getArmyUnits(playerId,planetId).then(function (result){
                    
                    
                     if(unitType.length>0 && unitType[0] !== "" && unitType[0] !== undefined){
-                        console.log(result)
+                 
                         var finalResult = {};
                         
                         for(var i = 0;i<unitType.length;i++){
@@ -143,9 +143,9 @@ model.playerArmy = function(playerId, planetId,unitType, stateFlag,unitTypeValue
                        
                         result =  finalResult;
                     }
-                   
+                
                     if(unitTypeValue.length>0 && unitTypeValue[0] !== "" && unitTypeValue[0] !== undefined){
-                        console.log("unittype value of: ",unitTypeValue)
+                      
          
                         var finalResult = {};
                         var jsonKeys = _.keys(unitJsons)
@@ -154,16 +154,20 @@ model.playerArmy = function(playerId, planetId,unitType, stateFlag,unitTypeValue
                             for(var j = 0;j<unitTypeValue.length;j++){
                                 
                                 if(_.contains(unitJsons[jsonKeys[i]].types,unitTypeValue[j])){//check if each unit json contains every type in the value array
+                                  
                                     matchedValue++;
                              
                                 }
                             }
-                            if(matchedValue == unitTypeValue.length && result[jsonKeys[i]] !== undefined){finalResult[jsonKeys[i]] = result[jsonKeys[i]]}
+                            
+                           
+                            if(matchedValue == unitTypeValue.length && result[jsonKeys[i]] !== undefined){console.log("applying successful filter");finalResult[jsonKeys[i]] = result[jsonKeys[i]]}
                         }
+                     
                         result = finalResult;
 
                     }
-
+               
 
                     return result
                 
@@ -179,7 +183,7 @@ model.playerArmy = function(playerId, planetId,unitType, stateFlag,unitTypeValue
             }//TODO add unit filter here
     
             else{
-                console.log(playerId,planetId)
+         
                     var promise2 = world.getArmyUnits(playerId,planetId).then(function(result){ 
     
                     var unitArray = [];
@@ -345,7 +349,10 @@ model.getCommanderData = function(){
                 console.log(result[i]["unit_spec"])
                 if(model.scenarioModel.playerSpawn.chosenPos == undefined){model.scenarioModel.playerSpawn.chosenPos = result[i].pos}
                 if(model.scenarioModel.playerSpawn.chosenPlanet == undefined){model.scenarioModel.playerSpawn.chosenPlanet = result[i].planet}
-                if(_.isEqual(model.scenarioModel.playerSpawn.chosenOrientation,[0,0,0])){model.scenarioModel.playerSpawn.chosenOrientation = result[i].orient}
+                if(model.scenarioModel.playerSpawn.chosenOrientation == undefined){model.scenarioModel.playerSpawn.chosenOrientation = result[i].orient}
+                console.log("after setting com values")
+                console.log(result[i].orient)
+                console.log(JSON.stringify(model.scenarioModel.playerSpawn))
     
             }
         }

@@ -33,7 +33,8 @@
       ],
      "live_game_time_bar":[
 
-      "coui://ui/mods/scenario-core/time_since_landing.js"
+      "coui://ui/mods/scenario-core/time_since_landing.js",
+      "coui://ui/mods/scenario-ui/scenario_time_bar.js"
 
      ],
      "new_game":[

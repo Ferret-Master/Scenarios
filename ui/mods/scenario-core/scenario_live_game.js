@@ -79,7 +79,7 @@ function ScenarioViewModel() {
 
       chosenPlanet: undefined,
 
-      chosenOrientation: [0,0,0]
+      chosenOrientation: undefined
 
 
     }
@@ -188,18 +188,24 @@ cursor_y = event.pageY;
 
 model.setupScenario = function(scenarioJSON){
   
-
+    model.currentFocusPlanetId =function () {
+    return api.camera.getFocus(api.Holodeck.focused.id).planetId()
+    }
     var planet = model.currentFocusPlanetId();
     if(planet <0){_.delay(model.setupScenario,100,scenarioJSON);return}
  
-
+    console.log("after planet check")
     if(scenarioJSON["requireBuilders"] == true){
+      console.log("before holodeck check")
       var hdeck = model.holodeck;
       hdeck.raycastTerrain(cursor_x, cursor_y).then(function(loc3D) {
+        console.log("inside holodeck .then")
           if (loc3D.pos) {
 
             if(loc3D.pos[0]>100 || loc3D.pos[0]<-100 ){
+            console.log("before spawn avatar")
             api.Panel.message("devmode","spawnAvatar",model.armyIndex());
+            console.log("after spawn avatar")
             setTimeout(getAvatarId,500)
             setTimeout(getCommanderId,2000)
             }
@@ -247,9 +253,8 @@ handlers.ScenarioLandingPosition = function(payload) {
 
   if(model.scenarioModel.playerCommanderType == -1){model.scenarioModel.playerCommanderType = payload.playerCom;}
   
-  model.playerArmy(model.armyIndex,payload.planet,payload.playerCom,false).then(function(result){model.scenarioModel.playerCommanderId = result[payload.playerCom]; console.log("player commander id is " + result)})
-  model.scenarioModel.playerSpawn.chosenPlanet = payload.planet;
-  model.scenarioModel.playerSpawn.chosenPos = payload.pos;
+  //model.playerArmy(model.armyIndex(),payload.planet,payload.playerCom,false).then(function(result){model.scenarioModel.playerCommanderId = result[payload.playerCom]; console.log("player commander id is " + result)})
+
 
 }
 

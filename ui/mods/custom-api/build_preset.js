@@ -43,8 +43,8 @@ function init_build_preset(api) {
     }))},
 
     buildCommandUnit: function(id,planet,structure){
-                          
-        console.log("attempting build command with unitid: " + id + " planet: "+planet + " spec: "+ structure+" at location "+ structure.pos);
+        structure.orientation = [structure.orientation[0],structure.orientation[1],structure.orientation[2]]                  
+        console.log("attempting build command with unitid: " + id + " planet: "+planet + " spec: "+ structure+" at location "+ structure.pos +" with orientation "+structure.orientation);
         console.log(JSON.stringify(structure))
         // console.log(api.getWorldView(0).sendOrder({units: unitid,command: 'build',location: {planet: planet,multi_pos: [location,location]},spec: spec,queue: true}));
         api.getWorldView(0).sendOrder({units: id,command: 'build',location: {planet: planet,pos: structure.pos,orient: structure.orientation},spec: structure.unitType,queue: true,group:true});

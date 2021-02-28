@@ -1,6 +1,6 @@
-var client_state = handlers.client_state; handlers.client_state = function (client) {
+var client_state_scenario = handlers.client_state; handlers.client_state = function (client) {
             
-    client_state(client);
+    client_state_scenario(client);
 
     var playerCom = "/pa/units/commanders/imperial_able/imperial_able.json"
     if (client.landing_position) {
@@ -40,9 +40,9 @@ var client_state = handlers.client_state; handlers.client_state = function (clie
 
 var commanderid = undefined;
 
-var server_state = handlers.server_state; handlers.server_state = function(msg) { 
+var server_state_scenario = handlers.server_state; handlers.server_state = function(msg) { 
 
-server_state(msg);
+server_state_scenario(msg);
 
 if (msg.data) {
     
