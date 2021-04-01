@@ -14,14 +14,19 @@ currently does not work if player doesnt modify com selection, won't be an issue
 
 */
 
-model.scenarioCommanderNeeded =true;
+
+
+
+model.annihilationModeShow = ko.observable(false)    ;
+
+
 
 model.scenarioCommanderSpec = "/pa/units/commanders/scenario_invincible_com/scenario_invincible_com.json";
                               
 model.selectedCommanderSpec = ko.observable("/pa/units/commanders/raptor_rallus/raptor_rallus.json").extend({ session: 'selectedCommanderSpec' });
 
 model.selectedCommander = ko.computed(function () {
-    // If we haven't gotten a commander list yet, just return nothin'.
+    // If we haven't gotten a commander list yet, just return nothing'.
     if (!model.commanders() || !model.commanders().length)
         return null;
 
@@ -32,7 +37,7 @@ model.selectedCommander = ko.computed(function () {
 
             var commander = model.preferredCommander();
             if (_.has(commander, 'UnitSpec')){
-                if(model.scenarioCommanderNeeded == true){
+                if(model.annihilationModeShow() == true){
                     
                       model.send_message('update_commander',
                      {
@@ -44,7 +49,7 @@ model.selectedCommander = ko.computed(function () {
                 return commander.UnitSpec;
             }
             else{
-                if(model.scenarioCommanderNeeded == true){
+                if(model.annihilationModeShow == true){
                     model.send_message('update_commander',
                     {
                         commander: model.scenarioCommanderSpec
@@ -60,7 +65,7 @@ model.selectedCommander = ko.computed(function () {
     }
 
     model.selectedCommanderSpec(model.commanders()[index]);
-    
+    if(model.commanders()[index] == "/pa/units/commanders/scenario_invincible_com/scenario_invincible_com.json"){return "/pa/units/commanders/raptor_rallus/raptor_rallus.json"}
  
     return model.commanders()[index];
 });
@@ -71,8 +76,8 @@ model.setCommander = function (index) {
 
     model.selectedCommanderIndex(index % model.commanders().length);
 
-    if(model.scenarioCommanderNeeded == false){
-        console.log("setting selected come")
+    if(model.annihilationModeShow() == false){
+        console.log("setting selected com")
         console.log(model.selectedCommander())
     model.send_message('update_commander',
     {
@@ -107,6 +112,16 @@ function fixComImage(){
 }
 
 _.delay(function () {
+    if(model.annihilationModeShow() == false){return}
+    model.selectedCommander()
+    model.send_message('update_commander',
+        {
+            commander: model.scenarioCommanderSpec
+        });
+        _.delay(fixComImage,200)
+  },1000);
+  _.delay(function () {
+    if(model.annihilationModeShow() == false){return}
     model.selectedCommander()
     model.send_message('update_commander',
         {
@@ -114,3 +129,70 @@ _.delay(function () {
         });
         _.delay(fixComImage,200)
   },5000);
+  _.delay(function () {
+    if(model.annihilationModeShow() == false){return}
+    model.selectedCommander()
+    model.send_message('update_commander',
+        {
+            commander: model.scenarioCommanderSpec
+        });
+        _.delay(fixComImage,200)
+  },10000);
+  _.delay(function () {
+    if(model.annihilationModeShow() == false){return}
+    model.selectedCommander()
+    model.send_message('update_commander',
+        {
+            commander: model.scenarioCommanderSpec
+        });
+        _.delay(fixComImage,200)
+  },15000);
+
+
+  model.annihilationModeToggle = function()
+    {
+        if ( ! model.isGameCreator() )
+        {
+            return;
+        }
+
+        model.annihilationModeShow( ! model.annihilationModeShow() );
+        if(model.annihilationModeShow() == true){model.sandbox(true)}
+        else{model.sandbox(false)}
+        model.changeSettings()
+        model.commanderPrep()
+    }
+
+$('div.section.game_mode').append('<div data-bind="visible: isGameCreator"><label data-bind="click: annihilationModeToggle"><input type="checkbox" style="pointer-events: none !important;" data-bind="checked: annihilationModeShow" /><label>Annihilation Mode</label></div>');//adds tickbox for the annhilation gamemode
+
+//function here to set players com to invincible com if toggle ticked
+
+model.commanderPrep =function(){
+    var modeActive = model.annihilationModeShow()
+    console.log("running")
+    if(modeActive == true){
+
+        model.send_message('update_commander',
+        {
+            commander: model.scenarioCommanderSpec
+        });
+        _.delay(fixComImage,200)
+       
+    }
+    
+    else{
+
+        model.send_message('update_commander',
+             {
+            commander: model.selectedCommander()
+
+            })
+            
+        }
+
+
+}
+
+
+
+

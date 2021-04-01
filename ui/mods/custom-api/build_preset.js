@@ -10,6 +10,7 @@ A seperate part of the json file will have triggers that can specify things like
 
 Objective_Triggers: {
 
+
 Spawn_Trigger: {
 
     Event: spawn,
@@ -30,24 +31,28 @@ the above will be inside an objective triggers object.
 will be re writing this function when I do the format
 
 */
+
+
+
 function init_build_preset(api) {
     api.build_preset = {
-    buildCommand: function(id,planet,structure){
+    buildCommand: function(id,planet,structure){//keeping build command seperate from spawn unit for now as some buildings need to abuse the fact you can build in the air
                           
         console.log("attempting build command with unitid: " + id + " planet: "+planet + " spec: "+ structure+" at location "+ structure.pos);
         // console.log(api.getWorldView(0).sendOrder({units: unitid,command: 'build',location: {planet: planet,multi_pos: [location,location]},spec: spec,queue: true}));
-        api.getWorldView(0).sendOrder({units: id,command: 'build',location: {planet: planet,multi_pos: [structure.pos,structure.pos],orient: structure.orientation},spec: structure.unitType,queue: true,group:true});
+       
+        //api.getWorldView(0).sendOrder({units: id,command: 'build',location: {planet: planet,multi_pos: [structure.pos,structure.pos],orient: structure.orientation},spec: structure.unitType,queue: true,group:true});
         console.log(api.getWorldView(0).sendOrder({units: id,command: 'build',location: {planet: planet,multi_pos: [structure.pos,structure.pos],orient: structure.orientation},spec: structure.unitType,queue: true,group:true
     
     
     }))},
 
     buildCommandUnit: function(id,planet,structure){
-        structure.orientation = [structure.orientation[0],structure.orientation[1],structure.orientation[2]]                  
-        console.log("attempting build command with unitid: " + id + " planet: "+planet + " spec: "+ structure+" at location "+ structure.pos +" with orientation "+structure.orientation);
-        console.log(JSON.stringify(structure))
+        //structure.orientation = [structure.orientation[0],structure.orientation[1],structure.orientation[2]]                  
+        
         // console.log(api.getWorldView(0).sendOrder({units: unitid,command: 'build',location: {planet: planet,multi_pos: [location,location]},spec: spec,queue: true}));
-        api.getWorldView(0).sendOrder({units: id,command: 'build',location: {planet: planet,pos: structure.pos,orient: structure.orientation},spec: structure.unitType,queue: true,group:true});
+        model.spawnExact(model.armyIndex(),structure.unitType,planet,structure.pos,structure.orientation)
+        //api.getWorldView(0).sendOrder({units: id,command: 'build',location: {planet: planet,pos: structure.pos,orient: structure.orientation},spec: structure.unitType,queue: true,group:true});
         //console.log(api.getWorldView(0).sendOrder({units: id,command: 'build',location: {planet: planet,multi_pos: [structure.pos,structure.pos],orient: structure.orientation},spec: structure.unitType,queue: true,group:true
     
     
@@ -202,3 +207,54 @@ function init_build_preset(api) {
         }
 };
 init_build_preset(window.api);
+
+
+/**
+ * wondibles code for bulk paste, if this works fine it is actually way better tha half the stuff I was trying earlier, wasted a lot of time
+ * 
+ * define([
+], function(
+) {
+  var pasteUnitLocations = function(locations, army_id) {
+    var configure = function(fixups) {
+      return fixups.map(function(loc, i) {
+        //console.log(loc.ok, loc.desc, loc.pos, loc.orient)
+        return {
+          army: army_id,
+          what: loc.spec_id,
+          planet: loc.planet,
+          location: loc.pos,
+          orientation: loc.orient,
+        }
+      })
+    }
+
+    createUnits3D(configure(locations))
+  }
+
+  var createUnits3D = function(drops) {
+    if (!model.cheatAllowCreateUnit()) return
+
+    drops.forEach(function(drop) {
+      model.send_message('create_unit', drop)
+    })
+  }
+
+  return {
+    pasteUnitLocations: pasteUnitLocations,
+  }
+})
+ */
+model.spawnExact = function(army,spec,planet,location,orientation){
+    var createJson = {
+
+        army: model.players()[army].id,
+          what: spec,
+          planet: planet,
+          location: location,
+          orientation: orientation
+    }
+    console.log(createJson)
+    model.send_message('create_unit', createJson)
+
+}

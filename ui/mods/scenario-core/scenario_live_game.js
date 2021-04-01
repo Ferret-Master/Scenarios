@@ -3,6 +3,7 @@
 
 
     var originalCall = engine.call
+   model.cheatAllowCreateUnit(false)//set to false to prevent bulk create units from working by default
     engine.call = function(method) {
  
       if (method == 'unit.debug.copy') {

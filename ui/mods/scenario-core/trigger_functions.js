@@ -81,7 +81,7 @@ model.triggerFunctions["preset_unit"] = function(triggerObject){//different vers
 "special":"playerCom"}
 */
 model.triggerFunctions["build_at_existing_unit"] = function(triggerObject){
-    // console.log("builda at existing unit running")
+     console.log("builda at existing unit running")
     // console.log(model.scenarioModel.landTime)
     var avatarId = model.scenarioModel["avatarId"];
  
@@ -93,9 +93,9 @@ model.triggerFunctions["build_at_existing_unit"] = function(triggerObject){
     var unitToBuild;
     triggerObject.prefab = {};
     if(triggerObject.special == "playerCom"){
-        // console.log(model.scenarioModel.playerCommanderType)
-        // console.log(model.scenarioModel.playerSpawn.chosenPos)
-        // console.log(model.scenarioModel.playerSpawn.chosenPlanet)
+         console.log(model.scenarioModel.playerCommanderType)
+         console.log(model.scenarioModel.playerSpawn.chosenPos)
+         console.log(model.scenarioModel.playerSpawn.chosenPlanet)
         if(model.scenarioModel.playerSpawn.chosenPos == undefined || model.scenarioModel.playerSpawn.chosenPlanet === undefined){_.delay(model.triggerFunctions["build_at_existing_unit"],100,triggerObject);return}
         if(model.scenarioModel.playerCommanderType == -1){model.scenarioModel.playerCommanderType = "/pa/units/commanders/raptor_rallus/raptor_rallus.json";}
         triggerObject.prefab.units = [{"unitType":model.scenarioModel.playerCommanderType,"pos":model.scenarioModel.playerSpawn.chosenPos,"orientation": model.scenarioModel.playerSpawn.chosenOrientation}]

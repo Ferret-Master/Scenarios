@@ -87,10 +87,11 @@ model.allPlayerArmy = function(playerId,unitType, stateFlag,unitTypeValue){
         var finalUnits = {};
         for(army in result){
             var armyKeys = _.keys(result[army])
+            console.log(armyKeys)
             for(unit in armyKeys){
               
                 if(!(armyKeys[unit] in finalUnits)){finalUnits[armyKeys[unit]] = []};
-              
+                console.log(armyKeys[unit])
                 
                 for(i in result[army][armyKeys[unit]]){
                  
@@ -233,7 +234,8 @@ model.playerArmy = function(playerId, planetId,unitType, stateFlag,unitTypeValue
                                 unitData = [unitData];
     
                         }
-                        
+                    console.log("unitdata below")
+                    console.log(unitData)
                       return unitData;
                     }
                     
@@ -242,6 +244,7 @@ model.playerArmy = function(playerId, planetId,unitType, stateFlag,unitTypeValue
                 })
                 
             }
+          
             promise2.then(function(result){resolve(result)})
     
         }
