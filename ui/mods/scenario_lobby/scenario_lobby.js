@@ -17,11 +17,12 @@ currently does not work if player doesnt modify com selection, won't be an issue
 
 
 
+
 model.annihilationModeShow = ko.observable(false)    ;
 
+model.selectedScenario = ko.observable("");
 
-
-model.scenarioCommanderSpec = "/pa/units/commanders/scenario_invincible_com/scenario_invincible_com.json";
+model.scenarioCommanderSpec = "";
                               
 model.selectedCommanderSpec = ko.observable("/pa/units/commanders/raptor_rallus/raptor_rallus.json").extend({ session: 'selectedCommanderSpec' });
 
@@ -65,7 +66,7 @@ model.selectedCommander = ko.computed(function () {
     }
 
     model.selectedCommanderSpec(model.commanders()[index]);
-    if(model.commanders()[index] == "/pa/units/commanders/scenario_invincible_com/scenario_invincible_com.json"){return "/pa/units/commanders/raptor_rallus/raptor_rallus.json"}
+    if(model.commanders()[index] == "/pa/units/commanders/scenario_invincible_com/scenario_invincible_com.json"){model.selectedCommanderSpec("/pa/units/commanders/raptor_rallus/raptor_rallus.json");return "/pa/units/commanders/raptor_rallus/raptor_rallus.json"}
  
     return model.commanders()[index];
 });
@@ -111,43 +112,6 @@ function fixComImage(){
 }
 }
 
-_.delay(function () {
-    if(model.annihilationModeShow() == false){return}
-    model.selectedCommander()
-    model.send_message('update_commander',
-        {
-            commander: model.scenarioCommanderSpec
-        });
-        _.delay(fixComImage,200)
-  },1000);
-  _.delay(function () {
-    if(model.annihilationModeShow() == false){return}
-    model.selectedCommander()
-    model.send_message('update_commander',
-        {
-            commander: model.scenarioCommanderSpec
-        });
-        _.delay(fixComImage,200)
-  },5000);
-  _.delay(function () {
-    if(model.annihilationModeShow() == false){return}
-    model.selectedCommander()
-    model.send_message('update_commander',
-        {
-            commander: model.scenarioCommanderSpec
-        });
-        _.delay(fixComImage,200)
-  },10000);
-  _.delay(function () {
-    if(model.annihilationModeShow() == false){return}
-    model.selectedCommander()
-    model.send_message('update_commander',
-        {
-            commander: model.scenarioCommanderSpec
-        });
-        _.delay(fixComImage,200)
-  },15000);
-
 
   model.annihilationModeToggle = function()
     {
@@ -163,7 +127,79 @@ _.delay(function () {
         model.commanderPrep()
     }
 
-$('div.section.game_mode').append('<div data-bind="visible: isGameCreator"><label data-bind="click: annihilationModeToggle"><input type="checkbox" style="pointer-events: none !important;" data-bind="checked: annihilationModeShow" /><label>Annihilation Mode</label></div>');//adds tickbox for the annhilation gamemode
+$('div.section.game_mode').append(
+
+    '<style> .show {display: block;} </style>'+
+   '<div class="dropdown">'+
+ ' <button onclick="myFunction()" class="dropbtn">Dropdown</button>'+
+  '<div id="myDropdown" class="dropdown-content">'+
+   ' <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">'+
+  
+    '</div>'+
+    '</div> '
+    
+    );
+
+/* <div class="dropdown">
+  <button onclick="myFunction()" class="dropbtn">Dropdown</button>
+  <div id="myDropdown" class="dropdown-content">
+    <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+    <a href="#about">About</a>
+    
+  </div>
+</div> */
+
+
+// <a href="#about">About</a>
+
+var populateScenarios = function(){
+    var scenarioCount = 4;
+    var scenarioList = document.getElementById("myDropdown");
+    console.log(scenarioList)
+    var scenarioName = "test"
+    for(var i = 0;i<scenarioCount;i++){
+   
+        var appendString = document.createElement('div')
+        scenarioName += "1"
+        var pleaseWork = "<div data-bind='disabled: !model.isGameCreator()'>"+"<div data-bind='click: model.setScenario("+'"'+scenarioName+'"'+")'>"+scenarioName+"</div></div>"
+        console.log(pleaseWork)
+        appendString.innerHTML = (pleaseWork)
+        console.log(appendString)
+        scenarioList.appendChild(appendString)
+
+    }
+}
+
+populateScenarios()
+
+model.setScenario = function(scenarioName){
+
+    console.log(scenarioName)
+
+}
+
+function myFunction() {
+  
+  if(document.getElementById("myDropdown").style.display !== "none"){ document.getElementById("myDropdown").style.display = "none"}
+  else{ document.getElementById("myDropdown").style.display = ""}
+  
+}
+myFunction()
+function filterFunction() {
+  var input, filter, ul, li, a, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  div = document.getElementById("myDropdown");
+  a = div.getElementsByTagName("div");
+  for (i = 0; i < a.length; i++) {
+    txtValue = a[i].textContent || a[i].innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      a[i].style.display = "";
+    } else {
+      a[i].style.display = "none";
+    }
+  }
+}
 
 //function here to set players com to invincible com if toggle ticked
 
@@ -193,6 +229,74 @@ model.commanderPrep =function(){
 
 }
 
+var scenariosIdentifier = "scenarios"
 
 
+model.loadScenario = function(Scenario){
 
+model.scenarioCommanderSpec = Scenario.customCommander
+if(model.scenarioCommanderSpec == undefined){model.scenarioCommanderSpec = ""}
+
+}
+
+model.updatePlayersScenario = function(){
+    var currentScenario = model.selectedScenario()
+    var data  = {};
+    data.identifier = scenariosIdentifier;
+    data.chosenScenario = currentScenario
+    data.type = "updateScenario"
+    model.send_message("json_message", data);
+}
+
+var scenarioHandler = function(msg)
+{
+    console.log(msg)
+    var data = msg.payload;
+
+    if (!data)
+        return;
+
+    if (model.isGameCreator())
+    {
+        switch (data.type)
+        {
+
+// new player needs scenario
+        case 'new':
+
+            model.updatePlayersScenario();
+
+            break;
+
+// ignore our own messages
+        case 'updateScenario':
+                console.log("updating scenario but HOST")
+            break;
+
+        default:
+            console.error('scenarios unknown host custom message');
+            console.error( JSON.stringify( data ) );
+            break;
+        }
+    }
+    else
+    {
+        switch (data.type)
+        {
+// host is sending all ranks to players
+        case 'updateScenario':
+            console.log("updating scenario")
+            console.log(data.chosenScenario)
+            if (data.chosenScenario !== "")
+            {
+              model.selectedScenario(data.chosenScenario)
+              model.loadScenario(model.selectedScenario())
+            }
+
+            break;
+            
+        }
+    }
+};
+
+model.registerJsonMessageHandler( scenariosIdentifier, scenarioHandler );

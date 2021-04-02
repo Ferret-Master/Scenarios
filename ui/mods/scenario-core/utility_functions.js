@@ -85,12 +85,13 @@ model.allPlayerArmy = function(playerId,unitType, stateFlag,unitTypeValue){
     var allPlanetArmyPromise = Promise.all(promiseArray)
     return allPlanetArmyPromise.then(function(result){
         var finalUnits = {};
-        for(army in result){
+        for(army in result){// for each player planet
             var armyKeys = _.keys(result[army])
             console.log(armyKeys)
-            for(unit in armyKeys){
+
+            for(unit in armyKeys){//for each unit on a planet
               
-                if(!(armyKeys[unit] in finalUnits)){finalUnits[armyKeys[unit]] = []};
+                if(!(armyKeys[unit] in finalUnits)){finalUnits[armyKeys[unit]] = []};//if 
                 console.log(armyKeys[unit])
                 
                 for(i in result[army][armyKeys[unit]]){

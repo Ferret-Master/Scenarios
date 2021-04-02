@@ -8,6 +8,9 @@
     "playerCount": 3,
     "aiCount": 2,
     "winCondition": "Default",
+    "customCommander":"/pa/units/commanders/scenario_invincible_com/scenario_invincible_com.json",
+    "requireSandbox":true,
+    "annihilation":true,
     "requireBuilders":true,
     "objectives": [
         {
