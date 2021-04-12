@@ -14,7 +14,7 @@ Currently each scenario file contains 3 major areas.
 
 var chosenScenario =  ko.observable(-1).extend({ session: 'selectedScenario' });
 
-chosenScenario(chosenScenario()+".json")
+
 
 function loadScenario(location){//will be made into an api/observable later , will be loaded by command for testing, followed by checking for system load.
     if(location == ""){return}
@@ -34,5 +34,7 @@ function loadScenario(location){//will be made into an api/observable later , wi
     
    
 };
-function loadTestScenario(){loadScenario("test_scenario_4.json")}
-setTimeout(loadTestScenario,100)
+ function loadTestScenario(){loadScenario("test_scenario_4.json")}
+ setTimeout(loadTestScenario,100)
+
+//_.delay(loadScenario,100,chosenScenario())

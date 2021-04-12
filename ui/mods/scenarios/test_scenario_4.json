@@ -22,7 +22,7 @@
             
             "delay":5,
           
-            "range_lower": 3,
+            "range_lower": 1,
             "range_higher": 10000,
             "range_type":"outside",
             "unit_types":"UNITTYPE_Mobile",

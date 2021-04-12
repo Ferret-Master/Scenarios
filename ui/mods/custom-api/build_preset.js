@@ -246,6 +246,7 @@ init_build_preset(window.api);
 })
  */
 model.spawnExact = function(army,spec,planet,location,orientation){
+  console.log("spawn exact running with army "+army)
     var createJson = {
 
         army: model.players()[army].id,

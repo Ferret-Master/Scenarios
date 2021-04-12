@@ -20,7 +20,7 @@ currently does not work if player doesnt modify com selection, won't be an issue
 
 model.annihilationModeShow = ko.observable(false)    ;
 
-model.selectedScenario = ko.observable("");
+model.selectedScenario = ko.observable(-1).extend({ session: 'selectedScenario' });
 
 model.scenarioCommanderSpec = "";
                               
@@ -129,9 +129,9 @@ function fixComImage(){
 
 $('div.section.game_mode').append(
 
-    '<style> .show {display: block;} </style>'+
+    '<style> .show {display: block;} #scenarioName:hover{font-weight:bold}#scenarioName{border-style: solid solid solid solid} </style>'+
    '<div class="dropdown">'+
- ' <button onclick="myFunction()" class="dropbtn">Dropdown</button>'+
+ ' <button onclick="myFunction()" class="dropbtn">Scenarios</button>'+
   '<div id="myDropdown" class="dropdown-content">'+
    ' <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">'+
   
@@ -140,48 +140,60 @@ $('div.section.game_mode').append(
     
     );
 
-/* <div class="dropdown">
-  <button onclick="myFunction()" class="dropbtn">Dropdown</button>
-  <div id="myDropdown" class="dropdown-content">
-    <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
-    <a href="#about">About</a>
-    
-  </div>
-</div> */
 
 
-// <a href="#about">About</a>
+
+var gameBar = document.getElementById("game-bar")
+var scenarioName =  document.createElement('div')
+scenarioName.id = "scenario_name"
+scenarioName.innerText = "No scenario has been loaded"
+
+gameBar.appendChild(scenarioName)
+
+
+
+
 
 var populateScenarios = function(){
-    var scenarioCount = 4;
+
+    $.getJSON('coui:/mods/scenarios/scenario_list.json').then(function(imported) {
+        
+        try{
+    imported.scenarios.push("None")
+
+    var scenarioCount = imported.scenarios.length;
     var scenarioList = document.getElementById("myDropdown");
-    console.log(scenarioList)
-    var scenarioName = "test"
+
     for(var i = 0;i<scenarioCount;i++){
-   
+        var scenarioName = imported.scenarios[i]
         var appendString = document.createElement('div')
-        scenarioName += "1"
-        var pleaseWork = "<div data-bind='disabled: !model.isGameCreator()'>"+"<div data-bind='click: model.setScenario("+'"'+scenarioName+'"'+")'>"+scenarioName+"</div></div>"
-        console.log(pleaseWork)
+        var pleaseWork = "<div data-bind='disabled: !model.isGameCreator()'>"+"<div id = 'scenarioName' onclick='model.setScenario("+'"'+scenarioName+'"'+")'>"+scenarioName+"</div></div>"
         appendString.innerHTML = (pleaseWork)
-        console.log(appendString)
         scenarioList.appendChild(appendString)
 
-    }
+    }   
+       
+     }
+     catch(err){console.log(err)}
+ 
+     });
+
 }
 
 populateScenarios()
 
 model.setScenario = function(scenarioName){
-
-    console.log(scenarioName)
+    if(scenarioName == "None"){document.getElementById("scenario_name").innerText = "No scenario has been loaded"}
+    else{document.getElementById("scenario_name").innerText = " Scenario "+scenarioName +" is active"}
+    model.selectedScenario(scenarioName+".json")
+    if(model.isGameCreator()){_.delay(model.updatePlayersScenario,500)}
 
 }
 
 function myFunction() {
-  
+
   if(document.getElementById("myDropdown").style.display !== "none"){ document.getElementById("myDropdown").style.display = "none"}
-  else{ document.getElementById("myDropdown").style.display = ""}
+  else{if(!model.isGameCreator()){return} document.getElementById("myDropdown").style.display = ""}
   
 }
 myFunction()
@@ -232,10 +244,12 @@ model.commanderPrep =function(){
 var scenariosIdentifier = "scenarios"
 
 
-model.loadScenario = function(Scenario){
+model.loadScenario = function(scenario){
 
-model.scenarioCommanderSpec = Scenario.customCommander
+model.scenarioCommanderSpec = scenario.customCommander
 if(model.scenarioCommanderSpec == undefined){model.scenarioCommanderSpec = ""}
+model.setScenario(scenario)
+
 
 }
 
@@ -283,7 +297,7 @@ var scenarioHandler = function(msg)
     {
         switch (data.type)
         {
-// host is sending all ranks to players
+// host is sending scenario to players
         case 'updateScenario':
             console.log("updating scenario")
             console.log(data.chosenScenario)

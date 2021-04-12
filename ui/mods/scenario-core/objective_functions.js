@@ -61,7 +61,7 @@ model.objectiveCheckFunctions["build_units"] = function (timedObject){
 }
 
 //takes in a range of units, and whether it should trigger within or outside this range, does not return progress.
-//if unittypes is true, units will be assumed to contain those and they will be used instead.
+//if unittypes is true, units will be assumed to contain those and they will be used instead, to exclude scenario units I need to exclude nobuild by default.
 model.objectiveCheckFunctions["unit_range"] = function (timedObject){
     console.log("unit range running")
     var promiseArray = [];
@@ -319,7 +319,31 @@ model.objectiveEffectFunctions["radius_ring"] = function (objectLocation, durati
 
 }
 
+/**
+ * 
+ * an objective that takes in some parameters from the object and periodically spawns waves of units that scale by some variable(probably time)
+ * 
+ * there would be a difficulty number, scaling ratio(difficulty increase vs time), initial difficulty, and max difficulty
+ * 
+ * it could also specify what units can be spawned and their difficulty tier
+ * 
+ * spawn points would be specified along with what radius around them to spawn in
+ * 
+ * waves would be spawned and given to the enemy ai with compositions based on the difficulty tier of the unit, there would be some kind of ratio of expensive vs cheaper units for a nice balance
+ * 
+ * could have a timer attached if needed
+ * 
+ * adding a end objective field to objectibes would let me end other objectives on certain conditions which would be cool
+ */
+model.objectiveCheckFunctions["spawn_waves"] = function (timedObject){
 
+
+
+
+
+
+
+}
 
 
 

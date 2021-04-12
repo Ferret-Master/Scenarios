@@ -90,6 +90,8 @@ function ScenarioViewModel() {
     self.playerCommanderId = undefined;
 
     self.noSelection = ["/pa/units/commanders/scenario_avatar/scenario_avatar.json","/pa/units/air/scenario_loader/scenario_loader.json"];
+
+    self.planetLength =0;
 }
 model.scenarioModel = new ScenarioViewModel();
 
@@ -135,17 +137,32 @@ model.scenarioModel = new ScenarioViewModel();
 
 })
 
-function getAvatarId(){
+function getAvatarId(){ // gets the id's for each avatar
     
-    avatarPromise = model.allPlayerArmy(model.armyIndex(),"/pa/units/commanders/scenario_avatar/scenario_avatar.json");
+    model.scenarioModel.avatarId = []
+    var avatarPromiseArray = []
+    for(var i = 0;i<model.scenarioModel.planetLength;i++){
+
+      var avatarPromise = model.playerArmy(model.armyIndex(),i,"/pa/units/commanders/scenario_avatar/scenario_avatar.json")
+      avatarPromiseArray.push(avatarPromise)
+
+    }
+    avatarPromise = Promise.all(avatarPromiseArray)
+
+
     avatarPromise.then(function(result){
     
       try{
-      if(result["/pa/units/commanders/scenario_avatar/scenario_avatar.json"] == undefined || _.isEmpty(result["/pa/units/commanders/scenario_avatar/scenario_avatar.json"])){_.delay(getAvatarId,1000);return}
-     console.log("got avatar id")
-      //model.scenarioModel.avatarId = result["/pa/units/commanders/scenario_avatar/scenario_avatar.json"]
-      
-      model.scenarioModel.avatarId = result["/pa/units/commanders/scenario_avatar/scenario_avatar.json"]
+        var validAvatar = false;
+        for(var resultIndex in result){
+
+          if(result[resultIndex]["/pa/units/commanders/scenario_avatar/scenario_avatar.json"] == undefined || _.isEmpty(result[resultIndex]["/pa/units/commanders/scenario_avatar/scenario_avatar.json"])){continue}
+          validAvatar = true
+               
+           model.scenarioModel.avatarId[resultIndex] = result[resultIndex]["/pa/units/commanders/scenario_avatar/scenario_avatar.json"]
+        }
+        if(validAvatar == false){_.delay(getAvatarId,1000);return}
+     
     }
       catch(err){console.log(err)}
 
@@ -187,34 +204,35 @@ cursor_x = event.pageX;
 cursor_y = event.pageY;
 }
 
-model.setupScenario = function(scenarioJSON){
+model.setupScenario = function(scenarioJSON){ // sets up necessary components for the scenario
   
-    model.currentFocusPlanetId =function () {
-    return api.camera.getFocus(api.Holodeck.focused.id).planetId()
-    }
-    var planet = model.currentFocusPlanetId();
-    if(planet <0){_.delay(model.setupScenario,100,scenarioJSON);return}
- 
-    console.log("after planet check")
+    var planets = model.planetListState()
+    console.log("setting up scenario")
+   
+    if(planets == undefined || planets.planets.length<1){_.delay(model.setupScenario,100,scenarioJSON);return}
+    planets = planets.planets
+    model.scenarioModel.planetLength = planets.length
+   
     if(scenarioJSON["requireBuilders"] == true){
-      console.log("before holodeck check")
-      var hdeck = model.holodeck;
-      hdeck.raycastTerrain(cursor_x, cursor_y).then(function(loc3D) {
-        console.log("inside holodeck .then")
-          if (loc3D.pos) {
+        
+            for(var planetIndex in planets){
+              var planet = planets[planetIndex]
+              console.log(planet)
+              if(planet.id !== undefined){//check it is not the sun
+                console.log("spawning avatar on planet "+planetIndex)
+                var armyId = model.armyIndex()
+                if(armyId == undefined || armyId == -1){_.delay(model.setupScenario,100,scenarioJSON);return}
+                model.spawnExact(armyId,"/pa/units/commanders/scenario_avatar/scenario_avatar.json", planetIndex, [0,0,planet.radius],[0,0,0])
 
-            if(loc3D.pos[0]>100 || loc3D.pos[0]<-100 ){
-            console.log("before spawn avatar")
-            api.Panel.message("devmode","spawnAvatar",model.armyIndex());
-            console.log("after spawn avatar")
+              }
+
+            }
+        
+         
+           
             setTimeout(getAvatarId,500)
             setTimeout(getCommanderId,2000)
-            }
-            else{_.delay(model.setupScenario,100,scenarioJSON);return}
-          }
-          else{_.delay(model.setupScenario,100,scenarioJSON);return}
-        })
-       
+  
     }
     model.scenarioModel.author = scenarioJSON["author"]
     model.scenarioModel.scenarioName = scenarioJSON["name"]

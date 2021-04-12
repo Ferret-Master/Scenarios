@@ -79,7 +79,7 @@ model.allPlayerArmy = function(playerId,unitType, stateFlag,unitTypeValue){
             var chosenPlanet = planet.index;
         }
         else{continue}
-        console.log("army promise called with planet ",chosenPlanet)
+
         promiseArray.push(model.playerArmy(playerId, chosenPlanet,unitType, stateFlag,unitTypeValue))
     }
     var allPlanetArmyPromise = Promise.all(promiseArray)
@@ -87,12 +87,12 @@ model.allPlayerArmy = function(playerId,unitType, stateFlag,unitTypeValue){
         var finalUnits = {};
         for(army in result){// for each player planet
             var armyKeys = _.keys(result[army])
-            console.log(armyKeys)
+           
 
             for(unit in armyKeys){//for each unit on a planet
               
                 if(!(armyKeys[unit] in finalUnits)){finalUnits[armyKeys[unit]] = []};//if 
-                console.log(armyKeys[unit])
+               
                 
                 for(i in result[army][armyKeys[unit]]){
                  
@@ -157,13 +157,14 @@ model.playerArmy = function(playerId, planetId,unitType, stateFlag,unitTypeValue
                                 
                                 if(_.contains(unitJsons[jsonKeys[i]].types,unitTypeValue[j])){//check if each unit json contains every type in the value array
                                   
+                                    if(_.contains(unitJsons[jsonKeys[i]].types,"UNITTYPE_NoBuild")){continue}
                                     matchedValue++;
                              
                                 }
                             }
                             
                            
-                            if(matchedValue == unitTypeValue.length && result[jsonKeys[i]] !== undefined){console.log("applying successful filter");finalResult[jsonKeys[i]] = result[jsonKeys[i]]}
+                            if(matchedValue == unitTypeValue.length && result[jsonKeys[i]] !== undefined){finalResult[jsonKeys[i]] = result[jsonKeys[i]]}
                         }
                      
                         result = finalResult;
@@ -235,8 +236,8 @@ model.playerArmy = function(playerId, planetId,unitType, stateFlag,unitTypeValue
                                 unitData = [unitData];
     
                         }
-                    console.log("unitdata below")
-                    console.log(unitData)
+              
+     
                       return unitData;
                     }
                     
@@ -346,9 +347,9 @@ model.getCommanderData = function(){
     var commanderId = model.scenarioModel.playerCommanderId
     var commanderData = api.getWorldView(0).getUnitState(commanderId)
     commanderData.then(function(result){
-        console.log(result)
+    
         for(i in result){
-            console.log(result[i])
+         
             if(result[i]["unit_spec"]){
                 console.log(result[i]["unit_spec"])
                 if(model.scenarioModel.playerSpawn.chosenPos == undefined){model.scenarioModel.playerSpawn.chosenPos = result[i].pos}
