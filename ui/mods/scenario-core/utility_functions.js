@@ -157,7 +157,7 @@ model.playerArmy = function(playerId, planetId,unitType, stateFlag,unitTypeValue
                                 
                                 if(_.contains(unitJsons[jsonKeys[i]].types,unitTypeValue[j])){//check if each unit json contains every type in the value array
                                   
-                                    if(_.contains(unitJsons[jsonKeys[i]].types,"UNITTYPE_NoBuild")){continue}
+                                    //if(_.contains(unitJsons[jsonKeys[i]].types,"UNITTYPE_NoBuild")){continue}
                                     matchedValue++;
                              
                                 }
@@ -203,7 +203,7 @@ model.playerArmy = function(playerId, planetId,unitType, stateFlag,unitTypeValue
                       
                         result =  finalResult;
                     }
-
+                 
                     if(unitTypeValue.length>0 && unitTypeValue[0] !== "" && unitTypeValue[0] !== undefined){
          
                         var finalResult = {};
@@ -217,7 +217,7 @@ model.playerArmy = function(playerId, planetId,unitType, stateFlag,unitTypeValue
                              
                                 }
                             }
-                            if(matchedValue == unitTypeValue.length && result[jsonKeys[i]] !== undefined){finalResult[jsonKeys[i]] = result[jsonKeys]}
+                            if(matchedValue == unitTypeValue.length && result[jsonKeys[i]] !== undefined){finalResult[jsonKeys[i]] = result[jsonKeys[i]]}
                         }
                         result = finalResult;
 
@@ -228,7 +228,7 @@ model.playerArmy = function(playerId, planetId,unitType, stateFlag,unitTypeValue
                         unitArray.push(result[armyKeys[i]])
                     }
                     unitArray = _.flatten(unitArray)
-
+                   
                     return world.getUnitState(unitArray).then(function (ready) {
                         var unitData = this.result;
                         var one = !_.isArray(unitData);
@@ -237,7 +237,7 @@ model.playerArmy = function(playerId, planetId,unitType, stateFlag,unitTypeValue
     
                         }
               
-     
+                        
                       return unitData;
                     }
                     

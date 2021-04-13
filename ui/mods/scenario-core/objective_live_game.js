@@ -78,6 +78,7 @@ if(objectiveObject.activeEffect !== true && objectiveObject.effect !== undefined
     objectiveObject.activeEffect = true;
     objectiveObject.effectPuppetId = effectPuppetId;
 }
+
 var returnPromise = new Promise(function(resolve,reject){resolve(model.objectiveCheckFunctions[objectiveObject.type](objectiveObject,playerId));})
 
 returnPromise.then(function(result){//TODO replace the 0 with playerId
@@ -214,7 +215,7 @@ model.objectiveLoop();
 }
 
 model.objectiveLoop = function(){
-    
+    if(model.scenarioModel)
     if(model.scenarioModel == undefined){setTimeout(model.objectiveLoop,1000);return;
     }
     var avatarId = model.scenarioModel["avatarId"];

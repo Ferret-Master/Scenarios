@@ -234,6 +234,12 @@ model.setupScenario = function(scenarioJSON){ // sets up necessary components fo
             setTimeout(getCommanderId,2000)
   
     }
+    else{
+
+      setTimeout(getCommanderId,2000)
+      model.scenarioModel.avatarId = -2
+
+    }
     model.scenarioModel.author = scenarioJSON["author"]
     model.scenarioModel.scenarioName = scenarioJSON["name"]
 return;

@@ -335,10 +335,76 @@ model.objectiveEffectFunctions["radius_ring"] = function (objectLocation, durati
  * 
  * adding a end objective field to objectibes would let me end other objectives on certain conditions which would be cool
  */
-model.objectiveCheckFunctions["spawn_waves"] = function (timedObject){
+model.objectiveCheckFunctions["spawn_waves"] = function (waveObject){
+    console.log("spawn waves objective running")
+    var controllingPlayer = 0;
+    if(waveObject.playerType == "ai"){
+        players = model.players()
+        for(playerIndex in players){
+            var player = players[playerIndex]
+            if(player.ai == true){
+                controllingPlayer = playerIndex
+            }
+
+        }
+
+    }
+    var army = model.playerArmy(model.armyIndex(),waveObject.planet,"",true,waveObject.dont_spawn_near_unit_type)
+    console.log(army)
+    army.then(function(result){
+        console.log("result below")
+        console.log(result)
+        var locations = []
+        for(unitIndex in result){
+            unit = result[unitIndex]
+            locations.push(unit.pos)
+        }
+
+        if(waveObject.planet !== undefined){//planet rather than location based wave spawning
+
+            var effectNeeded = (waveObject.spawnEffect !== undefined)
+            console.log("before progress check")
+            if((waveObject.progress/waveObject.scalingRatio)%waveObject.waveInterval >0 && (waveObject.progress/waveObject.scalingRatio)%waveObject.waveInterval <2){//if it is time to spawn a wave
+                var unitsNeeded = waveObject.progress//for now 1:1
+                for(var points = 0; points<unitsNeeded;points++){// queuing up many random movement commands, move doesnt have the pausing of patrol
+                    function randomPoint(){
+                        var pos1 = Math.floor(Math.random() * 501); 
+                    var pos2 = Math.floor(Math.random() * 501);
+                    var pos3 = Math.floor(Math.random() * 501);
+                    var posArray = [pos1,pos2,pos3];
+                    for(var count = 0; count<3;count++){
+                        var sign = Math.floor(Math.random() * 11);
+                        
+                        if (sign > 4){posArray[count] = posArray[count]*-1;}
+                        
+                    }
+                    if(waveObject.dont_spawn_radius !== undefined){
+                        for(var locationIndex in locations){
+                        if(model.distanceBetween(posArray, locations[locationIndex]) < waveObject.dont_spawn_radius){
+                            return randomPoint()
+                        }
+                        else{return posArray}
+                        }
+                    }
+                    }
+                    console.log("before spawn exact")
 
 
+                   model.spawnExact(controllingPlayer,_.keys(waveObject.unitValues)[0],waveObject.planet,randomPoint(),[0,0,0])
+                    
+                    
+                }
+    
+    
+            }
+           
+        }
 
+
+    })
+    var difficultyIncrease =waveObject.scalingRatio
+    return (waveObject.progress+difficultyIncrease);//raises the difficulty
+   
 
 
 
