@@ -122,14 +122,12 @@ returnPromise.then(function(result){//TODO replace the 0 with playerId
     }
     else{//other result should be an update to progress, so update ui
 
-        if(objectiveObject.type == "control_area"){
+        if(objectiveObject.timesCalled !== undefined){
             
-            objectiveObject.progress = result;
+            objectiveObject.timesCalled += 1;
 
         }
-        else{
-            objectiveObject.progress = result;
-        }
+        if(objectiveObject.progress !== undefined){objectiveObject.progress = result;}
     }
     
     

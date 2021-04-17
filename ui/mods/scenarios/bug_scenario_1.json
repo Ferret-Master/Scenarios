@@ -22,17 +22,42 @@
             "type":"spawn_waves",
             "planet":0,
             "dont_spawn_near_unit_type":"UNITTYPE_Commander",
-            "dont_spawn_radius":600,
+            "dont_spawn_radius":500,
             "spawn_near_unit_types":[],
             "spawn_near_radius":300,
+            "lastCalled":0,
             "timesCalled":0,
-            "progress":0,
+            "progress":1000,
             "maxDifficulty":100000,
-            "scalingRatio":0.5,
-            "waveInterval":45,
+            "scalingNumber":0.2,
+            "scalingRatio":0.1,
+            "waveInterval":60,
+      
             "unitValues":{
 
-                "/pa/units/land/bug_grunt/bug_grunt.json":1
+            
+                "spitters":{
+                    "value":1,
+                    "units":[
+                        ["/pa/units/land/bug_scout/bug_scout.json",2,60]
+                    ]
+                },
+                "melee":{
+                    "value":2,
+                    "units":[
+                         ["/pa/units/land/bug_grunt/bug_grunt.json",2,30],
+                         ["/pa/units/land/bug_grunt_big/bug_grunt_big.json",10,200]
+                         ]
+
+                },
+                "warrior":{
+                    "value":1,
+                    "units":[
+                         ["/pa/units/land/bug_warrior/bug_warrior.json",50,100000]
+                         ]
+
+                }
+               
 
             },
             "startingObjective": true,
@@ -49,8 +74,35 @@
             "failureObjectives": [
                 ""
             ]
+        },
+        {
+            "name": "kill_counter",
+            "id":2,
+            "visible":true,
+            "description": "Number of bugs killed",
+            "result":"Survive",
+            "needed":100000,
+            "syntax":"/",
+            "type":"destroyed_metal_counter",
+            "counterValue":300,
+            "progress":0,
+            "startingObjective": true,
+            "finishDuration": null,
+            "successTriggers": [
+                ""
+            ],
+            "failureTriggers": [
+                ""
+            ],
+            "successObjectives": [
+                ""
+            ],
+            "failureObjectives": [
+                ""
+            ]
         }
     ],
+    
       
     "triggers": [
  

@@ -150,6 +150,7 @@ model.objectiveCheckFunctions["destroy_units"] = function (timedObject){//likely
  */
 model.objectiveCheckFunctions["control_area"] = function (objectiveObject, playerId){
 
+    
 
     //for each player get the units within an area, if only 1 player has units within the area they get their time incremented
     for(var i = 0;i<objectiveObject.progress.length;i++){if(objectiveObject.progress[i]>=objectiveObject.needed && i == model.armyIndex()){return true}}
@@ -336,65 +337,112 @@ model.objectiveEffectFunctions["radius_ring"] = function (objectLocation, durati
  * adding a end objective field to objectibes would let me end other objectives on certain conditions which would be cool
  */
 model.objectiveCheckFunctions["spawn_waves"] = function (waveObject){
-    console.log("spawn waves objective running")
+    if(model.paused() == true || model.isSpectator() == true || model.gameOver() == true || model.scenarioModel.landTime == 200000){return}
+    var planetRadius = 500
+    var planets = model.planetListState()
+
+    planets = planets.planets
+    for(planetIndex in planets){
+     
+        if(planets[planetIndex].id == waveObject.planet){planetRadius = planets[planetIndex].radius}
+    }
+  
+    
+    var army = []
     var controllingPlayer = 0;
     if(waveObject.playerType == "ai"){
         players = model.players()
         for(playerIndex in players){
             var player = players[playerIndex]
-            if(player.ai == true){
+            if(player.ai == true && player.stateToPlayer == "hostile"){
                 controllingPlayer = playerIndex
+            }
+            else{
+                army.push(model.playerArmy(playerIndex,waveObject.planet,"",true,waveObject.dont_spawn_near_unit_type))
             }
 
         }
 
     }
-    var army = model.playerArmy(model.armyIndex(),waveObject.planet,"",true,waveObject.dont_spawn_near_unit_type)
-    console.log(army)
-    army.then(function(result){
-        console.log("result below")
-        console.log(result)
+  
+   
+    var allArmy = Promise.all(army)
+    var scalingRatio = 0
+    allArmy.then(function(result){
+        
         var locations = []
-        for(unitIndex in result){
-            unit = result[unitIndex]
-            locations.push(unit.pos)
+        for(armyIndex in result){
+     
+        for(unitIndex in result[armyIndex]){
+            unit = result[armyIndex][unitIndex]
+            if(unit !== undefined){if(unit == undefined){continue} locations.push(unit.pos)}
+          
         }
 
+         }
+
+         function randomPoint(){
+
+            var posArray = rand_sphere_point(planetRadius)
+            if(waveObject.dont_spawn_radius !== undefined){
+               
+                var tooClose = false
+           
+                for(var locationIndex in locations){
+                   
+                  
+          
+                if(model.distanceBetween(posArray, locations[locationIndex]) < waveObject.dont_spawn_radius){
+             
+                    tooClose = true
+                   
+                }
+                }
+                if(tooClose == true){ return randomPoint()}
+                else{return posArray}
+            }
+            }
         if(waveObject.planet !== undefined){//planet rather than location based wave spawning
 
             var effectNeeded = (waveObject.spawnEffect !== undefined)
-            console.log("before progress check")
-            if((waveObject.progress/waveObject.scalingRatio)%waveObject.waveInterval >0 && (waveObject.progress/waveObject.scalingRatio)%waveObject.waveInterval <2){//if it is time to spawn a wave
-                var unitsNeeded = waveObject.progress//for now 1:1
-                for(var points = 0; points<unitsNeeded;points++){// queuing up many random movement commands, move doesnt have the pausing of patrol
-                    function randomPoint(){
-                        var pos1 = Math.floor(Math.random() * 501); 
-                    var pos2 = Math.floor(Math.random() * 501);
-                    var pos3 = Math.floor(Math.random() * 501);
-                    var posArray = [pos1,pos2,pos3];
-                    for(var count = 0; count<3;count++){
-                        var sign = Math.floor(Math.random() * 11);
-                        
-                        if (sign > 4){posArray[count] = posArray[count]*-1;}
-                        
-                    }
-                    if(waveObject.dont_spawn_radius !== undefined){
-                        for(var locationIndex in locations){
-                        if(model.distanceBetween(posArray, locations[locationIndex]) < waveObject.dont_spawn_radius){
-                            return randomPoint()
-                        }
-                        else{return posArray}
-                        }
-                    }
-                    }
-                    console.log("before spawn exact")
+          
+            if((model.scenarioModel.RealTimeSinceLanding)%waveObject.waveInterval >0 && (model.scenarioModel.RealTimeSinceLanding%waveObject.waveInterval <2 && waveObject.timesCalled >0) && waveObject.lastCalled !==(model.scenarioModel.RealTimeSinceLanding)){//if it is time to spawn a wave
+                waveObject.lastCalled = 
+                console.log("spawning wave with difficulty value of "+waveObject.progress)
+           
+                var waveUnits = _.keys(waveObject.unitValues)
+                var groupSpawnPoint = randomPoint()
 
 
-                   model.spawnExact(controllingPlayer,_.keys(waveObject.unitValues)[0],waveObject.planet,randomPoint(),[0,0,0])
-                    
-                    
+                for(groupIndex in waveUnits){//for each unit group in the wave
+                    var unitGroupObject = waveObject.unitValues[waveUnits[groupIndex]]
+                    var groupValue = waveObject.progress/unitGroupObject.value 
+                    for(unitIndex in unitGroupObject.units){// for each unit in the group
+                        var unit = unitGroupObject.units[unitIndex]
+                        var unitValue = unit[1]
+                        var unitName = unit[0]
+                        var unitScalingNumber = unit[2]
+                        var unitRatio = unitScalingNumber/groupValue
+                        
+                        //if(unitGroupObject.units.length>1){unitRatio = unitRatio + (-0.1 * Math.pow((0.015*(groupValue/unitValue)),2)) + 0.004*groupValue}
+                        if(unitRatio>1){unitRatio = 1}
+                        if(unitRatio<0){unitRatio = 0}
+                        console.log(unitRatio," | ",groupValue," | ",unitValue)
+                        var unitsNeeded = unitRatio*groupValue/unitValue
+                        unitsNeeded = Math.floor(unitsNeeded)
+                        console.log(model.scenarioModel.RealTimeSinceLanding)
+                        console.log("spawning "+unitsNeeded+" "+unitName)
+                        for(var points = 0; points<unitsNeeded;points++){// queuing up many random movement commands, move doesnt have the pausing of patrol
+                 
+                            if(groupValue<0){ continue}
+                            model.spawnExact(controllingPlayer,unitName,waveObject.planet,groupSpawnPoint,[0,0,0])
+                            groupValue -= unitValue
+                             
+                         }
+
+                    }
+         
                 }
-    
     
             }
            
@@ -402,8 +450,10 @@ model.objectiveCheckFunctions["spawn_waves"] = function (waveObject){
 
 
     })
-    var difficultyIncrease =waveObject.scalingRatio
-    return (waveObject.progress+difficultyIncrease);//raises the difficulty
+    if((model.scenarioModel.RealTimeSinceLanding)%waveObject.waveInterval >0 && (model.scenarioModel.RealTimeSinceLanding%waveObject.waveInterval <2 && waveObject.timesCalled >0 && waveObject.lastCalled!==model.scenarioModel.RealTimeSinceLanding)){scalingRatio = (waveObject.scalingRatio*waveObject.progress)}
+    var difficultyIncrease = waveObject.scalingNumber + scalingRatio
+    var returnValue = waveObject.progress+difficultyIncrease
+    return returnValue;//raises the difficulty
    
 
 
@@ -411,6 +461,12 @@ model.objectiveCheckFunctions["spawn_waves"] = function (waveObject){
 
 }
 
+model.objectiveCheckFunctions["destroyed_metal_counter"] = function (counterObject){//used to track kills etc in custom modes
+    var metalDestroyed = model.enemyMetalDestroyed();
+    if(counterObject.counterValue !== undefined){return metalDestroyed/counterObject.counterValue}
 
+    else{return metalDestroyed}
+
+}
 
 

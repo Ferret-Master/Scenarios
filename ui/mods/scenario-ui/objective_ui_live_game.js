@@ -150,13 +150,5 @@ handlers.objectiveUpdate = function(payload) {
         if(displayedSecondsSinceLanding < 10){displayedSecondsSinceLanding =  "0"+displayedSecondsSinceLanding}
        
         $(".landingTime").html(displayedMinutesSinceLanding+":"+displayedSecondsSinceLanding)
-
-      
-		
-            
-            
-            
-            
-      
         
     }

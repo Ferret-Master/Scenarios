@@ -366,3 +366,21 @@ model.getCommanderData = function(){
     
 
 }
+
+
+// by DISSONANT
+    function rand_sphere_point(r) {
+
+        function rand_logistic() {
+            q = Math.random()
+            return Math.log(q / (1 - q))
+        }
+    
+        v = [0,0,0].map(rand_logistic)
+    
+        m = Math.sqrt(_.sum(v, function(x) {return Math.pow(x, 2)}))
+    
+        v = v.map(function(x) {return r * x / m})
+    
+        return v
+    }
