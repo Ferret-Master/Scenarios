@@ -83,7 +83,7 @@ var returnPromise = new Promise(function(resolve,reject){resolve(model.objective
 
 returnPromise.then(function(result){//TODO replace the 0 with playerId
     //console.log("result of progress = "+result)
-    
+    if(objectiveObject.maxTime< model.scenarioModel.RealTimeSinceLanding && model.scenarioModel.RealTimeSinceLanding !== -200000 && objectiveObject.maxTime !== undefined){result = true}
     if(result == null){return}
     if(result === true){//move from active objectives into finished, update ui, activate success triggers
         if(objectiveObject.effectPuppetId !== undefined){

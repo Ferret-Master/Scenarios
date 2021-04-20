@@ -384,3 +384,13 @@ model.getCommanderData = function(){
     
         return v
     }
+
+    model.sendJsonMessage = function(type,jsonObject){
+        var scenariosIdentifier = "scenarios"
+        var data  = {};
+        data.identifier = scenariosIdentifier;
+        data.jsonObject = jsonObject
+        data.type = type
+        
+        model.send_message("json_message", data);
+    }

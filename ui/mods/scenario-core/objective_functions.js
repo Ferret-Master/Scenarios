@@ -407,16 +407,47 @@ model.objectiveCheckFunctions["spawn_waves"] = function (waveObject){
             var effectNeeded = (waveObject.spawnEffect !== undefined)
           
             if((model.scenarioModel.RealTimeSinceLanding)%waveObject.waveInterval >0 && (model.scenarioModel.RealTimeSinceLanding%waveObject.waveInterval <2 && waveObject.timesCalled >0) && waveObject.lastCalled !==(model.scenarioModel.RealTimeSinceLanding)){//if it is time to spawn a wave
-                waveObject.lastCalled = 
+                waveObject.lastCalled;
                 console.log("spawning wave with difficulty value of "+waveObject.progress)
            
                 var waveUnits = _.keys(waveObject.unitValues)
                 var groupSpawnPoint = randomPoint()
+                var randomNum = Math.random()
+                // if(effectNeeded == true && waveObject.effectContext == "groups"){
+                 
+                //     var effectJson = {
+                //         effectName:"burrow",
+                //         duration:waveObject.spawnEffectDuration,
+                //         location: groupSpawnPoint
+                //     }
+                //     model.sendJsonMessage("spawnEffect",effectJson)
+                // }
 
+                //for each wave 
+                var totalChance = 0
+                var pickedWave = false;
+                console.log("before wave pick")
+                for(waveIndex in waveUnits){
+                    var waveChance = waveObject.unitValues[waveUnits[waveIndex]].waveChance
+                    totalChance += waveChance
+                    console.log(totalChance)
+                    console.log(randomNum)
+                    if(randomNum<=totalChance){
 
+                        waveUnits = waveObject.unitValues[waveUnits[waveIndex]]
+                        pickedWave = true
+                        console.log("picked wave")
+                    }
+                }
+                console.log("after wave pick")
+                if(pickedWave == false){waveUnits = waveObject.unitValues[waveUnits[0]]}
+                console.log(waveUnits)
                 for(groupIndex in waveUnits){//for each unit group in the wave
-                    var unitGroupObject = waveObject.unitValues[waveUnits[groupIndex]]
+                    if(groupIndex == "waveChance"){continue}
+                    console.log(groupIndex)
+                    var unitGroupObject = waveUnits[groupIndex]
                     var groupValue = waveObject.progress/unitGroupObject.value 
+                   
                     for(unitIndex in unitGroupObject.units){// for each unit in the group
                         var unit = unitGroupObject.units[unitIndex]
                         var unitValue = unit[1]
@@ -427,14 +458,15 @@ model.objectiveCheckFunctions["spawn_waves"] = function (waveObject){
                         //if(unitGroupObject.units.length>1){unitRatio = unitRatio + (-0.1 * Math.pow((0.015*(groupValue/unitValue)),2)) + 0.004*groupValue}
                         if(unitRatio>1){unitRatio = 1}
                         if(unitRatio<0){unitRatio = 0}
-                        console.log(unitRatio," | ",groupValue," | ",unitValue)
+                        
                         var unitsNeeded = unitRatio*groupValue/unitValue
                         unitsNeeded = Math.floor(unitsNeeded)
-                        console.log(model.scenarioModel.RealTimeSinceLanding)
+                      
                         console.log("spawning "+unitsNeeded+" "+unitName)
                         for(var points = 0; points<unitsNeeded;points++){// queuing up many random movement commands, move doesnt have the pausing of patrol
                  
                             if(groupValue<0){ continue}
+                            if(waveObject.group == false){groupSpawnPoint = randomPoint()}
                             model.spawnExact(controllingPlayer,unitName,waveObject.planet,groupSpawnPoint,[0,0,0])
                             groupValue -= unitValue
                              
@@ -449,7 +481,7 @@ model.objectiveCheckFunctions["spawn_waves"] = function (waveObject){
         }
 
 
-    })
+    }).catch(function(err){})
     if((model.scenarioModel.RealTimeSinceLanding)%waveObject.waveInterval >0 && (model.scenarioModel.RealTimeSinceLanding%waveObject.waveInterval <2 && waveObject.timesCalled >0 && waveObject.lastCalled!==model.scenarioModel.RealTimeSinceLanding)){scalingRatio = (waveObject.scalingRatio*waveObject.progress)}
     var difficultyIncrease = waveObject.scalingNumber + scalingRatio
     var returnValue = waveObject.progress+difficultyIncrease
@@ -463,6 +495,7 @@ model.objectiveCheckFunctions["spawn_waves"] = function (waveObject){
 
 model.objectiveCheckFunctions["destroyed_metal_counter"] = function (counterObject){//used to track kills etc in custom modes
     var metalDestroyed = model.enemyMetalDestroyed();
+    if(counterObject.progress >= counterObject.needed){return true}
     if(counterObject.counterValue !== undefined){return metalDestroyed/counterObject.counterValue}
 
     else{return metalDestroyed}

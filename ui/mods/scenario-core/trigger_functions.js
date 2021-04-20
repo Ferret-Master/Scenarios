@@ -100,20 +100,48 @@ model.triggerFunctions["build_at_existing_unit"] = function(triggerObject){
         if(model.scenarioModel.playerCommanderType == -1){model.scenarioModel.playerCommanderType = "/pa/units/commanders/raptor_rallus/raptor_rallus.json";}
         triggerObject.prefab.units = [{"unitType":model.scenarioModel.playerCommanderType,"pos":model.scenarioModel.playerSpawn.chosenPos,"orientation": model.scenarioModel.playerSpawn.chosenOrientation}]
         triggerObject.prefab.planet = model.scenarioModel.playerSpawn.chosenPlanet
-        
-     
-    }
-    else{// TODO expand for general use
 
-        var unitToBuild = triggerObject.unitName;
-        var unitToBuildAt = triggerObject.existing_unit;
-    }
-    console.log("sending build order ")
+        console.log("sending build order ")
     console.log(triggerObject)
     var preset = triggerObject.prefab;
     console.log(preset)
     console.log(avatarId)
     model.executeAsPlayer(playerIndex,api.build_preset.exactPreFabUnit,[avatarId[0],preset])
+        
+     
+    }
+    else if(triggerObject.special == "unit type"){// TODO expand for general use
+        if(model.scenarioModel.RealTimeSinceLanding <1 || model.scenarioModel.RealTimeSinceLanding ==200000){_.delay(model.triggerFunctions["build_at_existing_unit"],500,triggerObject);return}
+        var locations = []
+        var unitToBuild = triggerObject.newUnitName;
+        var unitTypeToBuildAt = triggerObject.unitType;
+        var armyPromise = model.playerArmy(playerIndex,triggerObject.planet,"",true,unitTypeToBuildAt)
+        planet = triggerObject.planet
+        armyPromise.then(function(result){
+            console.log(result)
+            for(unitIndex in result){
+                unit = result[unitIndex]
+                if(unit !== undefined){if(unit == undefined){continue} locations.push(unit.pos)}
+              
+            }
+            console.log(locations)
+            for(locationIndex in locations){
+                for(unitNameIndex in unitToBuild){
+                    var unitArray = unitToBuild[unitNameIndex]
+                    for(var i = 0; i<unitArray[1];i++){
+                        console.log("spawning ",unitArray[0])
+                        model.spawnExact(playerIndex,unitArray[0],planet,locations[locationIndex],[0,0,0])
+
+                    }
+
+                }
+               
+            }
+
+
+        })
+    }
+    
     //api.build_preset.exactPreFab(avatarId,preset,playerIndex)
 
 
