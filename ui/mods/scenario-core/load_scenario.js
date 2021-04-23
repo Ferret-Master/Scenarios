@@ -20,7 +20,7 @@ function loadScenario(location){//will be made into an api/observable later , wi
     if(location == ""){return}
     model.unitKeys = _.keys(model.unitSpecs)
 
-    $.getJSON('coui:/mods/scenarios/' + location).then(function(imported) {
+    $.getJSON('coui:/mods/scenarios/' + location+'.json').then(function(imported) {
         
        try{
         model.setupTriggers(imported["triggers"]);
@@ -34,7 +34,9 @@ function loadScenario(location){//will be made into an api/observable later , wi
     
    
 };
- function loadTestScenario(){loadScenario("bug_scenario_1.json")}
- setTimeout(loadTestScenario,100)
+//  function loadTestScenario(){loadScenario("bug_scenario_1.json")}
+//  setTimeout(loadTestScenario,100)
 
-//_.delay(loadScenario,100,chosenScenario())
+if(chosenScenario().length <2 || chosenScenario() == undefined || chosenScenario() == -1){chosenScenario('preset_test')}
+
+_.delay(loadScenario,100,chosenScenario())

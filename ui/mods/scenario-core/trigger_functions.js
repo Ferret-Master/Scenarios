@@ -41,13 +41,27 @@ model.triggerFunctions["preset"] = function(triggerObject){
     var avatarId = model.scenarioModel["avatarId"];
  
     if(avatarId == undefined || avatarId == -1){_.delay(model.triggerFunctions["preset"],1000,triggerObject);return}
-    if(triggerObject["delay"]>0){var newTriggerObject = triggerObject;newTriggerObject.delay = 0 ;_.delay(model.triggerFunctions["preset"],(triggerObject["delay"]*1000),triggerObject)}
+    if(triggerObject["delay"]>0){var newTriggerObject = triggerObject;newTriggerObject.delay = 0 ;_.delay(model.triggerFunctions["preset"],(triggerObject["delay"]*1000),triggerObject); return}
     playerIndex = model.armyIndex();
 
     var preset = triggerObject.prefab;
     console.log(playerIndex)
     console.log("running build preset")
-    model.executeAsPlayer(playerIndex,api.build_preset.exactPreFab,[avatarId[0],preset])
+    var armyIndex = model.armyIndex()
+    var planet = preset.planet
+    var units = preset.units
+    var unitKeys = _.keys(units)
+    for(unitIndex in unitKeys){
+        var unitAmount = units[unitKeys[unitIndex]].pos.length
+        console.log(unitAmount)
+        for(var i = 0;i<unitAmount;i++){
+           
+            model.spawnExact(armyIndex,unitKeys[unitIndex],planet,units[unitKeys[unitIndex]].pos[i],units[unitKeys[unitIndex]].orientation[i])
+        }
+        console.log("finished spawning")
+        
+    }
+    //model.executeAsPlayer(playerIndex,api.build_preset.exactPreFab,[avatarId[0],preset])
     //api.build_preset.exactPreFab(avatarId,preset,playerIndex)
 
 

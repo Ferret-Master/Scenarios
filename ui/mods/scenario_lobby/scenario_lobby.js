@@ -167,8 +167,8 @@ var populateScenarios = function(){
     for(var i = 0;i<scenarioCount;i++){
         var scenarioName = imported.scenarios[i]
         var appendString = document.createElement('div')
-        var pleaseWork = "<div data-bind='disabled: !model.isGameCreator()'>"+"<div id = 'scenarioName' onclick='model.setScenario("+'"'+scenarioName+'"'+")'>"+scenarioName+"</div></div>"
-        appendString.innerHTML = (pleaseWork)
+        var scenarioHtml = "<div data-bind='disabled: !model.isGameCreator()'>"+"<div id = 'scenarioName' onclick='model.setScenario("+'"'+scenarioName+'"'+")'>"+scenarioName+"</div></div>"
+        appendString.innerHTML = (scenarioHtml)
         scenarioList.appendChild(appendString)
 
     }   
@@ -185,7 +185,7 @@ populateScenarios()
 model.setScenario = function(scenarioName){
     if(scenarioName == "None"){document.getElementById("scenario_name").innerText = "No scenario has been loaded"}
     else{document.getElementById("scenario_name").innerText = " Scenario "+scenarioName +" is active"}
-    model.selectedScenario(scenarioName+".json")
+    model.selectedScenario(scenarioName)
     if(model.isGameCreator()){_.delay(model.updatePlayersScenario,500)}
 
 }

@@ -1,5 +1,5 @@
 {
-    "name": "Bug Mode",
+    "name": "Bug Mode Normal",
     "description": "BUG",
     "scenarioID": 2,
     "systemName": "Centax-3",
@@ -31,8 +31,8 @@
             "timesCalled":-60,
             "progress":-16,
             "maxDifficulty":100000,
-            "scalingNumber":0.2,
-            "scalingRatio":0.2,
+            "scalingNumber":0.15,
+            "scalingRatio":0.1,
             "waveInterval":60,
       
             "unitValues":[
@@ -45,8 +45,8 @@
                 "spitters":{
                     "value":1,
                     "units":[
-                        ["/pa/units/land/bug_scout/bug_scout.json",2,80],
-                        ["/pa/units/land/bug_scorcher/bug_scorcher.json",40,400],
+                        ["/pa/units/land/bug_scout/bug_scout.json",2,40],
+                        ["/pa/units/land/bug_scorcher/bug_scorcher.json",80,600],
                         ["/pa/units/land/bug_basilisk/bug_basilisk.json",300,300000]
                     
                     ]
@@ -54,9 +54,9 @@
                 "melee":{
                     "value":1,
                     "units":[
-                         ["/pa/units/land/bug_grunt/bug_grunt.json",2,50],
+                         ["/pa/units/land/bug_grunt/bug_grunt.json",2,40],
                          ["/pa/units/land/bug_grunt_big/bug_grunt_big.json",20,400],
-                         ["/pa/units/land/bug_warrior/bug_warrior.json",50,500]
+                         ["/pa/units/land/bug_warrior/bug_warrior.json",60,600]
                          ]
 
                 },
@@ -76,7 +76,7 @@
                 "runners":{
                     "value":1,
                     "units":[
-                         ["/pa/units/land/bug_runner/runner.json",20,50000000]
+                         ["/pa/units/land/bug_runner/runner.json",25,50000000]
                       
                          ]
 
@@ -122,7 +122,7 @@
             "maxDifficulty":100000,
             "scalingNumber":0.1,
             "scalingRatio":0.1,
-            "waveInterval":30,
+            "waveInterval":40,
       
             "unitValues":[{
 

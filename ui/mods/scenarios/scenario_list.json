@@ -1,10 +1,12 @@
 {
  "scenarios":[
+   "bug_scenario_normal_difficulty",
     "bug_scenario_1",
     "test_scenario_1",
     "test_scenario_2",
     "test_scenario_3",
-    "test_scenario_4"
+    "test_scenario_4",
+    "preset_test"
 
  ]
 

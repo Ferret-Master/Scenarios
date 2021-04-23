@@ -350,13 +350,20 @@ model.objectiveCheckFunctions["spawn_waves"] = function (waveObject){
     
     var army = []
     var controllingPlayer = 0;
+    var playerController =false
     if(waveObject.playerType == "ai"){
         players = model.players()
         for(playerIndex in players){
             var player = players[playerIndex]
-            if(player.ai == true && player.stateToPlayer == "hostile"){
+            if(player.ai == true && player.stateToPlayer == "hostile" && playerController == false){
                 controllingPlayer = playerIndex
             }
+            if(player.econ_rate == 0.1){
+
+                controllingPlayer = playerIndex
+                playerController = true
+            }
+            
             else{
                 army.push(model.playerArmy(playerIndex,waveObject.planet,"",true,waveObject.dont_spawn_near_unit_type))
             }
@@ -364,7 +371,7 @@ model.objectiveCheckFunctions["spawn_waves"] = function (waveObject){
         }
 
     }
-  
+    if(controllingPlayer == model.armyIndex()){return}
    
     var allArmy = Promise.all(army)
     var scalingRatio = 0
@@ -428,6 +435,11 @@ model.objectiveCheckFunctions["spawn_waves"] = function (waveObject){
                 var pickedWave = false;
                 console.log("before wave pick")
                 for(waveIndex in waveUnits){
+                    if(pickedWave == true){continue}
+                    console.log(waveIndex)
+                    console.log(waveUnits)
+                    console.log(waveUnits[waveIndex])
+                    console.log(waveObject.unitValues[waveUnits[waveIndex]])
                     var waveChance = waveObject.unitValues[waveUnits[waveIndex]].waveChance
                     totalChance += waveChance
                     console.log(totalChance)
@@ -481,7 +493,7 @@ model.objectiveCheckFunctions["spawn_waves"] = function (waveObject){
         }
 
 
-    }).catch(function(err){})
+    }).catch(function(err){console.log(err)})
     if((model.scenarioModel.RealTimeSinceLanding)%waveObject.waveInterval >0 && (model.scenarioModel.RealTimeSinceLanding%waveObject.waveInterval <2 && waveObject.timesCalled >0 && waveObject.lastCalled!==model.scenarioModel.RealTimeSinceLanding)){scalingRatio = (waveObject.scalingRatio*waveObject.progress)}
     var difficultyIncrease = waveObject.scalingNumber + scalingRatio
     var returnValue = waveObject.progress+difficultyIncrease
