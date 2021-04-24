@@ -22,6 +22,10 @@ model.annihilationModeShow = ko.observable(false)    ;
 
 model.selectedScenario = ko.observable(-1).extend({ session: 'selectedScenario' });
 
+var objectivesToActivate =  ko.observable(-1).extend({ session: 'activeObjectives' });
+
+objectivesToActivate(-1)
+
 model.scenarioCommanderSpec = "";
                               
 model.selectedCommanderSpec = ko.observable("/pa/units/commanders/raptor_rallus/raptor_rallus.json").extend({ session: 'selectedCommanderSpec' });
@@ -314,3 +318,13 @@ var scenarioHandler = function(msg)
 };
 
 model.registerJsonMessageHandler( scenariosIdentifier, scenarioHandler );
+
+
+//looping updating the scenario so players joining get it and I can define it ahead of time
+
+
+function loopedScenarioUpdate(){
+    model.updatePlayersScenario()
+    _.delay(loopedScenarioUpdate, 5000)
+
+}

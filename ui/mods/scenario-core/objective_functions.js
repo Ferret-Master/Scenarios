@@ -515,3 +515,25 @@ model.objectiveCheckFunctions["destroyed_metal_counter"] = function (counterObje
 }
 
 
+
+
+
+model.objectiveCheckFunctions["players_alive"] = function (waveObject){
+    var players = model.players()
+    var humanPlayers = 0
+    var aiPlayers = 0
+    for(playerIndex in players){
+        var player = players[playerIndex]
+        if(player.ai == 1 && player.defeated == false){aiPlayers +=1}
+        if(player.ai !== 1 && player.defeated == false){humanPlayers +=1}
+    }
+    var totalPlayers = humanPlayers + aiPlayers
+
+    if(waveObject.totalAlive !==undefined){if(waveObject.totalAlive == totalPlayers){return true}}
+
+    if(waveObject.humanAlive !==undefined){if(waveObject.humanAlive == humanPlayers){return true}}
+
+    if(waveObject.aiAlive !==undefined){if(waveObject.aiAlive == aiPlayers){return true}}
+
+}
+

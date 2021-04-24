@@ -14,8 +14,6 @@ Currently each scenario file contains 3 major areas.
 
 var chosenScenario =  ko.observable(-1).extend({ session: 'selectedScenario' });
 
-
-
 function loadScenario(location){//will be made into an api/observable later , will be loaded by command for testing, followed by checking for system load.
     if(location == ""){return}
     model.unitKeys = _.keys(model.unitSpecs)

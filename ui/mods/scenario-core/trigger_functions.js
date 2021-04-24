@@ -44,11 +44,18 @@ model.triggerFunctions["preset"] = function(triggerObject){
     if(triggerObject["delay"]>0){var newTriggerObject = triggerObject;newTriggerObject.delay = 0 ;_.delay(model.triggerFunctions["preset"],(triggerObject["delay"]*1000),triggerObject); return}
     
     playerIndex = model.armyIndex();
-    
+    if(triggerObject.neutral == true){
+        var players = model.players()
+        for(i in players){
+            var player = players[i]
+            if(player.ai == 1){playerIndex = i}
+        }
+
+    }
     var preset = triggerObject.prefab;
     console.log(playerIndex)
     console.log("running build preset")
-    var armyIndex = model.armyIndex()
+   
     var planet = preset.planet
     var units = preset.units
     var unitKeys = _.keys(units)
@@ -57,7 +64,7 @@ model.triggerFunctions["preset"] = function(triggerObject){
         console.log(unitAmount)
         for(var i = 0;i<unitAmount;i++){
            
-            model.spawnExact(armyIndex,unitKeys[unitIndex],planet,units[unitKeys[unitIndex]].pos[i],units[unitKeys[unitIndex]].orientation[i])
+            model.spawnExact(playerIndex,unitKeys[unitIndex],planet,units[unitKeys[unitIndex]].pos[i],units[unitKeys[unitIndex]].orientation[i])
         }
         console.log("finished spawning")
         
@@ -275,32 +282,12 @@ model.triggerFunctions["destroy_unit"] = function(triggerObject){
 }
 
 
-model.triggerFunctions["kill_all_invincible_ai"] = function(triggerObject){// the player cycles through the ai in the game deletes their commander
+model.triggerFunctions["kill_all_invincible_ai"] = function(triggerObject){// the player cycles through the ai in the game and creates a metal max for them, resulting in their commandeers blowing up
     var players = model.players()
-    function killAI(playerIndex){
-    
-      
-        var armyPromise = model.allPlayerArmy(playerIndex,"UNITTYPE_Commander")
-        armyPromise.then(function(result){
-            console.log("in promise")
-            console.log(result)
-            var commanderSpec = _.key(result)
-            var commanderId = result[commanderSpec]
-
-            api.getWorldView(0).sendOrder({units: commanderId,command: 'self_destruct',queue: true,group:true});
-        })
-    }
-    function switchControl(playerIndex){
-        api.Panel.message("devmode","switchControl",[playerIndex,5000]);
-    }
-    var killDelay = 500
     for(playerIndex in players){
         var player = players[playerIndex]
         if(player.ai == 1 && player.defeated == false){
-            _.delay(switchControl,killDelay-500,playerIndex)
-            _.delay(killAI,killDelay,playerIndex)
-            killDelay = killDelay + 2000
-
+           model.spawnExact(playerIndex,"/pa/units/land/metal_max/metal_max.json",0,[300,300,300],[0,0,0])
         }
 
     }

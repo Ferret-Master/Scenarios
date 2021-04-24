@@ -101,7 +101,7 @@
         },
         {
             "name": "spawn_waves_2",
-            "id":1,
+            "id":2,
             "visible":false,
             "description": "Spawns waves of bugs periodically.",
             "playerType":"ai",
@@ -170,7 +170,7 @@
         },
         {
             "name": "kill_counter_1",
-            "id":2,
+            "id":3,
             "visible":true,
             "description": "Tons Of Biomass Destroyed",
             "result":"Get rewarded with a kaiju for each control tower",
@@ -196,7 +196,7 @@
         },
 		{
             "name": "kill_counter_2",
-            "id":2,
+            "id":4,
             "visible":true,
             "description": "Tons Of Biomass Destroyed",
             "result":"Get rewarded with 3 kaiju for each control tower",
@@ -222,7 +222,7 @@
         },
         {
             "name": "kill_counter_3",
-            "id":2,
+            "id":5,
             "visible":true,
             "description": "Tons Of Biomass Destroyed",
             "result":"Survive",
@@ -248,7 +248,7 @@
         },
         {
             "name": "setup start zapper",
-            "id":3,
+            "id":6,
             "description": "sets up starting zapper",
             "hidden":true,
             "type": "timed",

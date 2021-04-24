@@ -394,3 +394,39 @@ model.getCommanderData = function(){
         
         model.send_message("json_message", data);
     }
+
+    /**
+     * 
+     * "prefab": {
+                "planet": 0,
+                "centerPos": [100,100,100],
+                "centerOrient":[0,0,0],
+                "units": {
+                    "/pa/units/land/energy_plant/energy_plant.json": {
+                        "pos": [
+                            [ -177.4828643798828, -344.97222900390625, -312.9060363769531 ],
+                            [ -181.01220703125, -354.727783203125, -299.43267822265625 ]
+                        ],
+                        "orientation": [
+                            [ 0.8785752654075623, -0.1692122220993042, -0.12924018502235413, 0.4275159239768982 ],
+                            [ 0.8799293637275696, -0.17241352796554565, -0.1336355209350586, 0.4220658242702484 ]
+                        ]
+                    },
+                   
+                    }
+                }
+            }
+        }
+
+
+        This function 
+     */
+
+        
+    model.convertDynamicPrefab = function(newCenter,radius,prefab){
+
+
+
+
+
+    }

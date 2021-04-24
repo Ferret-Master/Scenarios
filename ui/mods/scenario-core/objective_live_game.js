@@ -22,6 +22,10 @@ objective types(early):
 
 */
 
+var objectivesToActivate =  ko.observable(-1).extend({ session: 'activeObjectives' });
+
+
+
 function removeByAttr(arr, attr, value){//courtesy of stack overflow but just what I needed
     var i = arr.length;
     while(i--){
@@ -182,12 +186,12 @@ model.makeObjectiveActiveByName = function(objectiveName){
 
 
 }
+
 model.setupObjectives = function(inputObjectiveArray){
     console.log("objective setup started")
     var objectiveArray = inputObjectiveArray["objectives"]
-    // console.log(objectiveArray["objectives"])
-    // console.log(newObjectiveArray)
-    objectiveModel.playerId = 0;//temp
+   
+    objectiveModel.playerId = 0;
 
     for(var i = 0;i<objectiveArray.length;i++){//converts shorthand values to easier to use ones
 
@@ -197,16 +201,33 @@ model.setupObjectives = function(inputObjectiveArray){
     //hopefully none of this ends up being async
     
 
-    for(var i = 0;i<objectiveArray.length;i++){
+    if(objectivesToActivate() !== -1 && objectivesToActivate().length !== 0){
+        for(var i = 0;i<objectiveArray.length;i++){
 
 
-        objectiveModel.allObjectives[i] = objectiveArray[i];
-        if(objectiveArray[i].startingObjective == true){
-            
-            model.makeObjectiveActive(objectiveArray[i])
+            objectiveModel.allObjectives[i] = objectiveArray[i];
+            if(_.contains(objectivesToActivate(),objectiveArray[i].id) == true){
+                
+                model.makeObjectiveActive(objectiveArray[i])
+            }
+    
+            totalObjectives++;
         }
 
-        totalObjectives++;
+    }
+    else{
+        for(var i = 0;i<objectiveArray.length;i++){
+
+
+            objectiveModel.allObjectives[i] = objectiveArray[i];
+            if(objectiveArray[i].startingObjective == true){
+                
+                model.makeObjectiveActive(objectiveArray[i])
+            }
+    
+            totalObjectives++;
+        }
+
     }
 
 model.objectiveLoop();
@@ -226,15 +247,16 @@ model.objectiveLoop = function(){
     //console.log(objectiveModel.playerId)
     if(objectiveModel){//if the model is defined
         var active = objectiveModel.activeObjectives;
+        var activeObjectiveIds = []
         for(var i = 0;i<active.length;i++){
             
-
+            activeObjectiveIds.push(active[i].id)
             objectiveProgress(active[i],objectiveModel.playerId)
             if(objectiveModel.activeObjectives[i].playerNames == undefined){objectiveModel.activeObjectives[i].playerNames = model.scenarioModel.playerNameArray}
             if(objectiveModel.activeObjectives[i].playerName == undefined){objectiveModel.activeObjectives[i].playerName = model.playerName()}
 
         }
-
+        objectivesToActivate(activeObjectiveIds)
         //console.log("objective loop checked actives")
 
 
