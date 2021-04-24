@@ -42,8 +42,9 @@ model.triggerFunctions["preset"] = function(triggerObject){
  
     if(avatarId == undefined || avatarId == -1){_.delay(model.triggerFunctions["preset"],1000,triggerObject);return}
     if(triggerObject["delay"]>0){var newTriggerObject = triggerObject;newTriggerObject.delay = 0 ;_.delay(model.triggerFunctions["preset"],(triggerObject["delay"]*1000),triggerObject); return}
+    
     playerIndex = model.armyIndex();
-
+    
     var preset = triggerObject.prefab;
     console.log(playerIndex)
     console.log("running build preset")
@@ -272,6 +273,46 @@ model.triggerFunctions["destroy_unit"] = function(triggerObject){
     return;
 
 }
+
+
+model.triggerFunctions["kill_all_invincible_ai"] = function(triggerObject){// the player cycles through the ai in the game deletes their commander
+    var players = model.players()
+    function killAI(playerIndex){
+    
+      
+        var armyPromise = model.allPlayerArmy(playerIndex,"UNITTYPE_Commander")
+        armyPromise.then(function(result){
+            console.log("in promise")
+            console.log(result)
+            var commanderSpec = _.key(result)
+            var commanderId = result[commanderSpec]
+
+            api.getWorldView(0).sendOrder({units: commanderId,command: 'self_destruct',queue: true,group:true});
+        })
+    }
+    function switchControl(playerIndex){
+        api.Panel.message("devmode","switchControl",[playerIndex,5000]);
+    }
+    var killDelay = 500
+    for(playerIndex in players){
+        var player = players[playerIndex]
+        if(player.ai == 1 && player.defeated == false){
+            _.delay(switchControl,killDelay-500,playerIndex)
+            _.delay(killAI,killDelay,playerIndex)
+            killDelay = killDelay + 2000
+
+        }
+
+    }
+
+
+
+     
+ 
+     return;
+ 
+ }
+
 
 model.triggerFunctions["repair"] = function(triggerObject){
    

@@ -109,8 +109,9 @@ $(document).ready(function () {
             }
             
             this.updatePlayerControlFlag(index);
-
+          
             setTimeout(this.updatePlayerControlFlag.bind(null, currentPlayerIndex), time+50);
+           
             
         
         };
@@ -132,11 +133,11 @@ $(document).ready(function () {
     };
 
     //test command = api.Panel.message("devmode","switchControl",1);
-    handlers.switchControl = function(playerIndex,time){
+    handlers.switchControl = function(settings){
 
-        if(time == undefined){time = 500}
+        if(settings[1] == undefined){settings[1] = 500}
 
-        model.tempControlSwitch(playerIndex,time)
+        model.tempControlSwitch(settings[0],settings[1])
 
     }
     handlers.spawnAvatar = function(playerIndex,time){

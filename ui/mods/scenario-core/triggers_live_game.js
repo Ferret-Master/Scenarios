@@ -30,10 +30,11 @@ model.setupTriggers = function(triggerArray){
 model.activateTrigger = function(triggerName){ //this prevents creators breaking things by calling triggers with no defined values.
     console.log("activate trigger called with value "+triggerName)
     console.log(scenarioTriggerModel["allTriggernames"])
+    var playerIndex = model.armyIndex()
     for(var i = 0;i<scenarioTriggerModel["allTriggernames"].length;i++){
         if(scenarioTriggerModel.allTriggernames[i] == triggerName){
             var triggerObject = scenarioTriggerModel.allTriggers[i];
-            
+            if(triggerObject.playerIndex !== undefined){if(triggerObject.playerIndex !== playerIndex){return}}
             var delayMilliseconds = triggerObject["delay"]*1000;
             var delay_type = triggerObject["delay_type"] 
             if(delay_type == "spawn" && model.scenarioModel.landTime == 200000){_.delay(model.activateTrigger,100,triggerObject.name); return}
