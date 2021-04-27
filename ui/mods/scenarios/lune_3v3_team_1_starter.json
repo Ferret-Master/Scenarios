@@ -43,6 +43,8 @@
             "spawnEffectDuration":3,
             "effectContext":"groups",
             "group":true,
+            "accelerate_by_dont_spawn_type":true,
+            "accelerate_value":0.1,
             "show_area":false,
             "type":"spawn_waves",
             "planet":0,
@@ -131,6 +133,8 @@
             "spawnEffect":"pingRed",
             "spawnEffectDuration":3,
             "effectContext":"groups",
+            "accelerate_by_dont_spawn_type":true,
+            "accelerate_value":0.1,
             "show_area":false,
             "type":"spawn_waves",
             "group":false,
@@ -143,8 +147,8 @@
             "timesCalled":0,
             "progress":-4,
             "maxDifficulty":100000,
-            "scalingNumber":0.1,
-            "scalingRatio":0.1,
+            "scalingNumber":0.35,
+            "scalingRatio":0.2,
             "waveInterval":40,
       
             "unitValues":[{

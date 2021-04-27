@@ -36,7 +36,7 @@
         {
             "name": "spawn_preset",
             "id": 1,
-            "playerId": 0,
+            "playerIndex": 0,
             "type": "preset",
             "location": {},
             "delay": 5,

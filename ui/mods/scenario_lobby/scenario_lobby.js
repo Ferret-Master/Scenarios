@@ -324,7 +324,8 @@ model.registerJsonMessageHandler( scenariosIdentifier, scenarioHandler );
 
 
 function loopedScenarioUpdate(){
-    model.updatePlayersScenario()
+    _.delay(model.updatePlayersScenario,500)
     _.delay(loopedScenarioUpdate, 5000)
 
 }
+loopedScenarioUpdate()

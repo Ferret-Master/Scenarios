@@ -389,7 +389,8 @@ model.objectiveCheckFunctions["spawn_waves"] = function (waveObject){
          }
 
          function randomPoint(){
-
+            var maxDist = waveObject.spawn_close_radius
+            if(maxDist = undefined){maxDist = 2000}
             var posArray = rand_sphere_point(planetRadius)
             if(waveObject.dont_spawn_radius !== undefined){
                
@@ -398,8 +399,8 @@ model.objectiveCheckFunctions["spawn_waves"] = function (waveObject){
                 for(var locationIndex in locations){
                    
                   
-          
-                if(model.distanceBetween(posArray, locations[locationIndex]) < waveObject.dont_spawn_radius){
+                var distance = model.distanceBetween(posArray, locations[locationIndex])
+                if(distance < waveObject.dont_spawn_radius || distance > maxDist){
              
                     tooClose = true
                    
@@ -433,33 +434,33 @@ model.objectiveCheckFunctions["spawn_waves"] = function (waveObject){
                 //for each wave 
                 var totalChance = 0
                 var pickedWave = false;
-                console.log("before wave pick")
+               
                 for(waveIndex in waveUnits){
                     if(pickedWave == true){continue}
-                    console.log(waveIndex)
-                    console.log(waveUnits)
-                    console.log(waveUnits[waveIndex])
-                    console.log(waveObject.unitValues[waveUnits[waveIndex]])
+                   
                     var waveChance = waveObject.unitValues[waveUnits[waveIndex]].waveChance
                     totalChance += waveChance
-                    console.log(totalChance)
-                    console.log(randomNum)
+                   
                     if(randomNum<=totalChance){
 
                         waveUnits = waveObject.unitValues[waveUnits[waveIndex]]
                         pickedWave = true
-                        console.log("picked wave")
+                        
                     }
                 }
-                console.log("after wave pick")
+               
                 if(pickedWave == false){waveUnits = waveObject.unitValues[waveUnits[0]]}
-                console.log(waveUnits)
+               
                 for(groupIndex in waveUnits){//for each unit group in the wave
                     if(groupIndex == "waveChance"){continue}
-                    console.log(groupIndex)
+                   
                     var unitGroupObject = waveUnits[groupIndex]
                     var groupValue = waveObject.progress/unitGroupObject.value 
-                   
+                    console.log(groupValue)
+                    console.log(locations.length)
+                    console.log(waveObject.accelerate_value)
+                    if(waveObject.accelerate_by_dont_spawn_type == true){groupValue = groupValue +( groupValue * locations.length*waveObject.accelerate_value/(model.players().length-1))}
+                   console.log(groupValue)
                     for(unitIndex in unitGroupObject.units){// for each unit in the group
                         var unit = unitGroupObject.units[unitIndex]
                         var unitValue = unit[1]
