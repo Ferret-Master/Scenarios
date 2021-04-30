@@ -367,9 +367,40 @@ model.triggerFunctions["select_unit"] = function(triggerObject){
 
 }
 
+
+/**
+ * weather testing
+ * 
+ *  {
+        "name": "weather",
+        
+        "id": 1,
+        "delay": 0,
+        "planet":0,
+        "snap": false,
+        "effectName": "weather",
+        "pos":[0,0,0],
+        "scale":3
+    }
+ * 
+ * 
+ */
 model.triggerFunctions["spawn_effect"] = function(triggerObject){
-   
+    
+    var location = {};
+    location.planet = triggerObject.planet;
+    location.pos = triggerObject.pos;
+    location.scale = triggerObject.scale;
+    if(location.scale == undefined){location.scale =1}
+    
+    api.puppet.createEffect(triggerObject.effectName,location,triggerObject.duration,triggerObject.snap);
+
     return;
+
+
+
+
+   
 
 }
 

@@ -135,14 +135,38 @@ $('div.section.game_mode').append(
 
     '<style> .show {display: block;} #scenarioName:hover{font-weight:bold}#scenarioName{border-style: solid solid solid solid} </style>'+
    '<div class="dropdown">'+
- ' <button onclick="myFunction()" class="dropbtn">Scenarios</button>'+
-  '<div id="myDropdown" class="dropdown-content">'+
+ ' <button onclick="dropdownScenario()" class="dropbtn">Scenarios</button>'+
+  '<div id="dropdownScenario" class="dropdown-content">'+
    ' <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">'+
   
     '</div>'+
     '</div> '
     
     );
+
+$('div.section.game_mode').append(
+
+        '<style> .show {display: block;} #scenarioName:hover{font-weight:bold}#scenarioName{border-style: solid solid solid solid} </style>'+
+       '<div class="dropdown">'+
+     '<button onclick="dropdownDescription()" class="dropbtn">Scenario Description</button>'+
+      '<div id="dropdownDescription" class="dropdown-content">'+
+        '</div>'+
+        '</div> '
+        
+        );
+
+        
+$('div.section.game_mode').append(
+
+    '<style> .show {display: block;} #scenarioName:hover{font-weight:bold}#scenarioName{border-style: solid solid solid solid} </style>'+
+    '<div class="dropdown">'+
+    ' <button onclick="dropdownSetup()" class="dropbtn">Scenario Setup</button>'+
+    '<div id="dropdownSetup" class="dropdown-content">'+
+    '</div>'+
+    '</div> '
+    
+    );        
+
 
 
 
@@ -166,7 +190,7 @@ var populateScenarios = function(){
     imported.scenarios.push("None")
 
     var scenarioCount = imported.scenarios.length;
-    var scenarioList = document.getElementById("myDropdown");
+    var scenarioList = document.getElementById("dropdownScenario");
 
     for(var i = 0;i<scenarioCount;i++){
         var scenarioName = imported.scenarios[i]
@@ -186,21 +210,96 @@ var populateScenarios = function(){
 
 populateScenarios()
 
-model.setScenario = function(scenarioName){
-    if(scenarioName == "None"){document.getElementById("scenario_name").innerText = "No scenario has been loaded"}
-    else{document.getElementById("scenario_name").innerText = " Scenario "+scenarioName +" is active"}
+function initialCommanderSet(){
+
+    model.send_message('update_commander',
+    {
+        commander: model.scenarioCommanderSpec
+    }); _.delay(fixComImage,200)
+
+}
+
+function setAICommanders(commander){
+    var armies = model.armies()
+    for(armyIndex in armies){
+        var army = armies[armyIndex]
+        for(slotIndex in army.slots()){
+            var slot = army.slots()[slotIndex]
+            if(slot.ai() == true && slot.commander() !== commander){
+                
+            model.send_message('set_ai_commander',
+            {
+                id: slot.playerId(),
+                ai_commander: commander
+            });
+            }
+        }
+    }
+
+}
+
+model.setScenario = function(scenarioName){//there may be issues with people being unreadied, I know that altering the ai's commander does that, so need to check things like that before re setting them
+    if(scenarioName == "None"){document.getElementById("scenario_name").innerHTML = "No scenario has been loaded"}
+    else{
+        document.getElementById("scenario_name").innerHTML= " Scenario "+scenarioName +" is active <br>(please read the setup/description)"
+      
+        $.getJSON('coui:/mods/scenarios/'+scenarioName+'.json').then(function(imported) {
+            if(imported.aiComRequired == true){//sets all ai's commanders to the selected com upon scenario load if they are not already
+                setAICommanders(imported.aiCommander)
+            }
+            if(imported.requireSandbox == true){model.sandbox(true)}
+            if(imported.annihilation == true){model.annihilationModeToggle(); model.annihilationModeShow(true)}
+            if(imported.customCommander !== undefined){model.scenarioCommanderSpec = imported.customCommander; _.delay(initialCommanderSet,1000)}
+
+            var scenarioDescription = document.getElementById("dropdownDescription");
+            var scenarioSetup = document.getElementById("dropdownSetup");
+            
+            if(imported.setup !== undefined){
+                scenarioSetup.innerText = imported.setup
+            }
+            else{
+                scenarioSetup.innerText = 'No setup listed'
+            }
+
+            if(imported.description !== undefined){
+                scenarioDescription.innerText = imported.description
+            }
+            else{
+                scenarioDescription.innerText = 'No description listed'
+            }
+
+
+            scenarioDescription.innerText = imported.description
+        })
+    }
     model.selectedScenario(scenarioName)
     if(model.isGameCreator()){_.delay(model.updatePlayersScenario,500)}
 
 }
 
-function myFunction() {
+function dropdownScenario() {
 
-  if(document.getElementById("myDropdown").style.display !== "none"){ document.getElementById("myDropdown").style.display = "none"}
-  else{if(!model.isGameCreator()){return} document.getElementById("myDropdown").style.display = ""}
+  if(document.getElementById("dropdownScenario").style.display !== "none"){ document.getElementById("dropdownScenario").style.display = "none"}
+  else{if(!model.isGameCreator()){return} document.getElementById("dropdownScenario").style.display = ""}
   
 }
-myFunction()
+function dropdownDescription() {
+
+    if(document.getElementById("dropdownDescription").style.display !== "none"){ document.getElementById("dropdownDescription").style.display = "none"}
+    else{document.getElementById("dropdownDescription").style.display = ""}
+    
+  }
+  function dropdownSetup() {
+
+    if(document.getElementById("dropdownSetup").style.display !== "none"){ document.getElementById("dropdownSetup").style.display = "none"}
+    else{document.getElementById("dropdownSetup").style.display = ""}
+    
+  }
+dropdownScenario()
+dropdownDescription()
+dropdownSetup()
+
+
 function filterFunction() {
   var input, filter, ul, li, a, i;
   input = document.getElementById("myInput");
@@ -325,7 +424,7 @@ model.registerJsonMessageHandler( scenariosIdentifier, scenarioHandler );
 
 function loopedScenarioUpdate(){
     _.delay(model.updatePlayersScenario,500)
-    _.delay(loopedScenarioUpdate, 5000)
+    _.delay(loopedScenarioUpdate, 10000)
 
 }
 loopedScenarioUpdate()

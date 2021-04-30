@@ -1,6 +1,7 @@
 {
     "name": "Anhilation Gamemode Test",
-    "description": "A early test of a the anhilation gamemode",
+    "description": "A early test of a the anhilation gamemode without loaders",
+    "setup":"Every player must reselect their commander after this is loaded at least once, the host can confirm everyone has picked it",
     "scenarioID": 3,
     "systemName": "Centax-3",
     "author": "Ferretmaster",
@@ -8,6 +9,9 @@
     "playerCount": 3,
     "aiCount": 2,
     "winCondition": "Default",
+    "customCommander":"/pa/units/commanders/scenario_invincible_com/scenario_invincible_com.json",
+    "requireSandbox":true,
+    "annihilation":true,
     "requireBuilders":true,
     "objectives": [
         {
@@ -17,12 +21,12 @@
             "description": "destroy all of a players factorys/fabricators.",
             "type": "unit_range",
             
-            "delay":30,
+            "delay":5,
           
-            "range_lower": 5,
-            "range_higher": 1000,
+            "range_lower": 1,
+            "range_higher": 10000,
             "range_type":"outside",
-            "unit_types":"UNITTYPE_Construction",
+            "unit_types":"UNITTYPE_Mobile",
             "units":"",
             "result":"that player will lose",
            
@@ -43,44 +47,46 @@
             ]
         },
         {
-            "name": "spawn loader",
-            "id":2,
-            "description": "sets annhilation up",
+            "name": "setup game",
+            "id":3,
+            "description": "sets up game",
             "hidden":true,
             "type": "timed",
             "time":0,
             "startingObjective": true,
             "successTriggers": [
-                "spawn_loader"
+        
+               
             ],
             "failureTriggers": [
                 ""
             ],
             "successObjectives": [
-                "load_commander",
-                "Anhilation"
+                "spawn real com"
             ],
             "failureObjectives": [
                 ""
             ]
         },
         {
-            "name": "load_commander",
-            "id":3,
-            "description": "loads commander for safety",
+            "name": "spawn real com",
+            "id":4,
+            "description": "spawns the players commander",
             "hidden":true,
             "type": "timed",
             "time":0,
+            "delay": 0,
+            "delay_type":"spawn",
             "startingObjective": false,
             "successTriggers": [
-                "load_com",
-                "spawn_replacement"
+        
+                "spawn_replacement","disable_select"
             ],
             "failureTriggers": [
                 ""
             ],
             "successObjectives": [
-                ""
+                "Anhilation"
             ],
             "failureObjectives": [
                 ""
@@ -88,33 +94,29 @@
         }
     ],
     "triggers": [
-        {
-            "name": "spawn_loader",
-            "id": 1,
-            "type": "paste_unit",
-            "unit":"/pa/units/air/scenario_loader/scenario_loader.json"
-        },
-        {
-            "name": "load_com",
-            "id": 2,
-            "planet":0,
-            "delay": 0,
-            "delay_type":"spawn",
-            "type": "load_commander"
-        },
+       
         {
             "name": "spawn_replacement",
             "id": 3,
-            "delay": 0.5,
-            "delay_type":"spawn",
+            "delay": 0,
+          
             "type": "build_at_existing_unit",
             "special":"playerCom"
             
         },
         {
+            "name": "disable_select",
+            "id": 5,
+            "delay": 0,
+          
+            "type": "prevent_unit_selection",
+            "unitJSON":"/pa/units/commanders/scenario_invincible_com/scenario_invincible_com.json"
+            
+        },
+        {
             "name": "kill_player_delayed",
             "id": 4,
-            "delay": 5,
+            "delay": 0,
             "type": "destroy_unit",
             "amount": "commander"
             

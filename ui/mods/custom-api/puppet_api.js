@@ -73,7 +73,7 @@ createPuppet: function(puppetName, location,animation,effectsType,color,pingDura
 	});
 },
 createEffect: function(effectName, location,duration, snap){
-
+			console.log(effectName,location,duration,snap)
 			if(snap == true){location.snap = true}
 			if(duration == undefined || duration == 0){duration = 21600}//set to 6 hours if unspecified
 			var config = [{}];

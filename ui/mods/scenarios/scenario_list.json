@@ -1,14 +1,12 @@
 {
  "scenarios":[
-   "bug_scenario_normal_difficulty",
-    "bug_scenario_1",
-    "test_scenario_1",
-    "test_scenario_2",
-    "test_scenario_3",
-    "test_scenario_4",
-   
+    "bug_horde_easy",
+    "bug_horde_medium",
+    "bug_horde_hard",
+    "weather_test",
     "lune_3v3_team_1_starter",
-    "neutral_units_test"
+    "neutral_units_test",
+    "ypres_5v5_prebuilt"
 
  ]
 

@@ -34,7 +34,13 @@ model.activateTrigger = function(triggerName){ //this prevents creators breaking
     for(var i = 0;i<scenarioTriggerModel["allTriggernames"].length;i++){
         if(scenarioTriggerModel.allTriggernames[i] == triggerName){
             var triggerObject = scenarioTriggerModel.allTriggers[i];
-            if(triggerObject.playerIndex !== undefined){if(triggerObject.playerIndex !== playerIndex){return}}
+            if(triggerObject.playerIndex !== undefined){
+                console.log("checking if player index matches")
+                console.log(triggerObject.playerIndex,playerIndex)
+                if(triggerObject.playerIndex !== playerIndex){return}
+                console.log("matched index")
+            
+            }
             var delayMilliseconds = triggerObject["delay"]*1000;
             var delay_type = triggerObject["delay_type"] 
             if(delay_type == "spawn" && model.scenarioModel.landTime == 200000){_.delay(model.activateTrigger,100,triggerObject.name); return}

@@ -32,9 +32,9 @@ function loadScenario(location){//will be made into an api/observable later , wi
     
    
 };
-//  function loadTestScenario(){loadScenario("bug_scenario_1.json")}
+function loadTestScenario(){console.log("no scenario loaded")}
 //  setTimeout(loadTestScenario,100)
 
-if(chosenScenario().length <2 || chosenScenario() == undefined || chosenScenario() == -1){console.log("no scenario loaded")}
+if(chosenScenario().length <2 || chosenScenario() == undefined || chosenScenario() == -1){loadTestScenario()}
 
-_.delay(loadScenario,100,chosenScenario())
+else{_.delay(loadScenario,100,chosenScenario())}
