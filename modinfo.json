@@ -50,7 +50,7 @@
         
         
     },
-    "companions": [
+    "dependencies": [
       "com.pa.ferretmaster.scenario-server",
       "com.pa.raevn.rfloatframe"
     ],
