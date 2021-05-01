@@ -1,12 +1,12 @@
  {
-   "context": "client",
+   "context": "server",
    "identifier": "com.pa.ferretmaster.scenarios",
-   "display_name": "scenarios(PRE ALPHA)",
-   "description": "custom scenarios PRE ALPHA",
+   "display_name": "scenarios(ALPHA)",
+   "description": "A mod that allows for the creation of custom scenarios, includes scenarios such as annihilation mode and bug horde mode",
    "author": "ferretmaster",
    "version": "1.0",
-   "build": "105067",
-   "date": "2020-12-28",
+   "build": "115626",
+   "date": "2021-5-1",
    "signature": "not yet implemented",
    "forum": "",
    "priority": 100,
@@ -50,9 +50,11 @@
         
         
     },
-    "dependencies": [
+    "companions": [
+      "com.pa.ferretmaster.scenario-server",
       "com.pa.raevn.rfloatframe"
-      ],
+    ],
+    
    "category": ["ui","titans", "in-game","server"]
  }
 

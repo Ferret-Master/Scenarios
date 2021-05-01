@@ -5,6 +5,7 @@
     "systemName": "Centax-3",
     "author": "Ferretmaster",
     "gameType": "Multiplayer",
+    "setup":"This is made for TETC's king of the hill/ffa map with a planet called crown of thorns, will not work well on other maps",
     "playerCount": 3,
     "aiCount": 2,
     "winCondition": "Default",

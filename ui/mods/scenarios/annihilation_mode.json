@@ -1,7 +1,7 @@
 {
     "name": "Anhilation Gamemode Test",
     "description": "A early test of a the anhilation gamemode without loaders",
-    "setup":"Every player must reselect their commander after this is loaded at least once, the host can confirm everyone has picked it",
+    "setup":"Every player must reselect their commander after this is loaded at least once, the host can confirm everyone has picked it, it should look like the aeson commander",
     "scenarioID": 3,
     "systemName": "Centax-3",
     "author": "Ferretmaster",
