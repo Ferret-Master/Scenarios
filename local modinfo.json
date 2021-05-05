@@ -1,12 +1,12 @@
  {
-   "context": "server",
-   "identifier": "com.pa.ferretmaster.scenarios",
-   "display_name": "scenarios(ALPHA)",
+   "context": "client",
+   "identifier": "com.pa.ferretmaster.scenarios-local",
+   "display_name": "scenarios(ALPHA) local",
    "description": "A mod that allows for the creation of custom scenarios, includes scenarios such as annihilation mode and bug horde mode",
    "author": "ferretmaster",
-   "version": "1.01",
+   "version": "1.0",
    "build": "115626",
-   "date": "2021-5-6",
+   "date": "2021-5-1",
    "signature": "not yet implemented",
    "forum": "https://forums.planetaryannihilation.com/threads/server-scenarios.73550/",
    "priority": 100,
@@ -25,8 +25,8 @@
             "coui://ui/mods/scenario-core/scenario_live_game.js",
             "coui://ui/mods/scenario-core/trigger_functions.js",
             "coui://ui/mods/scenario-core/triggers_live_game.js",
-            "coui://ui/mods/scenario-core/handlers_live_game.js"
-          
+            "coui://ui/mods/scenario-core/handlers_live_game.js",
+            "coui://ui/mods/scenario-core/research.js"
             
             
         ],
@@ -46,14 +46,16 @@
       "LiveGame_FloatZone": [
         "coui://ui/mods/scenario-ui/objective_ui_live_game.js"
   
+      ],
+      "live_game_build_bar":[
+        "coui://ui/mods/scenario-core/live_build_bar.js"
       ]
+      
         
         
     },
     "dependencies": [
-
-      "com.pa.ferretmaster.scenario-server",
-
+      "com.pa.ferretmaster.scenario-server-local",
       "com.pa.raevn.rfloatframe"
     ],
     
