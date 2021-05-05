@@ -51,7 +51,9 @@
         
     },
     "dependencies": [
-      "com.pa.ferretmaster.scenario-server-local",
+
+      "com.pa.ferretmaster.scenario-server",
+
       "com.pa.raevn.rfloatframe"
     ],
     
