@@ -127,7 +127,7 @@
             "progress":-12,
             "spawn_close_radius":500,
             "maxDifficulty":100000,
-            "scalingNumber":0.5,
+            "scalingNumber":0.05,
             "scalingRatio":0.05,
             "waveInterval":40,
       

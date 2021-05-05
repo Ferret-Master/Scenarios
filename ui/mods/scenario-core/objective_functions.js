@@ -338,7 +338,7 @@ model.objectiveEffectFunctions["radius_ring"] = function (objectLocation, durati
  */
 model.objectiveCheckFunctions["spawn_waves"] = function (waveObject){
     if(model.paused() == true || model.isSpectator() == true || model.gameOver() == true || model.scenarioModel.landTime == 200000){return}
-    if(model.serverRate() < 0.15){model.triggerFunctions["kill_all_invincible_ai"]({})}//kill switch if server has went to shit, requires ai to use the ai invincible com
+    if(model.serverRate() < 0.3){model.triggerFunctions["kill_all_invincible_ai"]({})}//kill switch if server has went to shit, requires ai to use the ai invincible com
     var planetRadius = 500
     var planets = model.planetListState()
 
@@ -539,3 +539,6 @@ model.objectiveCheckFunctions["players_alive"] = function (waveObject){
 
 }
 
+model.objectiveCheckFunctions["change_buildable"] = function (buildObject){
+    
+}
