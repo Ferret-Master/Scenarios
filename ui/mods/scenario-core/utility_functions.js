@@ -425,8 +425,24 @@ model.getCommanderData = function(){
         
     model.convertDynamicPrefab = function(newCenter,radius,prefab){
 
+     
 
 
 
+
+    }
+    //generates x random points on a sphere and returns an array containing them
+    generateRandomPoints = function(r,numPoints){
+        var pointsArray= [];
+        for(var i = 0; i<numPoints; i++){pointsArray.push(rand_sphere_point(r))}
+
+    }
+    //takes in an array of points and returns a sub array of all points close enough to the given point
+    pointsInRange = function(originPoint,pointsArray,distanceMin,distanceMax){
+        var returnArray = [];
+        for(var i = 0; i<pointsArray.length;i++){
+            var distance = distanceBetween(originPoint,pointsArray[i])
+            if(distance < distanceMax && distance > distanceMin){returnArray.push(pointsArray[i])}
+        }
 
     }

@@ -1,11 +1,15 @@
 {
  "scenarios":[
-    "bug_horde_hard",
+	"bug_horde_easy",
+	"bug_horde_medium",
+	"bug_horde_challenging",
+    "bug_horde_expert",
     "weather_test",
     "lune_3v3_team_1_starter",
     "neutral_units_test",
     "ypres_5v5_prebuilt",
-    "king_of_the_hill_showcase"
+    "king_of_the_hill_showcase",
+	"annihilation_mode"
 
  ]
 
