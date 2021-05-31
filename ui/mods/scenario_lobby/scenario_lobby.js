@@ -70,7 +70,7 @@ model.selectedCommander = ko.computed(function () {
     }
 
     model.selectedCommanderSpec(model.commanders()[index]);
-    if(model.commanders()[index] == "/pa/units/commanders/scenario_invincible_com/scenario_invincible_com.json"){model.selectedCommanderSpec("/pa/units/commanders/raptor_rallus/raptor_rallus.json");return "/pa/units/commanders/raptor_rallus/raptor_rallus.json"}
+    if(model.commanders()[index] == "/pa/units/commanders/scenario_invincible_com/scenario_invincible_com.json" || model.commanders()[index] == "/pa/units/commanders/scenario_ai_invincible_com/scenario_ai_invincible_com.json"){model.selectedCommanderSpec("/pa/units/commanders/raptor_rallus/raptor_rallus.json");return "/pa/units/commanders/raptor_rallus/raptor_rallus.json"}
  
     return model.commanders()[index];
 });
@@ -241,11 +241,15 @@ function setAICommanders(commander){
 model.setScenario = function(scenarioName){//there may be issues with people being unreadied, I know that altering the ai's commander does that, so need to check things like that before re setting them
     if(scenarioName == "None"){document.getElementById("scenario_name").innerHTML = "No scenario has been loaded"}
     else{
-        document.getElementById("scenario_name").innerHTML= " Scenario "+scenarioName +" is active <br>(please read the setup/description)"
+        document.getElementById("scenario_name").innerHTML= " Scenario "+scenarioName +" is active <br>(please read the setup/description, sandbox is needed)"
       
         $.getJSON('coui:/mods/scenarios/'+scenarioName+'.json').then(function(imported) {
             if(imported.aiComRequired == true){//sets all ai's commanders to the selected com upon scenario load if they are not already
                 setAICommanders(imported.aiCommander)
+                model.scenarioAiCommander = imported.aiCommander
+            }
+            else{
+                model.scenarioAiCommander = undefined
             }
             if(imported.requireSandbox == true){model.sandbox(true)}
             if(imported.annihilation == true){model.annihilationModeToggle(); model.annihilationModeShow(true)}
@@ -355,7 +359,14 @@ model.setScenario(scenario)
 
 
 }
+model.updateAi = function(){
+    aiCommander = model.scenarioAiCommander;
+    if (aiCommander !== undefined) {
 
+        setAICommanders(aiCommander)
+    }
+
+}
 model.updatePlayersScenario = function(){
     var currentScenario = model.selectedScenario()
     var data  = {};
@@ -424,6 +435,7 @@ model.registerJsonMessageHandler( scenariosIdentifier, scenarioHandler );
 
 function loopedScenarioUpdate(){
     _.delay(model.updatePlayersScenario,500)
+    _.delay(model.updateAi,500)
     _.delay(loopedScenarioUpdate, 10000)
 
 }

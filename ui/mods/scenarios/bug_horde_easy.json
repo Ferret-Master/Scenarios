@@ -14,6 +14,32 @@
     "requireBuilders":true,
     "objectives": [
         {
+            "name": "timed win",
+            "id":3,
+            "visible":true,
+            "description": "survive for 30 mins",
+            "result":"win the game",
+            "needed":1800,
+            "time":1800,
+            "syntax":"/",
+            "type":"survive_time",
+            "progress":0,
+            "startingObjective": true,
+            "finishDuration": null,
+            "successTriggers": [
+                "win"
+            ],
+            "failureTriggers": [
+                ""
+            ],
+            "successObjectives": [
+                ""
+            ],
+            "failureObjectives": [
+                ""
+            ]
+        },
+        {
             "name": "spawn_waves",
             "id":1,
             "visible":false,
@@ -37,9 +63,9 @@
             "timesCalled":-60,
             "progress":-10,
             "maxDifficulty":100000,
-            "scalingNumber":0.1,
+            "scalingNumber":0.12,
             "scalingRatio":0.1,
-            "waveInterval":60,
+            "waveInterval":80,
       
             "unitValues":[
 
@@ -112,16 +138,18 @@
             "description": "Spawns waves of bugs periodically.",
             "playerType":"ai",
             "spawnEffect":"pingRed",
+            "spreadGroupSize":4,
             "spawnEffectDuration":3,
             "effectContext":"groups",
             "show_area":false,
             "type":"spawn_waves",
             "group":false,
+            "maxTime":900,
             "planet":0,
             "dont_spawn_near_unit_type":"UNITTYPE_Shield",
             "dont_spawn_radius":250,
             "spawn_near_unit_types":[],
-            "spawn_near_radius":300,
+            "spawn_near_radius":500,
             "lastCalled":0,
             "timesCalled":-60,
             "progress":-12,
@@ -324,6 +352,14 @@
                 "unitType":"UNITTYPE_Shield",
                 "newUnitName":[["/pa/units/sea/hover_ship/hover_ship.json",3]]
                 
+            },
+            {
+                "name": "win",
+                "id": 4,
+                "delay": 0,
+                "planet":0,
+                "type": "kill_all_invincible_ai"
+               
             }
         
     ]

@@ -50,7 +50,17 @@ model.objectiveCheckFunctions["gather"] = function (timedObject){//ammassing a c
 
 model.objectiveCheckFunctions["survive_time"] = function (timedObject){
 
-    return;
+    if(timedObject.activationTime == undefined && model.scenarioModel.RealTimeSinceLanding >0){
+
+        timedObject.activationTime = model.scenarioModel.RealTimeSinceLanding
+    }
+    
+    if((model.scenarioModel.RealTimeSinceLanding - timedObject.activationTime)>timedObject.time){console.log("timed objective finished");return true}
+    else{
+        if(timedObject.activationTime == undefined){return 0}
+        return model.scenarioModel.RealTimeSinceLanding - timedObject.activationTime
+    }
+
 
 }
 
@@ -336,9 +346,14 @@ model.objectiveEffectFunctions["radius_ring"] = function (objectLocation, durati
  * 
  * adding a end objective field to objectibes would let me end other objectives on certain conditions which would be cool
  */
+validPointsMap = {}
+
 model.objectiveCheckFunctions["spawn_waves"] = function (waveObject){
     if(model.paused() == true || model.isSpectator() == true || model.gameOver() == true || model.scenarioModel.landTime == 200000){return}
     if(model.serverRate() < 0.3){model.triggerFunctions["kill_all_invincible_ai"]({})}//kill switch if server has went to shit, requires ai to use the ai invincible com
+    if(model.serverRate() < 0.25){model.triggerFunctions["wipe_planet"]({}) ;return}
+    if(model.serverRate() < 0.6){return}//dont try and spawn a wave when the server is already slow
+    
     var planetRadius = 500
     var planets = model.planetListState()
 
@@ -391,23 +406,27 @@ model.objectiveCheckFunctions["spawn_waves"] = function (waveObject){
 
          function randomPoint(){
             var maxDist = waveObject.spawn_close_radius
-            if(maxDist = undefined){maxDist = 2000}
+            if(maxDist == undefined){maxDist = 2000}
             var posArray = rand_sphere_point(planetRadius)
             if(waveObject.dont_spawn_radius !== undefined){
                
                 var tooClose = false
-           
+                var closeEnough = false
                 for(var locationIndex in locations){
                    
                   
                 var distance = model.distanceBetween(posArray, locations[locationIndex])
-                if(distance < waveObject.dont_spawn_radius || distance > maxDist){
-             
+                if(distance < waveObject.dont_spawn_radius){
+                    
                     tooClose = true
                    
                 }
+                else {
+
+                    if (distance < maxDist) {closeEnough = true}
                 }
-                if(tooClose == true){ return randomPoint()}
+                }
+                if(tooClose == true || closeEnough == false){ return randomPoint()}
                 else{return posArray}
             }
             }
@@ -451,17 +470,18 @@ model.objectiveCheckFunctions["spawn_waves"] = function (waveObject){
                 }
                
                 if(pickedWave == false){waveUnits = waveObject.unitValues[waveUnits[0]]}
-               
+                var unitsToBeSpawned = [];
                 for(groupIndex in waveUnits){//for each unit group in the wave
                     if(groupIndex == "waveChance"){continue}
                    
                     var unitGroupObject = waveUnits[groupIndex]
                     var groupValue = waveObject.progress/unitGroupObject.value 
-                    console.log(groupValue)
-                    console.log(locations.length)
-                    console.log(waveObject.accelerate_value)
+                    // console.log(groupValue)
+                    // console.log(locations.length)
+                    // console.log(waveObject.accelerate_value)
                     if(waveObject.accelerate_by_dont_spawn_type == true){groupValue = groupValue +( groupValue * locations.length*waveObject.accelerate_value/(model.players().length-1))}
-                   console.log(groupValue)
+                   //console.log(groupValue)
+                  
                     for(unitIndex in unitGroupObject.units){// for each unit in the group
                         var unit = unitGroupObject.units[unitIndex]
                         var unitValue = unit[1]
@@ -477,11 +497,15 @@ model.objectiveCheckFunctions["spawn_waves"] = function (waveObject){
                         unitsNeeded = Math.floor(unitsNeeded)
                       
                         console.log("spawning "+unitsNeeded+" "+unitName)
+
+
+                        
+                      
+                        if(waveObject.spreadGroupSize == undefined){waveObject.spreadGroupSize = 0}
                         for(var points = 0; points<unitsNeeded;points++){// queuing up many random movement commands, move doesnt have the pausing of patrol
-                 
                             if(groupValue<0){ continue}
-                            if(waveObject.group == false){groupSpawnPoint = randomPoint()}
-                            model.spawnExact(controllingPlayer,unitName,waveObject.planet,groupSpawnPoint,[0,0,0])
+                            unitsToBeSpawned.push(unitName)
+                            
                             groupValue -= unitValue
                              
                          }
@@ -489,6 +513,23 @@ model.objectiveCheckFunctions["spawn_waves"] = function (waveObject){
                     }
          
                 }
+
+                var groupCounter = 0;
+                unitsToBeSpawned = _.shuffle(unitsToBeSpawned);
+                unitsToBeSpawned.forEach(function(unitName){
+
+                    if(waveObject.group == false){
+                        if(groupCounter == waveObject.spreadGroupSize){
+                            groupSpawnPoint = randomPoint();
+                            groupCounter = 0;
+                        }
+                        else{groupCounter += 1}
+                    }
+                    console.log("unit to be spawned from array ",unitName)
+                    model.spawnExact(controllingPlayer,unitName,waveObject.planet,groupSpawnPoint,[0,0,0]);
+
+                })
+                
     
             }
            
