@@ -436,6 +436,8 @@ model.registerJsonMessageHandler( scenariosIdentifier, scenarioHandler );
 function loopedScenarioUpdate(){
     _.delay(model.updatePlayersScenario,500)
     _.delay(model.updateAi,500)
+    if (model.isGameCreator() && model.slotsAreEmpty() == false && model.selectedScenario() !== -1 && model.sandbox() == false){model.toggleSandbox()}
+
     _.delay(loopedScenarioUpdate, 10000)
 
 }

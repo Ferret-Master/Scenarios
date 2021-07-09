@@ -143,7 +143,9 @@ model.triggerFunctions["build_at_existing_unit"] = function(triggerObject){
             console.log(result)
             for(unitIndex in result){
                 unit = result[unitIndex]
-                if(unit !== undefined){if(unit == undefined){continue} locations.push(unit.pos)}
+                if(unit !== undefined){if(unit == undefined){continue} if(unit.built_frac == undefined){
+                    locations.push(unit.pos)
+                }}
               
             }
             console.log(locations)

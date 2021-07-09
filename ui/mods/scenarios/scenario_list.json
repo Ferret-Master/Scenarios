@@ -1,9 +1,15 @@
 {
  "scenarios":[
+    "bug_standard_base_hard",
+    "bug_standard_base_challenging",
+    "bug_standard_base_medium",
+    "bug_standard_base_easy",
+    "bug_wars",
 	"bug_horde_easy",
 	"bug_horde_medium",
 	"bug_horde_challenging",
     "bug_horde_expert",
+    "bug_horde_swarm",
     "weather_test",
     "lune_3v3_team_1_starter",
     "neutral_units_test",
