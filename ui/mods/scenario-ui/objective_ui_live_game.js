@@ -30,6 +30,7 @@ model.objectiveProgresses = [];
 model.objectiveNeeded = [];
 model.objectiveResults = [];
 model.testValue = ko.observable(0);
+model.waveTime = null;
 
 //prepares progress data before sending it to the ui
 
@@ -150,5 +151,22 @@ handlers.objectiveUpdate = function(payload) {
         if(displayedSecondsSinceLanding < 10){displayedSecondsSinceLanding =  "0"+displayedSecondsSinceLanding}
        
         $(".landingTime").html(displayedMinutesSinceLanding+":"+displayedSecondsSinceLanding)
+        
+    }
+
+    handlers.scenarioWave = function(payload) {
+     
+        
+        var displayedSecondsSinceLanding = payload.waveInterval - Math.round(payload.elapsedTime%payload.waveInterval);
+        
+        if(model.waveTime == null){model.waveTime = payload.waveInterval}
+        if(model.waveTime>payload.waveInterval){model.waveTime = payload.waveInterval}
+        console.log(model.waveTime)
+        console.log(model.waveInterval,"|")
+        if(model.waveTime<payload.waveInterval){return}
+       
+        if(displayedSecondsSinceLanding < 10){displayedSecondsSinceLanding =  "0"+displayedSecondsSinceLanding}
+        $(".waveTime").html(displayedSecondsSinceLanding)
+       
         
     }

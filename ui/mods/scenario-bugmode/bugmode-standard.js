@@ -10,7 +10,7 @@ bug_standard = {
    dontSpawnPoints:[],
    creep:"/pa/units/bug_base/bug_creep/bug_creep.json",
    basicHive:"/pa/units/bug_base/basic_hive/basic_hive.json",
-   wall:"/pa/units/land/land_barrier/land_barrier.json",
+   wall:"/pa/units/bug_base/bug_wall/bug_wall.json",
    spire:"/pa/units/land/laser_defense/laser_defense.json",
    antiAir:"/pa/units/land/air_defense/air_defense.json",
    bugPlayer:undefined,

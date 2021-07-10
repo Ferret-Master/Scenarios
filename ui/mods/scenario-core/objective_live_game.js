@@ -81,6 +81,14 @@ if(objectiveObject.activeEffect !== true && objectiveObject.effect !== undefined
     var effectPuppetId = model.objectiveEffectFunctions[objectiveObject.effect](objectiveObject.location,objectiveObject.effectDuration);
     objectiveObject.activeEffect = true;
     objectiveObject.effectPuppetId = effectPuppetId;
+
+}
+if(objectiveObject.waveInterval!==undefined){
+   
+    
+    api.Panel.message("LiveGame_FloatZone", 'scenarioWave',{waveInterval:objectiveObject.waveInterval, elapsedTime: model.scenarioModel.RealTimeSinceLanding})
+        
+        
 }
 
 var returnPromise = new Promise(function(resolve,reject){resolve(model.objectiveCheckFunctions[objectiveObject.type](objectiveObject,playerId));})
