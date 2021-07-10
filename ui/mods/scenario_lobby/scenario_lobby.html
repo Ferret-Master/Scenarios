@@ -1,0 +1,51 @@
+<style>
+  .scenario_picker.bootstrap-select .dropdown-toggle.selectpicker {
+    padding: 8px;
+    border: 1px solid rgba(255,255,255,.3);
+  }
+
+  .section_subheader {
+    font-size: 13px;
+    color: #fff;
+    text-shadow: 0px 0px 20px #00b3ff;
+    padding: 8px 0px 0px;
+  }
+
+  #scenarioFilenameWrapper {
+    font-family: 'Droid Sans Mono';
+    font-size: 12px;
+  }
+</style>
+
+<div class="section scenario">
+  <div class="form-group">
+    <div class="section_header scenario">
+      Scenario
+    </div>
+
+    <select class="form-control scenario_picker" id="scenario-picker" onchange="model.setScenario(this.value)">
+    </select>
+
+    <div id="scenarioFilenameWrapper">
+      Loaded: <span id="scenarioFilename"></span>.json
+    </div>
+
+    <div id="scenarioDescriptionWrapper">
+      <div class="section_subheader scenario_description">
+        <loc>Description</loc>
+      </div>
+
+      <div id="scenarioDescription">
+      </div>
+    </div>
+
+    <div id="scenarioSetupWrapper">
+      <div class="section_subheader scenario_setup">
+        <loc>Setup</loc>
+      </div>
+
+      <div id="scenarioSetup">
+      </div>
+    </div>
+  </div>
+</div>
