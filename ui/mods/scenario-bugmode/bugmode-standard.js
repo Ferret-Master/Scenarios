@@ -92,19 +92,26 @@ updateDontSpawnPoints:function(){
 //spawns the bugs starting base, along with some defensive units, happens a bit after landing so that it avoids players
 spawnStartingBugBase:function (baseValue){
 
-    var points = generateRandomPoints(this.planetRadius,baseValue)
     
-    bug_standard.updateDontSpawnPoints()
-    var validPoints = pointsInArrayBands(points, this.dontSpawnPoints,300,2000)
+    generateValidRandomSpawns(this.planetRadius,baseValue,this.planetId,bug_standard.basicHive).then(function(points){
+        
+        bug_standard.updateDontSpawnPoints()
+        var validPoints = pointsInArrayBands(points, bug_standard.dontSpawnPoints,300,2000)
 
-    validPoints.forEach(function(point){
+        validPoints.forEach(function(point){
      
         model.spawnExact(bug_standard.bugPlayer,bug_standard.creep, bug_standard.planetId,point,[0,0,0])
         model.spawnExact(bug_standard.bugPlayer,bug_standard.basicHive, bug_standard.planetId,point,[0,0,0])
         model.spawnExact(model.armyIndex(),"/pa/units/land/temp_vision_small/temp_vision_small.json", bug_standard.planetId,point,[0,0,0])
     
     })
-    this.startComplete = true;
+    bug_standard.startComplete = true;
+
+    })
+
+
+    
+    
 },
 
 spawnCreep:function(attempts){
@@ -126,13 +133,15 @@ spawnCreep:function(attempts){
 },
 
 spawnBasicHives:function(attempts, ratios){
-    var points = generateRandomPoints(bug_standard.planetRadius,attempts)
+    generateValidRandomSpawns(this.planetRadius,attempts,this.planetId,bug_standard.basicHive).then(function(points){
     var validPoints = pointsInArrayBands(points, bug_standard.creepPoints,0,100,true)
     if(validPoints.length < 1){return}
     validPoints = pointsInArrayBands(validPoints, bug_standard.dontSpawnPoints,300,2000)
     validPoints.forEach(function(point){
         model.spawnExact(bug_standard.bugPlayer,bug_standard.basicHive, bug_standard.planetId,point,[0,0,0])
     })
+
+})
 
 
 },
@@ -167,7 +176,8 @@ upgradeHive:function(ratios){//upgrades basic hives into other types such as med
 },
 
 spawnSpire:function(attempts){
-    var points = generateRandomPoints(bug_standard.planetRadius,attempts)
+    
+    generateValidRandomSpawns(this.planetRadius,attempts,this.planetId,bug_standard.spire).then(function(points){
     var validPoints = pointsInArrayBands(points, bug_standard.creepPoints,0,100,true)
     if(validPoints.length < 1){return}
     validPoints = pointsInArrayBands(validPoints, bug_standard.dontSpawnPoints,300,2000)
@@ -175,11 +185,11 @@ spawnSpire:function(attempts){
         model.spawnExact(bug_standard.bugPlayer,bug_standard.spire, bug_standard.planetId,point,[0,0,0])
         model.spawnExact(bug_standard.bugPlayer,bug_standard.antiAir, bug_standard.planetId,point,[0,0,0])
     })
-
+})
 },
 
 spawnWall:function(attempts){
-    var points = generateRandomPoints(bug_standard.planetRadius,attempts)
+    generateValidRandomSpawns(this.planetRadius,attempts,this.planetId,bug_standard.wall).then(function(points){
     var validPoints = pointsInArrayBands(points, bug_standard.creepPoints,60,100,true)
     if(validPoints.length < 1){return}
     validPoints = pointsInArrayBands(validPoints, bug_standard.dontSpawnPoints,300,2000)
@@ -188,6 +198,8 @@ spawnWall:function(attempts){
         
        
     })
+
+})
 
 },
 

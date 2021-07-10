@@ -317,7 +317,7 @@
                 "type": "build_at_existing_unit",
                 "special":"unit type",
                 "unitType":"UNITTYPE_Commander",
-                "newUnitName":[["/pa/units/land/zap/bugzapper.json",1]]
+                "newUnitName":[["/pa/units/land/control_tower/control_tower.json",1]]
                 
             },
             {

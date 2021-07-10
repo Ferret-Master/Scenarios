@@ -382,6 +382,7 @@ model.objectiveCheckFunctions["spawn_waves"] = function (waveObject){
             
             else{
                 army.push(model.playerArmy(playerIndex,waveObject.planet,"",true,waveObject.dont_spawn_near_unit_type))
+                army.push(model.playerArmy(playerIndex,waveObject.planet,"",true,"UNITTYPE_Commander"))
             }
 
         }

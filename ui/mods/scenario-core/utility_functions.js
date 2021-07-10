@@ -437,6 +437,12 @@ model.getCommanderData = function(){
         for(var i = 0; i<numPoints; i++){pointsArray.push(rand_sphere_point(r))}
         return pointsArray;
     }
+    generateValidRandomSpawns = function(r,numPoints,planet){
+        var pointsArray= [];
+        for(var i = 0; i<numPoints; i++){pointsArray.push(rand_sphere_point(r))}
+        return validSpawns(pointsArray,planet);
+
+    }
     //takes in an array of points and returns a sub array of all points close enough to the given point
     pointsInRange = function(originPoint,pointsArray,distanceMin,distanceMax){
         var returnArray = [];
