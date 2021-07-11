@@ -18,7 +18,7 @@ currently does not work if player doesnt modify com selection, won't be an issue
 
 
 
-model.annihilationModeShow = ko.observable(false)    ;
+model.annihilationModeShow = ko.observable(false);
 
 model.selectedScenario = ko.observable(-1).extend({ session: 'selectedScenario' });
 
@@ -232,7 +232,7 @@ model.setScenario = function(scenarioFilename) {
 
             if (importedScenario.setup !== undefined) {
                 $("#scenarioSetupWrapper").show();
-                $("#scenarioSetup").html(importedScenario.description);
+                $("#scenarioSetup").html(importedScenario.setup);
             } else {
                 $("#scenarioSetupWrapper").hide();
                 $("#scenarioSetup").html('');
@@ -248,7 +248,7 @@ model.setScenario = function(scenarioFilename) {
         });
     }
 
-    model.selectedScenario(scenarioName);
+    model.selectedScenario(scenarioFilename);
 
     if (model.isGameCreator()) {
         _.delay(model.updatePlayersScenario, 500);
