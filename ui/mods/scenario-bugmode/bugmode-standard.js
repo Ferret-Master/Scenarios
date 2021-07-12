@@ -116,19 +116,23 @@ spawnStartingBugBase:function (baseValue){
 
 spawnCreep:function(attempts){
     
-    var points = generateRandomPoints(bug_standard.planetRadius,attempts)
+    
 
-    var validPoints = pointsInArrayBands(points, bug_standard.creepPoints,80,100,true)
+    generateValidRandomSpawns(this.planetRadius,attempts,this.planetId,bug_standard.creep,true).then(function(points){
     // console.log(points,this.creepPoints)
     // console.log(validPoints)
-    if(validPoints.length < 1){return}
-
+    if(points.length < 1){return}
+    
+    
+    validPoints = pointsInArrayBands(points, bug_standard.creepPoints,80,100,true)
+    
     newValidPoints = pointsInArrayBands(validPoints, bug_standard.dontSpawnPoints,300,2000)
-
+ 
     newValidPoints.forEach(function(point){
         model.spawnExact(bug_standard.bugPlayer,bug_standard.creep, bug_standard.planetId,point,[0,0,0])
         model.spawnExact(model.armyIndex(),"/pa/units/land/temp_vision_small/temp_vision_small.json", bug_standard.planetId,point,[0,0,0])
     })
+})
 
 },
 
@@ -177,7 +181,7 @@ upgradeHive:function(ratios){//upgrades basic hives into other types such as med
 
 spawnSpire:function(attempts){
     
-    generateValidRandomSpawns(this.planetRadius,attempts,this.planetId,bug_standard.spire).then(function(points){
+    generateValidRandomSpawns(this.planetRadius,attempts,this.planetId,bug_standard.spire,true).then(function(points){
     var validPoints = pointsInArrayBands(points, bug_standard.creepPoints,0,100,true)
     if(validPoints.length < 1){return}
     validPoints = pointsInArrayBands(validPoints, bug_standard.dontSpawnPoints,300,2000)
@@ -189,7 +193,7 @@ spawnSpire:function(attempts){
 },
 
 spawnWall:function(attempts){
-    generateValidRandomSpawns(this.planetRadius,attempts,this.planetId,bug_standard.wall).then(function(points){
+    generateValidRandomSpawns(this.planetRadius,attempts,this.planetId,bug_standard.wall,true).then(function(points){
     var validPoints = pointsInArrayBands(points, bug_standard.creepPoints,60,100,true)
     if(validPoints.length < 1){return}
     validPoints = pointsInArrayBands(validPoints, bug_standard.dontSpawnPoints,300,2000)
@@ -346,7 +350,8 @@ model.objectiveCheckFunctions["bug_mode_base"] = function (waveObject){
     }
 
     if(bug_standard.dontSpawnPoints.length<1 && bug_standard.startComplete == false){bug_standard.updateDontSpawnPoints();return 10}
-    if(bug_standard.creepPoints.length<1 && bug_standard.startComplete == false){bug_standard.updateDontSpawnPoints();bug_standard.spawnStartingBugBase(3);return 10}
+    if(bug_standard.creepPoints.length<1 && bug_standard.startComplete == false){bug_standard.updateDontSpawnPoints();bug_standard.spawnStartingBugBase(3*waveObject.spreadRate);return 10}
     if(bug_standard.creepPoints.length<1 && bug_standard.startComplete == true){bug_standard.updateDontSpawnPoints(); bug_standard.updateHiveAndCreepPoints();return 10}
+    if(bug_standard.hivePointsAndTypes.length <1  && model.scenarioModel.RealTimeSinceLanding > 60){model.triggerFunctions["kill_all_invincible_ai"]({})}//if all creep and hives have been defeated kill the bug ai
     return 10;//dummy value since progress is not timed based directly
 }    

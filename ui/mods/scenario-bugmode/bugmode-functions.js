@@ -73,68 +73,67 @@ function clearAndReplaceAtPosition(player, position, unit,planet){//spawns a uni
 
 
 
-function validSpawns(points,planet,spec){//takes in array of points and returns valid ones
-    fixupPromiseArray = []
+function validSpawns(points,planet,spec,ignoreFeatures){//takes in array of points and returns valid ones
+
+    fixupPointsArray = [];
     for(var i = 0;i < points.length;i++){
     var pointLoc = {}
     pointLoc.pos = points[i]
-    var fixedloc = engine.call('worldview.fixupBuildLocations', world.id, spec, Number(planet), JSON.stringify([pointLoc]));
-    fixupPromiseArray.push(fixedloc);
+    fixupPointsArray.push(pointLoc)
+   
+ 
     
 }
-console.log(fixupPromiseArray)    
 
-var fixupPromise = Promise.all(fixupPromiseArray);
-console.log(fixupPromise)   
-return fixupPromise.then(function(ready) {
-                                    
-    console.log("in promise all promise",ready) 
+var result = engine.call('worldview.fixupBuildLocations', world.id, spec, Number(planet), JSON.stringify(fixupPointsArray)).then(function(ready) {
+    console.log("in engine promise")
+   
             
     var returnArray = []
+    ready = JSON.parse(ready)
     for(var i = 0;i < ready.length;i++){
-        console.log("in loop")
-        var result = JSON.parse(ready[i])
-        console.log("1",result)
-        result = result[0]
-            console.log("2",result)
-            var fixupResult = result//JSON.parse(result);
-            console.log("fixupResult: ",fixupResult)
-            
-            if(fixupResult.ok == false || fixupResult.desc !== undefined){
+       
+        var fixupResult = ready[i]
 
-                console.log("invalid location")
+           
+           
+         
+            
+            if(fixupResult.ok == false || fixupResult.desc !== undefined && !((fixupResult.desc == "feature warning" || fixupResult.desc == "hit structure") && ignoreFeatures == true)){
+                console.log(fixupResult.desc)
+            
                 
 
             }
-            else{console.log("found location");returnArray.push(fixupResult.pos)}
+            else{returnArray.push(fixupResult.pos)}
        
 
         }
+        console.log("returning checked array")
         return returnArray;
                                         
                                         
-        }).catch(function (err) {
-            console.log("outer Promise Rejected");
-            console.log(err);
-        });
-
-}
-
-function testValidSpawns(){
-
-    var points = generatePlanetPoints(500)
-
-    validSpawns(points,0)
-
-
-
-
+        })
+return result
 }
 
 
-generateValidRandomSpawns = function(r,numPoints,planet,spec){
+filterValidRandomSpawns = function(r,numPoints,planet,spec,ignoreFeatures){
     var pointsArray= [];
     for(var i = 0; i<numPoints; i++){pointsArray.push(rand_sphere_point(r))}
-    return validSpawns(pointsArray,planet,spec);
+    var temp = validSpawns(pointsArray,planet,spec,ignoreFeatures)
+    console.log(temp)
+    return temp;
 
+}
+
+generateValidRandomSpawns = function(r,numPoints,planet,spec,ignoreFeatures){//similar to the above but returns the requested number rather than only working ones from that amount, hopefully at least
+    points = filterValidRandomSpawns(r,numPoints*10,planet,spec,ignoreFeatures)
+    return points.then(function(result){
+        var returnedPoints = [];
+        for(var i = 0;i<numPoints;i++){
+            returnedPoints.push(result[i])
+        }
+        return returnedPoints
+    })
 }
