@@ -1,5 +1,5 @@
 {
-    "name": "Bug Mode",
+    "name": "Bug waves expert",
     "description": "An Expert variation of bug wave defense. You start with units and a control tower(zapper) that prevents bugs from spawning near you. exponentially larger waves of bugs will assault you over time.",
     "setup":"<ul><li>There needs to be an ai - the last one in the lobby will act as the bugs</li><li>The ai needs to have the scenario ai commander (DO NOT SELECT) selected for it.</li><li>This mode should only be played on single planet maps.</li>",
     "aiComRequired":true,

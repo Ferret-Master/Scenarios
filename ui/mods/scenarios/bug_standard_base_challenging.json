@@ -1,5 +1,5 @@
 {
-    "name": "Bug Hive Mode Hard",
+    "name": "Bug Hive Mode Challenging",
     "description": "An medium variation of bug wave defense. You start with units and a control tower(zapper) that prevents bugs from spawning near you. exponentially larger waves of bugs will assault you over time.",
     "setup":"There needs to be an ai,the last one in the lobby will act as the bugs. this ai needs to have the scenario ai commander(DO NOT SELECT) selected for it. This mode should only be played on single planet maps",
     "aiComRequired":true,
