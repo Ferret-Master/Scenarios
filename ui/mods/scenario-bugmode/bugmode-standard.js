@@ -241,7 +241,7 @@ spawnNest:function(eggCount,maxSpread,nestUnit){
 
 //takes in a 2d array  and spawns units at each hive based on its type, has a difficulty multiplier for easier scaling
 spawnHiveWave:function(hivePointsAndTypes, difficulty){
-    if(model.armyIndex() !== bug_standard.waveObject.playerIndex){return}
+    if(model.armyIndex() !== bug_standard.waveObject.playerIndex){var nestOnly = true}
     var advanced_hive_exists = false;
     var advanced_hive_amount = 0;
     var medium_hive_amount = 0;
@@ -249,30 +249,42 @@ spawnHiveWave:function(hivePointsAndTypes, difficulty){
        for(var i = 0;i<difficulty;i++){//difficulty directly multiplies spawns
 
        if(point[0] == "/pa/units/bug_base/basic_hive/basic_hive.json"){//spawn grunts/alpha grunts if time/upgrade building?
+        if(!nestOnly == true){
         model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_grunt/bug_grunt.json", bug_standard.planetId,point[1],[0,0,0])
         model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_grunt/bug_grunt.json", bug_standard.planetId,point[1],[0,0,0])
         model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_grunt/bug_grunt.json", bug_standard.planetId,point[1],[0,0,0])
+        }
        }
        if(point[0] == "/pa/units/bug_base/basic_hive/basic_hive.json"){//spawn scouts
+        if(!nestOnly == true){
         model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_scout/bug_scout.json", bug_standard.planetId,point[1],[0,0,0])
         model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_scout/bug_scout.json", bug_standard.planetId,point[1],[0,0,0])
+        }
      
        }
        if(point[0] == "/pa/units/bug_base/medium_hive/medium_hive.json"){//spawns warriors
         medium_hive_amount++
+        if(!nestOnly == true){
         model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_warrior/bug_warrior.json", bug_standard.planetId,point[1],[0,0,0])
         model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_grunt_big/bug_grunt_big.json", bug_standard.planetId,point[1],[0,0,0])
         model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_grunt_big/bug_grunt_big.json", bug_standard.planetId,point[1],[0,0,0])
+        }
        
        }
        if(point[0] == "/pa/units/bug_base/medium_hive/medium_hive.json"){//spawn scorcher
+        if(!nestOnly == true){
         model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_scorcher/bug_scorcher.json", bug_standard.planetId,point[1],[0,0,0])
+        }
        }
        if(point[0] == "/pa/units/bug_base/advanced_hive/advanced_hive.json"){//spawn basilisk
+        if(!nestOnly == true){
         model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_basilisk/bug_basilisk.json", bug_standard.planetId,point[1],[0,0,0])
+        }
        }
        if(point[0] == "/pa/units/bug_base/advanced_hive/advanced_hive.json"){//spawn alpha warrior
+        if(!nestOnly == true){
         model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_warrior_big/bug_warrior_big.json", bug_standard.planetId,point[1],[0,0,0])
+        }
         advanced_hive_exists = true;
         advanced_hive_amount++;
        }
