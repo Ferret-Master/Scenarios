@@ -272,7 +272,7 @@ spawnHiveWave:function(hivePointsAndTypes, difficulty){
        
        }
        if(point[0] == "/pa/units/bug_base/medium_hive/medium_hive.json"){//spawn scorcher
-        if(!nestOnly == true){
+        if(!nestOnly == true && medium_hive_amount>2){
         model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_scorcher/bug_scorcher.json", bug_standard.planetId,point[1],[0,0,0])
         }
        }
@@ -380,17 +380,18 @@ model.objectiveCheckFunctions["bug_mode_base"] = function (waveObject){
     }
     if((model.scenarioModel.RealTimeSinceLanding)%waveObject.waveInterval >0 && (model.scenarioModel.RealTimeSinceLanding%waveObject.waveInterval <2 && waveObject.timesCalled >0) && waveObject.lastCalled !==(model.scenarioModel.RealTimeSinceLanding)){
 
-        bug_standard.updateHiveAndCreepPoints()
+        bug_standard.updateHiveAndCreepPoints();
+        waveObject.waveInterval +=1;
         _.delay(function(){
 
-            bug_standard.spawnHiveWave(bug_standard.hivePointsAndTypes,1)
+            bug_standard.spawnHiveWave(bug_standard.hivePointsAndTypes,1);
         },3000)
 
     }
 
     if(bug_standard.dontSpawnPoints.length<1 && bug_standard.startComplete == false){bug_standard.updateDontSpawnPoints();return 10}
-    if(bug_standard.creepPoints.length<1 && bug_standard.startComplete == false){bug_standard.updateDontSpawnPoints();bug_standard.spawnStartingBugBase(3);return 10}
-    if(bug_standard.creepPoints.length<1 && bug_standard.startComplete == true){bug_standard.updateDontSpawnPoints(); bug_standard.updateHiveAndCreepPoints();return 10}
+    if(bug_standard.creepPoints.length<1 && bug_standard.startComplete == false && model.scenarioModel.RealTimeSinceLanding > 5){bug_standard.updateDontSpawnPoints();bug_standard.spawnStartingBugBase(3);return 10}
+    if(bug_standard.creepPoints.length<1 && bug_standard.startComplete == true && model.scenarioModel.RealTimeSinceLanding > 5){bug_standard.updateDontSpawnPoints(); bug_standard.updateHiveAndCreepPoints();return 10}
     if(bug_standard.hivePointsAndTypes.length <1  && model.scenarioModel.RealTimeSinceLanding > 60){model.triggerFunctions["kill_all_invincible_ai"]({})}//if all creep and hives have been defeated kill the bug ai
     return 10;//dummy value since progress is not timed based directly
 }    
