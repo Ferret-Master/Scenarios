@@ -137,3 +137,20 @@ generateValidRandomSpawns = function(r,numPoints,planet,spec,ignoreFeatures){//s
         return returnedPoints
     })
 }
+
+generateValidRandomSpawnsOutsideTower = function(r,numPoints,planet,spec,ignoreFeatures){//similar to the above but returns the requested number rather than only working ones from that amount, hopefully at least
+    points = filterValidRandomSpawns(r,numPoints*10,planet,spec,ignoreFeatures)
+    return points.then(function(result){
+        var returnedPoints = [];
+        var tempPoints = pointsInArrayBands(result, bug_standard.dontSpawnPoints,300,2000);
+
+        for(var i = 0;i<numPoints;i++){
+
+            if(tempPoints.length>i){
+                returnedPoints.push(tempPoints[i]);
+            }
+        }
+        console.log(returnedPoints)
+        return returnedPoints;
+    })
+}

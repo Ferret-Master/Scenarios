@@ -103,8 +103,18 @@ model.triggerFunctions["preset_unit"] = function(triggerObject){//different vers
 "special":"playerCom"}
 */
 model.triggerFunctions["build_at_existing_unit"] = function(triggerObject){
-     console.log("builda at existing unit running")
+     console.log("build at existing unit running")
     // console.log(model.scenarioModel.landTime)
+
+
+    players = model.players()
+    for(var i = 0;i<players.length;i++){
+        if(players[i].id == model.armyId && players[i].slots.length>1){
+           if(model.playerName() !== players[i].slots[0]){return}
+        } 
+    }
+
+
     var avatarId = model.scenarioModel["avatarId"];
  
     if(avatarId == undefined || avatarId == -1){_.delay(model.triggerFunctions["build_at_existing_unit"],100,triggerObject);return}

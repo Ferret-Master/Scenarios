@@ -158,12 +158,14 @@ handlers.objectiveUpdate = function(payload) {
      
         
         var displayedSecondsSinceLanding = payload.waveInterval - Math.round(payload.elapsedTime%payload.waveInterval);
+
+        //only affects wave mode and commented out sections not working with changing wave times
         
-        if(model.waveTime == null){model.waveTime = payload.waveInterval}
-        if(model.waveTime>payload.waveInterval){model.waveTime = payload.waveInterval}
+        // if(model.waveTime == null){model.waveTime = payload.waveInterval}
+        // if(model.waveTime>payload.waveInterval){model.waveTime = payload.waveInterval}
         console.log(model.waveTime)
         console.log(model.waveInterval,"|")
-        if(model.waveTime<payload.waveInterval){return}
+        //if(model.waveTime<payload.waveInterval){return} 
        
         if(displayedSecondsSinceLanding < 10){displayedSecondsSinceLanding =  "0"+displayedSecondsSinceLanding}
         $(".waveTime").html(displayedSecondsSinceLanding)

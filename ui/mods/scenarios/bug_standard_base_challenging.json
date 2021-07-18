@@ -67,8 +67,8 @@
             "scalingNumber":0.25,
             "scalingRatio":0.14,
             "waveInterval":60,
-            "baseInterval":60,
-            "spreadRate":1.7,
+            "baseInterval":80,
+            "spreadRate":1.6,
       
             "unitValues":[
 
@@ -248,7 +248,7 @@
                 "type": "build_at_existing_unit",
                 "special":"unit type",
                 "unitType":"UNITTYPE_Commander",
-                "newUnitName":[["/pa/units/land/control_tower/control_tower.json",1],["/pa/units/land/energy_plant/energy_plant.json",2]]
+                "newUnitName":[["/pa/units/land/fabrication_vehicle/fabrication_vehicle.json",3],["/pa/units/land/control_tower/control_tower.json",1],["/pa/units/land/energy_plant/energy_plant.json",2]]
                 
             },
 			{
