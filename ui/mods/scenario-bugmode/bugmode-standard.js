@@ -15,6 +15,7 @@ bug_standard = {
    antiAir:"/pa/units/land/air_defense/air_defense.json",
    mediumEgg:"/pa/units/bug_base/bug_egg_medium/bug_egg_medium.json",
    smallEgg:"/pa/units/bug_base/bug_egg_small/bug_egg_small.json",
+   titan:"/pa/units/land/bug_titan/bug_titan.json",
    bugPlayer:undefined,
    planetRadius:undefined,
    planetId:undefined,
@@ -99,7 +100,7 @@ spawnStartingBugBase:function (baseValue){
         
         bug_standard.updateDontSpawnPoints()
         var validPoints = points;
-
+        console.log("validPoints: ",validPoints)
         validPoints.forEach(function(point){
      
         model.spawnExact(bug_standard.bugPlayer,bug_standard.creep, bug_standard.planetId,point,[0,0,0])
@@ -240,6 +241,22 @@ spawnNest:function(eggCount,maxSpread,nestUnit){
 
 },
 
+spawnTitan:function(titanCount){
+    generateValidRandomSpawns(this.planetRadius,300,this.planetId,bug_standard.basicHive).then(function(points){
+    var validPoints = pointsInArrayBands(points, bug_standard.creepPoints,0,150,true)
+    if(validPoints.length < 1){return}
+    validPoints = pointsInArrayBands(validPoints, bug_standard.dontSpawnPoints,300,2000)
+       var point =   _.sample(validPoints)
+
+      
+        model.spawnExact(bug_standard.bugPlayer,bug_standard.titan, bug_standard.planetId,point,[0,0,0])
+       
+    
+    
+
+})
+},
+
 
 //takes in a 2d array  and spawns units at each hive based on its type, has a difficulty multiplier for easier scaling
 spawnHiveWave:function(hivePointsAndTypes, difficulty,waveObject){
@@ -304,6 +321,9 @@ spawnHiveWave:function(hivePointsAndTypes, difficulty,waveObject){
     })
     if(advanced_hive_exists){
         bug_standard.spawnNest(advanced_hive_amount*5,50,bug_standard.mediumEgg)
+        if(advanced_hive_amount>4 && !nestOnly == true){
+            bug_standard.spawnTitan(advanced_hive_amount/5)
+        }
     }
     else{
          bug_standard.spawnNest(medium_hive_amount*5+(1*5),40,bug_standard.smallEgg)
@@ -408,6 +428,6 @@ model.objectiveCheckFunctions["bug_mode_base"] = function (waveObject){
     if(bug_standard.startComplete == false && model.scenarioModel.RealTimeSinceLanding <5){bug_standard.updateDontSpawnPoints()}
     if(bug_standard.creepPoints.length<1 && bug_standard.startComplete == false && model.scenarioModel.RealTimeSinceLanding > 5){bug_standard.updateDontSpawnPoints();bug_standard.spawnStartingBugBase(3);return 10}
     if(bug_standard.creepPoints.length<1 && bug_standard.startComplete == true && model.scenarioModel.RealTimeSinceLanding > 5){bug_standard.updateDontSpawnPoints(); bug_standard.updateHiveAndCreepPoints();return 10}
-    if(bug_standard.hivePointsAndTypes.length <1  && model.scenarioModel.RealTimeSinceLanding > 60){model.triggerFunctions["kill_all_invincible_ai"]({})}//if all creep and hives have been defeated kill the bug ai
+    if(bug_standard.hivePointsAndTypes.length <1  && model.scenarioModel.RealTimeSinceLanding > 100){model.triggerFunctions["kill_all_invincible_ai"]({})}//if all creep and hives have been defeated kill the bug ai
     return 10;//dummy value since progress is not timed based directly
 }    
