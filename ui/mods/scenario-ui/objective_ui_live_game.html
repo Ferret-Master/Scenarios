@@ -1,47 +1,89 @@
+<div class="scenario_bar_panel">
+    <div class="scenario_bar_control">
+        <div class="scenario_bar_control_cont">
+            <div class="scenario_info">
+                <div class="bar_fill"></div>
 
-<div class='div_ping_bar'  data-bind=''>
-    
-    <div class=scenario_author>
-        <span class = scenarioName>ScenarioName by </span><span class = author>Author</span>
+                <div class="scenario_info_cont">
+                    <span id="scenarioName"></span> <span id="scenarioAuthor"></span>
+                </div>
+            </div>
+
+            <div
+                class="list_control_btn"
+                data-bind="click: togglePinScenarioPanel, css: { div_animated_flash_cyan: model.newInvite }"
+            >
+                <img
+                    data-bind="attr: { src: scenarioPanelToggleImage }"
+                    src="coui://ui/main/shared/img/controls/pin_open.png"
+                >
+            </div>
+        </div>
     </div>
-    
 
-    <div class=scenario_time width="100%">
-        <span>Time: </span><span class = landingTime width = 50%>TimeSincelanding</span> <span>Wave: </span><span class = waveTime width = 50%>No wave scenario loaded</span>
+    <!-- ko if: showScenarioPanel -->
+    <div class="scenario_bar">
+        <div class="scenario_bar_cont">
+            <ol id="objectivesList">
+                <li class="objective">
+                    <div class="description_and_progress">
+                        <div class="description"></div>
+
+                        <div class="progress">
+                            <span class="current"></span>
+                            <span class="syntax"></span>
+                            <span class="needed"></span>
+                        </div>
+                    </div>
+
+                    <div class="progress_bar"><div class="progress_bar_progress"></div></div>
+
+                    <div class="result_cont">Reward: <span class="result"></span></div>
+                </li>
+
+                <li class="objective">
+                    <div class="description_and_progress">
+                        <div class="description"></div>
+
+                        <div class="progress">
+                            <span class="current"></span>
+                            <span class="syntax"></span>
+                            <span class="needed"></span>
+                        </div>
+                    </div>
+
+                    <div class="progress_bar"><div class="progress_bar_progress"></div></div>
+
+                    <div class="result_cont">Reward: <span class="result"></span></div>
+                </li>
+
+                <li class="objective">
+                    <div class="description_and_progress">
+                        <div class="description"></div>
+
+                        <div class="progress">
+                            <span class="current"></span>
+                            <span class="syntax"></span>
+                            <span class="needed"></span>
+                        </div>
+                    </div>
+
+                    <div class="progress_bar"><div class="progress_bar_progress"></div></div>
+
+                    <div class="result_cont">Reward: <span class="result"></span></div>
+                </li>
+            </ol>
+
+            <div class=scenario_time>
+                <div>
+                    <span>Game Time:</span> <span class="time" id="landingTime">00:00</span>
+                </div>
+
+                <div>
+                    <span>Wave Countdown:</span> <span class="time" id="waveTime">00:00</span>
+                </div>
+            </div>
+        </div>
     </div>
-    
-    <!-- objective table below -->
-    <table border="1" width="100%;"> 
-        <!-- headers -->
-        <tr>
-          <th >Objectives</th>
-          <th >Progress</th>
-          <th >Result/Reward</th>
-      </tr>
-      <!-- objective 1 -->
-      <tr>
-          <td width="50%"><span class = description0></span></td>
-          <td width="10%"><span class = progress0></span><span class = needed0></span></td>
-          <td width="40%"><span class = result0></span></td>
-      </tr>
-      <!-- objective 2 -->
-      <tr>
-          <td><span class = description1></span></td>
-          <td><span class = progress1></span><span class = needed1></span></td>
-          <td><span class = result1></span></td>
-      </tr>
-      <!-- objective 3 -->
-      <tr>
-          <td><span class = description2></span></td>
-          <td><span class = progress2></span><span class = needed2></span></td>
-          <td><span class = result2></span></td>
-      </tr>
-      <!-- objective 4 -->
-      <tr>
-        <td><span class = description3></span></td>
-        <td><span class = progress3></span><span class = needed3></span></td>
-        <td><span class = result3></span></td>
-    </tr>
-
-      </table>
+    <!-- /ko -->
 </div>

@@ -24,27 +24,39 @@ if (!String.prototype.padStart) {
 
 handlers.objectiveUpdate = function(payload) {
     if (!model.alreadyMadeFrame) {
+        var toggleImage = function(open) {
+            return open ? 'coui://ui/main/shared/img/controls/pin_open.png' : 'coui://ui/main/shared/img/controls/pin_closed.png';
+        };
+
+        model.alreadyMadeFrame = ko.observable(true);
+        model.pinScenarioPanel = ko.observable(true);
+        model.togglePinScenarioPanel = function () { model.pinScenarioPanel(!model.pinScenarioPanel()); };
+        model.showScenarioPanel = ko.computed(function () { return model.pinScenarioPanel() });
+        model.scenarioPanelToggleImage = ko.computed(function() { return toggleImage(model.showScenarioPanel()); });
+
         createFloatingFrame("scenario_frame", 500, 250, { "snap": false, "top": 42, "rememberPosition": "false" });//this top offset is so player bar with eco mods doesn't overlap
 
-        $.get("coui://ui/mods/scenario-ui/objective_ui_live_game.html", function (data) {
-            $("#scenario_frame_content").append(data);
+        $.get("coui://ui/mods/scenario-ui/objective_ui_live_game.html", function (html) {
+            var $html = $(html);
+            $("#scenario_frame_content").append($html);
+            ko.applyBindings(model, $html[0]);
         });
-
-        model.alreadyMadeFrame = true;
     }
 
-    if (payload === undefined || payload === 0) {
-        addLinkageLiveGame("model.objectiveModel()", "model.objectiveViewModel");
-        return;
-    }
+    payload.forEach(function(objective, i) {
+        if (!objective.visible) {
+            $("#objectivesList li:nth-child(" + (i + 1) + ")").hide();
+            return;
+        }
 
-    payload.filter(function(o) { return o.visible }).forEach(function(objective, i) {
+        $("#objectivesList li:nth-child(" + (i + 1) + ")").show();
+
         if (objective.description !== undefined) {
-            $(".description" + i).text(objective.description);
+            $("#objectivesList li:nth-child(" + (i + 1) + ") .description").text(objective.description);
         }
 
         if (objective.progress !== undefined) {
-            // Currently disabled as no scenarios use the "king" syntax, and this probably doesn't work
+            // Currently disabled as no scenarios use the "king" syntax, and this probably doesn't work / is outdated
             // if (objective.syntax === "king") {
             //     var finalString = "";
             //     var topPlayerString = "";
@@ -67,26 +79,33 @@ handlers.objectiveUpdate = function(payload) {
             //     $(".progress" + visibleObjectiveIndex).html(finalString);
             // } else {
 
-            $(".progress" + i).text(objective.progress + objective.syntax);
+            $("#objectivesList li:nth-child(" + (i + 1) + ") .progress .current").text(objective.progress);
+
+            var percentComplete = 100 / objective.needed * objective.progress;
+
+            $("#objectivesList li:nth-child(" + (i + 1) + ") .progress_bar_progress").width(percentComplete + "%");
+        }
+
+        if (objective.syntax !== "king") {
+            $("#objectivesList li:nth-child(" + (i + 1) + ") .progress .syntax").text(objective.syntax);
         }
 
         if (objective.needed !== undefined) {
-            $(".needed" + i).text(objective.needed);
+            $("#objectivesList li:nth-child(" + (i + 1) + ") .progress .needed").text(objective.needed);
         }
 
         if (objective.result !== undefined) {
-            $(".result" + i).text(objective.result);
+            $("#objectivesList li:nth-child(" + (i + 1) + ") .result").text(objective.result);
         }
     });
 };
 
-//adds the author and scenario name to the ui
 handlers.scenarioDetails = function(payload) {
-    $(".author").html(payload[0]);
-    $(".scenarioName").html(payload[1] + " by ");
+    $("#scenarioAuthor").html(payload[0]);
+    $("#scenarioName").html(payload[1] + " by ");
 }
 
-function secondsToTime(e){
+function secondsToTime(e) {
     var h = Math.floor(e / 3600),
         m = Math.floor(e % 3600 / 60),
         s = Math.floor(e % 60);
@@ -100,7 +119,7 @@ function secondsToTime(e){
 
 //updates the ingame clock on the scenario ui
 handlers.scenarioTime = function(payload) {
-    $(".landingTime").text(secondsToTime(payload));
+    $("#landingTime").text(secondsToTime(payload));
 }
 
 handlers.scenarioWave = function(payload) {
@@ -112,5 +131,5 @@ handlers.scenarioWave = function(payload) {
         return;
     }
 
-    $(".waveTime").text(secondsToTime(payload.waveInterval - Math.round(payload.elapsedTime % payload.waveInterval)));
+    $("#waveTime").text(secondsToTime(payload.waveInterval - Math.round(payload.elapsedTime % payload.waveInterval)));
 }

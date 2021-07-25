@@ -1,26 +1,148 @@
-.hide-for-cast  #data_util_frame {
-	display: none;
+.scenario_bar_panel {
+	/* TODO: Alignment? */
 }
 
-.row::after {
-	content: "";
-	clear: both;
-	display: table;
-  }
-  
-  .column {
-	float: left;
- 	width: 33.33%;
-  }
-  
-.scenario_author {
-	color:DodgerBlue;
-	font-weight:bold;
-	font-size:100%;
+/* Not needed if inside player_list_panel? */
+.list_control_btn {
+	height: 26px;
+	width: 28px;
+	background: inherit;
+	border: 1px solid #4d4d4d;
+	white-space: nowrap;
+	margin: 2px -6px 0px 0px;
+	padding: 6px;
+
+	/* Is there not a reset that does this?... */
+	box-sizing: border-box;
 }
+
+.scenario_bar_control {
+	min-width: 320px;
+	border-image: url('coui://ui/main/game/live_game/img/players_list_panel/img_player_bar.png') 60 51 0 25;
+	border-width: 60px 51px 0px 25px;
+	border-image-outset: 0 0 0 15px;
+	position: relative;
+	margin: -15px 0px 0px 0px;
+	pointer-events: none;
+}
+
+.scenario_bar_control_cont {
+	height: 30px;
+	margin: -45px 0px 0px -14px;
+	text-align: right;
+	pointer-events: all;
+	display: flex;
+	justify-content: space-between;
+	align-content: stretch;
+}
+
+.scenario_info {
+	color: #00b3ff;
+	min-width: 230px;
+	margin: 1px 0px 0px -8px;
+	text-align: left;
+	border: 1px solid transparent;
+	box-shadow: 0px 0px 30px rgba(0,0,0,.3);
+	display: flex;
+	flex-grow: 1;
+	justify-content: flex-end;
+}
+
+/* The grey ◤ */
+.bar_fill {
+	height: 30px;
+	min-width: 20px;
+	margin: -3px 0px 0px -10px;
+	background: url('coui://ui/main/game/live_game/img/players_list_panel/img-bar-fill-left.png') right top no-repeat;
+	flex-grow: 1;
+}
+
+.scenario_info_cont {
+	padding: 6px 12px 0px 3px;
+	color: #00b3ff;
+	font-weight: bold;
+}
+
+.scenario_bar {
+	max-width: 454px;
+	border-image: url('coui://ui/main/game/live_game/img/status_bar/img-menu-bground-left.png') 17 47 47 17 fill;
+	border-width: 17px 47px 47px 17px;
+	margin: -22px 38px 0px -7px;
+}
+
+.scenario_bar_cont {
+	margin: -7px -26px -28px 0;
+}
+
+#objectivesList {
+	padding: 0;
+	margin: 0;
+}
+
+.objective {
+	list-style: none;
+	margin: 24px 0;
+}
+
+.description_and_progress {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+}
+
+.progress .current,
+.progress .syntax {
+	font-size: 1.3em;
+}
+
+.progress .syntax {
+	color: #D1D1D1;
+}
+
+.progress .needed {
+	color: #00b3ff;
+	font-size: .8em;
+	font-weight: bold;
+}
+
+.progress_bar {
+	height: 4px;
+	background: #333;
+	margin: 6px 0 8px 0;
+	border: 1px solid #D1D1D1;
+}
+
+.progress_bar_progress {
+	height: 100%;
+	background-color: #00b3ff;
+	box-shadow: 0px 0px 12px #00bfff;
+}
+
+.result_cont {
+	color: #00b3ff;
+}
+
+.result {
+	font-weight: bold;
+}
+
 .scenario_time {
-	color:DodgerBlue;
-	font-weight:bold;
-	font-size:100%;
+	display: flex;
+	color: #00b3ff;
+	font-weight: bold;
+	margin: 8px 16px -8px 0;
 }
 
+.scenario_time > * {
+	flex: 1;
+}
+
+.scenario_time > *:last-child {
+	text-align: right;
+}
+
+.time {
+	display: inline-block;
+	text-align: left;
+	min-width: 60px;
+}
