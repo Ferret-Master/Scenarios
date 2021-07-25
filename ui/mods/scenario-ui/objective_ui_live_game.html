@@ -11,7 +11,7 @@
 
             <div
                 class="list_control_btn"
-                data-bind="click: togglePinScenarioPanel, css: { div_animated_flash_cyan: model.newInvite }"
+                data-bind="click: toggleHideScenarioPanel, css: { div_animated_flash_cyan: model.newInvite }"
             >
                 <img
                     data-bind="attr: { src: scenarioPanelToggleImage }"
@@ -21,8 +21,7 @@
         </div>
     </div>
 
-    <!-- ko if: showScenarioPanel -->
-    <div class="scenario_bar">
+    <div class="scenario_bar" data-bind="attr: { hidden: hideScenarioPanel }">
         <div class="scenario_bar_cont">
             <ol id="objectivesList">
                 <li class="objective">
@@ -85,5 +84,4 @@
             </div>
         </div>
     </div>
-    <!-- /ko -->
 </div>

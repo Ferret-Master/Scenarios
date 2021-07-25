@@ -29,10 +29,9 @@ handlers.objectiveUpdate = function(payload) {
         };
 
         model.alreadyMadeFrame = ko.observable(true);
-        model.pinScenarioPanel = ko.observable(true);
-        model.togglePinScenarioPanel = function () { model.pinScenarioPanel(!model.pinScenarioPanel()); };
-        model.showScenarioPanel = ko.computed(function () { return model.pinScenarioPanel() });
-        model.scenarioPanelToggleImage = ko.computed(function() { return toggleImage(model.showScenarioPanel()); });
+        model.hideScenarioPanel = ko.observable(false);
+        model.toggleHideScenarioPanel = function () { model.hideScenarioPanel(!model.hideScenarioPanel()); };
+        model.scenarioPanelToggleImage = ko.computed(function() { return toggleImage(!model.hideScenarioPanel()); });
 
         createFloatingFrame("scenario_frame", 500, 250, { "snap": false, "top": 42, "rememberPosition": "false" });//this top offset is so player bar with eco mods doesn't overlap
 
