@@ -3,7 +3,7 @@
 }
 
 .scenario_bar_control {
-		min-width: 440px;
+		min-width: 460px;
 		border-image: url('coui://ui/main/game/live_game/img/players_list_panel/img_player_bar.png') 60 51 0 25;
 		border-width: 60px 51px 0px 25px;
 		border-image-outset: 0 0 0 15px;
@@ -120,17 +120,18 @@
 }
 
 .scenario_time > * {
-		flex: 1;
+
 }
 
 .scenario_time > *:last-child {
 		text-align: right;
+		margin-left: auto;
 }
 
 .time {
 		display: inline-block;
 		text-align: left;
-		min-width: 60px;
+		min-width: 55px;
 }
 
 .scenario_bar_panel + .div_spectator_panel,
