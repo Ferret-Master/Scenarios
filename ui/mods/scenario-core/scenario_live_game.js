@@ -5,7 +5,7 @@
     var originalCall = engine.call
    model.cheatAllowCreateUnit(false)//set to false to prevent bulk create units from working by default
     engine.call = function(method) {
- 
+
       if (method == 'unit.debug.copy') {
         console.log("not allowed for player")
         return undefined;
@@ -21,12 +21,12 @@
         else if (method == 'unit.debug.scenarioPaste') {
             method = 'unit.debug.paste';
             return originalCall.apply(this, arguments);
-           
+
       } else {
         return originalCall.apply(this, arguments);
       }
     }
-     
+
 
 
 
@@ -44,7 +44,7 @@ also keeps track of things, as it is not appropriate for objectives or triggers 
 
 
 
-*/ 
+*/
 
 function ScenarioViewModel() {
 
@@ -100,14 +100,14 @@ model.scenarioModel = new ScenarioViewModel();
   var unwantedId = [];
   if(model.selection() == undefined || model.selection() == null){return}
   var selectionId = model.selection().spec_ids;
-  
+
   for(var i = 0;i<noSelect.length;i++){
 
     if(selectionId[noSelect[i]] !== undefined){
-     
+
       for(var j = 0;j<selectionId[noSelect[i]].length;j++){
         unwantedId.push(selectionId[noSelect[i]][j])
-      } 
+      }
 
     }
 
@@ -116,7 +116,7 @@ model.scenarioModel = new ScenarioViewModel();
   var wantedId = [];
 
   var selectedKeys = _.keys(selectionId)
- 
+
   for(var i = 0;i<selectedKeys.length;i++)
   {
 
@@ -124,7 +124,7 @@ model.scenarioModel = new ScenarioViewModel();
       wantedId.push(selectionId[selectedKeys[i]][j])
     }
   }
- 
+
   oldWantedId = wantedId;
 
   wantedId = _.difference(wantedId,unwantedId)
@@ -138,7 +138,7 @@ model.scenarioModel = new ScenarioViewModel();
 })
 
 function getAvatarId(){ // gets the id's for each avatar
-    
+
     model.scenarioModel.avatarId = []
     var avatarPromiseArray = []
     for(var i = 0;i<model.scenarioModel.planetLength;i++){
@@ -151,18 +151,18 @@ function getAvatarId(){ // gets the id's for each avatar
 
 
     avatarPromise.then(function(result){
-    
+
       try{
         var validAvatar = false;
         for(var resultIndex in result){
 
           if(result[resultIndex]["/pa/units/commanders/scenario_avatar/scenario_avatar.json"] == undefined || _.isEmpty(result[resultIndex]["/pa/units/commanders/scenario_avatar/scenario_avatar.json"])){continue}
           validAvatar = true
-               
+
            model.scenarioModel.avatarId[resultIndex] = result[resultIndex]["/pa/units/commanders/scenario_avatar/scenario_avatar.json"]
         }
         if(validAvatar == false){_.delay(getAvatarId,1000);return}
-     
+
     }
       catch(err){console.log(err)}
 
@@ -172,12 +172,12 @@ function getAvatarId(){ // gets the id's for each avatar
       model.scenarioModel.playerNameArray.push(model.players()[i].name)
     }
 
-    
+
     })
 }
 
 function getCommanderId(){
-  
+
   commanderPromise = model.allPlayerArmy(model.armyIndex(),"",false,"UNITTYPE_Commander");
   commanderPromise.then(function(result){
     console.log(result)
@@ -188,10 +188,10 @@ function getCommanderId(){
         model.scenarioModel.playerCommanderId.push(result[property][commanderIndex])
 
       }
-      
+
     }
- 
-  
+
+
   })
 }
 
@@ -205,16 +205,16 @@ cursor_y = event.pageY;
 }
 
 model.setupScenario = function(scenarioJSON){ // sets up necessary components for the scenario
-  
+
     var planets = model.planetListState()
     console.log("setting up scenario")
-   
+
     if(planets == undefined || planets.planets.length<1){_.delay(model.setupScenario,100,scenarioJSON);return}
     planets = planets.planets
     model.scenarioModel.planetLength = planets.length
-   
+
     if(scenarioJSON["requireBuilders"] == true){
-        
+
             for(var planetIndex in planets){
               var planet = planets[planetIndex]
               console.log(planet)
@@ -227,12 +227,12 @@ model.setupScenario = function(scenarioJSON){ // sets up necessary components fo
               }
 
             }
-        
-         
-           
+
+
+
             setTimeout(getAvatarId,500)
             setTimeout(getCommanderId,2000)
-  
+
     }
     else{
 
@@ -247,29 +247,29 @@ return;
 
 
 handlers.ScenarioTime = function(payload) {
-    
+
     if(model.scenarioModel !== undefined){
-      
+
     model.scenarioModel.fullTime = Math.round(payload);
     if((model.scenarioModel.playerCommanderId !== undefined || model.hasSelection()) && model.gameOver() == false && model.maxEnergy() > 0){
-  
+
         if( model.scenarioModel.fullTime<model.scenarioModel.landTime &&  model.scenarioModel.fullTime !== 0){model.scenarioModel.landTime =  model.scenarioModel.fullTime}
-      
+
     }
     if(model.scenarioModel.landTime !== 200000){
        if(model.scenarioModel.playerSpawn.chosenPos == undefined){model.getCommanderData()}
         var realTime = model.scenarioModel.fullTime - model.scenarioModel.landTime;
         model.scenarioModel.RealTimeSinceLanding = realTime;
-        api.Panel.message("LiveGame_FloatZone", 'scenarioTime',realTime)
-        api.Panel.message("LiveGame_FloatZone", 'scenarioDetails',[model.scenarioModel["author"],model.scenarioModel["scenarioName"]])
-        
+        api.Panel.message("live_game_players", 'scenarioTime',realTime)
+        api.Panel.message("live_game_players", 'scenarioDetails',[model.scenarioModel["author"],model.scenarioModel["scenarioName"]])
+
     }}
-  
-    
+
+
 };
 
 handlers.ScenarioLandingZones = function(payload) {
-  
+
   model.scenarioModel.playerSpawn.zones = payload;
 
 }
@@ -277,10 +277,8 @@ handlers.ScenarioLandingZones = function(payload) {
 handlers.ScenarioLandingPosition = function(payload) {
 
   if(model.scenarioModel.playerCommanderType == -1){model.scenarioModel.playerCommanderType = payload.playerCom;}
-  
+
   //model.playerArmy(model.armyIndex(),payload.planet,payload.playerCom,false).then(function(result){model.scenarioModel.playerCommanderId = result[payload.playerCom]; console.log("player commander id is " + result)})
 
 
 }
-
-    
