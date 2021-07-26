@@ -86,7 +86,7 @@ if(objectiveObject.activeEffect !== true && objectiveObject.effect !== undefined
 if(objectiveObject.waveInterval!==undefined){
 
 
-    api.Panel.message("live_game_players", 'scenarioWave',{waveInterval:objectiveObject.waveInterval, elapsedTime: model.scenarioModel.RealTimeSinceLanding})
+    api.Panel.message("players", 'scenarioWave',{waveInterval:objectiveObject.waveInterval, elapsedTime: model.scenarioModel.RealTimeSinceLanding})
 
 
 }
@@ -276,7 +276,7 @@ model.objectiveLoop = function(){
         setTimeout(model.objectiveLoop,1000);
 
     }
-    api.Panel.message("live_game_players", 'objectiveUpdate' ,objectiveModel.activeObjectives)
+    api.Panel.message("players", 'objectiveUpdate' ,objectiveModel.activeObjectives)
 
 }
 

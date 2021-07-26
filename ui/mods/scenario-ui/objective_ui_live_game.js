@@ -66,32 +66,25 @@ function formatObjectiveValue(value, format) {
   return output;
 }
 
+var toggleImage = function(open) {
+    return open ? 'coui://ui/main/shared/img/controls/pin_open.png' : 'coui://ui/main/shared/img/controls/pin_closed.png';
+};
+
 var scenarioUiLoaded = false;
 
-if (!scenarioUiLoaded) {
-    scenarioUiLoaded = true;
+$(document).ready(function () {
+    if (scenarioUiLoaded) {
+      return;
+    }
 
-    var toggleImage = function(open) {
-        return open ? 'coui://ui/main/shared/img/controls/pin_open.png' : 'coui://ui/main/shared/img/controls/pin_closed.png';
-    };
+    scenarioUiLoaded = true;
 
     model.alreadyMadeFrame = ko.observable(true);
     model.hideScenarioPanel = ko.observable(false);
     model.toggleHideScenarioPanel = function () { model.hideScenarioPanel(!model.hideScenarioPanel()); };
     model.scenarioPanelToggleImage = ko.computed(function() { return toggleImage(!model.hideScenarioPanel()); });
 
-    $.get("coui://ui/mods/scenario-ui/objective_ui_live_game.html", function (html) {
-        var $html = $(html);
-        $html.insertAfter("script + svg");
-        ko.applyBindings(model, $html[0]);
-    });
-}
-
-$(document).ready(function () {
     handlers.objectiveUpdate = function(payload) {
-        console.log("objectiveUpdate");
-        console.log($("#objectiveList")[0]);
-
         payload.forEach(function(objective, i) {
             if (!objective.visible) {
                 $("#objectivesList li:nth-child(" + (i + 1) + ")").hide();
@@ -186,6 +179,11 @@ $(document).ready(function () {
         $("#waveTime").text(secondsToTime(payload.waveInterval - Math.round(payload.elapsedTime % payload.waveInterval)));
     }
 
-    console.log("Added handlers from objective_ui_live_game. Handlers are now:");
-    console.log(handlers);
+    $.get("coui://ui/mods/scenario-ui/objective_ui_live_game.html", function (html) {
+        var $html = $(html);
+        $html.insertAfter("script + svg");
+
+        // Activates knockout.js
+        ko.applyBindings(model, $html[0]);
+    });
 });

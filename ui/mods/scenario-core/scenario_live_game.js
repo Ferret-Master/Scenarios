@@ -260,8 +260,8 @@ handlers.ScenarioTime = function(payload) {
        if(model.scenarioModel.playerSpawn.chosenPos == undefined){model.getCommanderData()}
         var realTime = model.scenarioModel.fullTime - model.scenarioModel.landTime;
         model.scenarioModel.RealTimeSinceLanding = realTime;
-        api.Panel.message("live_game_players", 'scenarioTime',realTime)
-        api.Panel.message("live_game_players", 'scenarioDetails',[model.scenarioModel["author"],model.scenarioModel["scenarioName"]])
+        api.Panel.message("players", 'scenarioTime',realTime)
+        api.Panel.message("players", 'scenarioDetails',[model.scenarioModel["author"],model.scenarioModel["scenarioName"]])
 
     }}
 
