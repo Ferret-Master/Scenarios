@@ -126,9 +126,9 @@ handlers.objectiveUpdate = function(payload) {
         }
 
         if (objective.syntax === "%") {
-          $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress__syntax").text("%");
+            $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress__syntax").text("%");
         } else if (_.includes(objective.syntax, "/")) {
-          $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress__syntax").text("/");
+            $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress__syntax").text("/");
         }
 
         if (objective.needed !== undefined && objective.syntax !== "%") {
@@ -148,7 +148,6 @@ handlers.objectiveUpdate = function(payload) {
 };
 
 handlers.scenarioDetails = function(payload) {
-    console.log("Handling scenarioDetails call");
     $("#scenarioAuthor").html(payload[0]);
     $("#scenarioName").html(payload[1] + " by ");
 }
