@@ -1,5 +1,5 @@
  {
-   "context": "client",
+   "context": "server",
    "identifier": "com.pa.ferretmaster.scenarios-local",
    "display_name": "scenarios(ALPHA) local",
    "description": "A mod that allows for the creation of custom scenarios, includes scenarios such as annihilation mode and bug horde mode",
