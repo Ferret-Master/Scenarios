@@ -70,120 +70,110 @@ var toggleImage = function(open) {
     return open ? 'coui://ui/main/shared/img/controls/pin_open.png' : 'coui://ui/main/shared/img/controls/pin_closed.png';
 };
 
-var scenarioUiLoaded = false;
+model.alreadyMadeFrame = ko.observable(true);
+model.hideScenarioPanel = ko.observable(false);
+model.toggleHideScenarioPanel = function () { model.hideScenarioPanel(!model.hideScenarioPanel()); };
+model.scenarioPanelToggleImage = ko.computed(function() { return toggleImage(!model.hideScenarioPanel()); });
 
-$(document).ready(function () {
-    if (scenarioUiLoaded) {
-      return;
-    }
-
-    scenarioUiLoaded = true;
-
-    model.alreadyMadeFrame = ko.observable(true);
-    model.hideScenarioPanel = ko.observable(false);
-    model.toggleHideScenarioPanel = function () { model.hideScenarioPanel(!model.hideScenarioPanel()); };
-    model.scenarioPanelToggleImage = ko.computed(function() { return toggleImage(!model.hideScenarioPanel()); });
-
-    handlers.objectiveUpdate = function(payload) {
-        payload.forEach(function(objective, i) {
-            if (!objective.visible) {
-                $("#objectivesList li:nth-child(" + (i + 1) + ")").hide();
-                return;
-            }
-
-            $("#objectivesList li:nth-child(" + (i + 1) + ")").show();
-
-            if (objective.description !== undefined) {
-                $("#objectivesList li:nth-child(" + (i + 1) + ") .description").text(objective.description);
-            }
-
-            if (objective.progress !== undefined) {
-                // Currently disabled as no scenarios use the "king" syntax, and this probably doesn't work / is outdated
-                // if (objective.syntax === "king") {
-                //     var finalString = "";
-                //     var topPlayerString = "";
-                //     var highestNum = 0;
-                //     var playerName = payload[i].playerName;
-                //     var playerNumber = 0;
-                //
-                //     for(var j = 0; j < array[i].length; j++){
-                //         if (array[i][j] > highestNum) {
-                //           highestNum = array[i][j]; topPlayerString = payload[0].playerNames[j]
-                //         }
-                //
-                //         if (playerName === payload[0].playerNames[j]) {
-                //           playerNumber = array[i][j];
-                //         }
-                //     }
-                //
-                //     finalString += (playerName + ":" + playerNumber + "\r\n" + "Leader:" + topPlayerString + " with " + highestNum);
-                //
-                //     $(".progress" + visibleObjectiveIndex).html(finalString);
-                // } else {
-
-                if (_.includes(objective.syntax, "/") && objective.syntax.length > 1) {
-                    var text = formatObjectiveValue(objective.progress,  objective.syntax.split("/")[0]);
-
-                    $("#objectivesList li:nth-child(" + (i + 1) + ") .progress .current").text(text);
-                } else {
-                    $("#objectivesList li:nth-child(" + (i + 1) + ") .progress .current").text(objective.progress);
-                }
-
-                var percentComplete = 100 / objective.needed * objective.progress;
-
-                $("#objectivesList li:nth-child(" + (i + 1) + ") .progress_bar_progress").width(percentComplete + "%");
-            }
-
-            if (objective.syntax === "%") {
-              $("#objectivesList li:nth-child(" + (i + 1) + ") .progress .syntax").text("%");
-            } else if (_.includes(objective.syntax, "/")) {
-              $("#objectivesList li:nth-child(" + (i + 1) + ") .progress .syntax").text("/");
-            }
-
-            if (objective.needed !== undefined && objective.syntax !== "%") {
-                if (_.includes(objective.syntax, "/") && objective.syntax.length > 1) {
-                    var text = formatObjectiveValue(objective.needed, objective.syntax.split("/")[1]);
-
-                    $("#objectivesList li:nth-child(" + (i + 1) + ") .progress .needed").text(text);
-                } else {
-                    $("#objectivesList li:nth-child(" + (i + 1) + ") .progress .needed").text(objective.needed);
-                }
-            }
-
-            if (objective.result !== undefined) {
-                $("#objectivesList li:nth-child(" + (i + 1) + ") .result").text(objective.result);
-            }
-        });
-    };
-
-    handlers.scenarioDetails = function(payload) {
-        console.log("Handling scenarioDetails call");
-        $("#scenarioAuthor").html(payload[0]);
-        $("#scenarioName").html(payload[1] + " by ");
-    }
-
-    //updates the ingame clock on the scenario ui
-    handlers.scenarioTime = function(payload) {
-        $("#landingTime").text(secondsToTime(payload));
-    }
-
-    handlers.scenarioWave = function(payload) {
-        if (model.waveTime === undefined || model.waveTime > payload.waveInterval) {
-            model.waveTime = payload.waveInterval;
-        }
-
-        if (model.waveTime < payload.waveInterval) {
+handlers.objectiveUpdate = function(payload) {
+    payload.forEach(function(objective, i) {
+        if (!objective.visible) {
+            $("#objectivesList li:nth-child(" + (i + 1) + ")").hide();
             return;
         }
 
-        $("#waveTime").text(secondsToTime(payload.waveInterval - Math.round(payload.elapsedTime % payload.waveInterval)));
+        $("#objectivesList li:nth-child(" + (i + 1) + ")").show();
+
+        if (objective.description !== undefined) {
+            $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_description").text(objective.description);
+        }
+
+        if (objective.progress !== undefined) {
+            // Currently disabled as no scenarios use the "king" syntax, and this probably doesn't work / is outdated
+            // if (objective.syntax === "king") {
+            //     var finalString = "";
+            //     var topPlayerString = "";
+            //     var highestNum = 0;
+            //     var playerName = payload[i].playerName;
+            //     var playerNumber = 0;
+            //
+            //     for(var j = 0; j < array[i].length; j++){
+            //         if (array[i][j] > highestNum) {
+            //           highestNum = array[i][j]; topPlayerString = payload[0].playerNames[j]
+            //         }
+            //
+            //         if (playerName === payload[0].playerNames[j]) {
+            //           playerNumber = array[i][j];
+            //         }
+            //     }
+            //
+            //     finalString += (playerName + ":" + playerNumber + "\r\n" + "Leader:" + topPlayerString + " with " + highestNum);
+            //
+            //     $(".progress" + visibleObjectiveIndex).html(finalString);
+            // } else {
+
+            if (_.includes(objective.syntax, "/") && objective.syntax.length > 1) {
+                var text = formatObjectiveValue(objective.progress,  objective.syntax.split("/")[0]);
+
+                $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress__current").text(text);
+            } else {
+                $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress__current").text(objective.progress);
+            }
+
+            var percentComplete = 100 / objective.needed * objective.progress;
+
+            $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress_bar > *").width(percentComplete + "%");
+        }
+
+        if (objective.syntax === "%") {
+          $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress__syntax").text("%");
+        } else if (_.includes(objective.syntax, "/")) {
+          $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress__syntax").text("/");
+        }
+
+        if (objective.needed !== undefined && objective.syntax !== "%") {
+            if (_.includes(objective.syntax, "/") && objective.syntax.length > 1) {
+                var text = formatObjectiveValue(objective.needed, objective.syntax.split("/")[1]);
+
+                $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress__needed").text(text);
+            } else {
+                $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress__needed").text(objective.needed);
+            }
+        }
+
+        if (objective.result !== undefined) {
+            $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_result").text(objective.result);
+        }
+    });
+};
+
+handlers.scenarioDetails = function(payload) {
+    console.log("Handling scenarioDetails call");
+    $("#scenarioAuthor").html(payload[0]);
+    $("#scenarioName").html(payload[1] + " by ");
+}
+
+//updates the ingame clock on the scenario ui
+handlers.scenarioTime = function(payload) {
+    $("#landingTime").text(secondsToTime(payload));
+}
+
+handlers.scenarioWave = function(payload) {
+    if (model.waveTime === undefined || model.waveTime > payload.waveInterval) {
+        model.waveTime = payload.waveInterval;
     }
 
-    $.get("coui://ui/mods/scenario-ui/objective_ui_live_game.html", function (html) {
-        var $html = $(html);
-        $html.insertAfter("script + svg");
+    if (model.waveTime < payload.waveInterval) {
+        return;
+    }
 
-        // Activates knockout.js
-        ko.applyBindings(model, $html[0]);
-    });
+    $("#waveTime").text(secondsToTime(payload.waveInterval - Math.round(payload.elapsedTime % payload.waveInterval)));
+}
+
+$.get("coui://ui/mods/scenario-ui/objective_ui_live_game.html", function (html) {
+    var $html = $(html);
+    $html.insertAfter("script + svg");
+
+    // Activates knockout.js
+    ko.applyBindings(model, $html[0]);
 });

@@ -34,15 +34,6 @@
 		justify-content: flex-end;
 }
 
-/* The grey ◤ */
-.bar_fill {
-		height: 30px;
-		min-width: 20px;
-		margin: -3px 0px 0px -10px;
-		background: url('coui://ui/main/game/live_game/img/players_list_panel/img-bar-fill-left.png') right top no-repeat;
-		flex-grow: 1;
-}
-
 .scenario_info_cont {
 		padding: 6px 12px 0px 3px;
 		color: #00b3ff;
@@ -76,39 +67,39 @@
 		align-items: baseline;
 }
 
-.progress .current,
-.progress .syntax {
+.objective_progress__current,
+.objective_progress__syntax {
 		font-size: 1.3em;
 }
 
-.progress .syntax {
+.objective_progress__syntax {
 		color: #D1D1D1;
 }
 
-.progress .needed {
+.objective_progress__needed {
 		color: #00b3ff;
 		font-size: .8em;
 		font-weight: bold;
 }
 
-.progress_bar {
+.objective_progress_bar {
 		height: 4px;
 		background: #333;
 		margin: 6px 0 8px 0;
 		border: 1px solid #D1D1D1;
 }
 
-.progress_bar_progress {
+.objective_progress_bar > * {
 		height: 100%;
 		background-color: #00b3ff;
 		box-shadow: 0px 0px 12px #00bfff;
 }
 
-.result_cont {
+.objective_result_cont {
 		color: #00b3ff;
 }
 
-.result {
+.objective_result {
 		font-weight: bold;
 }
 
@@ -119,16 +110,12 @@
 		margin: 8px 16px -8px 0;
 }
 
-.scenario_time > * {
-
-}
-
 .scenario_time > *:last-child {
 		text-align: right;
 		margin-left: auto;
 }
 
-.time {
+.scenario_bar .time {
 		display: inline-block;
 		text-align: left;
 		min-width: 55px;
@@ -136,6 +123,7 @@
 
 .scenario_bar_panel + .div_spectator_panel,
 .scenario_bar_panel + .div_player_list_panel {
+		min-height: 100px; /* Don't clip player names on hover */
 		display: inline-block; /* Don't go full width */
 		margin-top: -16px; /* Move up to touch scenario_bar_panel */
 		-webkit-clip-path: polygon(
