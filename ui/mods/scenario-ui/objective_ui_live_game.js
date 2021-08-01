@@ -1,174 +1,178 @@
-(function() {
-
-function createScenarioFrame() {
-    if(model.alreadyMadeFrame == false){
-    console.log("running make frame")
-    createFloatingFrame("scenario_frame", 500, 250, { "snap": false, "top": 42, "rememberPosition": "false" });//this top offset is so player bar with eco mods doesn't overlap
-
-
-    $.get("coui://ui/mods/scenario-ui/objective_ui_live_game.html", function (data) {
-        $("#scenario_frame_content").append(data);
+/**
+ * string.padStart pollyfill from https://github.com/behnammodi/polyfill/blob/master/string.polyfill.js
+ * Can be removed once Coherent UI is updated, like, at all.
+ */
+if (!String.prototype.padStart) {
+    Object.defineProperty(String.prototype, "padStart", {
+        configurable: true,
+        writable: true,
+        value: function (targetLength, padString) {
+            targetLength = targetLength >> 0; // floor if number or convert non-number to 0;
+            padString = String(typeof padString !== "undefined" ? padString : " ");
+            if (this.length > targetLength) {
+                return String(this);
+            } else {
+                targetLength = targetLength - this.length;
+                if (targetLength > padString.length) {
+                    padString += padString.repeat(targetLength / padString.length); // append to original to ensure we are longer than needed
+                }
+                return padString.slice(0, targetLength) + String(this);
+            }
+        },
     });
+}
 
-    $("<link/>", {
-        rel: "stylesheet",
-        type: "text/css",
-        href: "coui://ui/mods/scenario-ui/objective_ui_live_game.css"
-    }).appendTo("head");
+/**
+ * Convert seconds to an hh:mm:ss time, where hours are only shown if time is >= 1h
+ */
+function secondsToTime(seconds) {
+    var h = Math.floor(seconds / 3600),
+        m = Math.floor(seconds % 3600 / 60),
+        s = Math.floor(seconds % 60);
 
-    
-//forgetFramePosition("scenario_frame");
+    h = h ? (h.toString() + ":") : ""; // Only show hours if needed, and don't pad
+    m = m.toString().padStart(2, "0") + ":";
+    s = s.toString().padStart(2, "0");
 
-lockFrame("scenario_frame");
+    return h + m + s;
+}
 
-//-----------------------------------------------------------------Objective Display Functions---------------------------------------------------
-model.alreadyMadeFrame = true;
-}}
+/**
+ * Convert a `progress` or `needed` value from a number into a fancy string
+ */
+function formatObjectiveValue(value, format) {
+  var output = format;
 
-model.objectiveDescriptions =[];
-model.objectiveProgresses = [];
-model.objectiveNeeded = [];
-model.objectiveResults = [];
-model.testValue = ko.observable(0);
-model.waveTime = null;
+  if (format === "h") {
+    return Math.floor(value / 3600) + "m";
+  }
 
-//prepares progress data before sending it to the ui
+  if (format === "m") {
+    return Math.floor(value % 3600 / 60) + "m";
+  }
 
+  if (format === "s") {
+    return Math.floor(value % 60) + "s";
+  }
+
+  if (_.includes(format, "mm")) {
+    output = output.replace("mm", Math.floor(value % 3600 / 60).toString().padStart(2, "0"));
+  }
+
+  if (_.includes(format, "ss")) {
+    output = output.replace("ss", Math.floor(value % 60).toString().padStart(2, "0"));
+  }
+
+  return output;
+}
+
+var toggleImage = function(open) {
+    return open ? 'coui://ui/main/shared/img/controls/pin_open.png' : 'coui://ui/main/shared/img/controls/pin_closed.png';
+};
+
+model.alreadyMadeFrame = ko.observable(true);
+model.hideScenarioPanel = ko.observable(false);
+model.toggleHideScenarioPanel = function () { model.hideScenarioPanel(!model.hideScenarioPanel()); };
+model.scenarioPanelToggleImage = ko.computed(function() { return toggleImage(!model.hideScenarioPanel()); });
 
 handlers.objectiveUpdate = function(payload) {
-    if(model.alreadyMadeFrame === undefined){model.alreadyMadeFrame = false;}
-    if(model.alreadyMadeFrame == false){createScenarioFrame();model.alreadyMadeFrame = true}
-        if(payload === undefined || payload === 0 ){addLinkageLiveGame("model.objectiveModel()", "model.objectiveViewModel");console.log("active undefined");return} 
-    else{
-       
-        var newObjectiveDescriptions = [];
-        var newObjectiveProgresses = [];
-        var newObjectiveNeeded = [];
-        var newObjectiveResults =[];
-        var newObjectiveSyntax = [];
-        for(var i = 0;i<payload.length;i++){
-           
-            var objective = payload[i];
-            var visible = objective.visible;
-            var result = objective.result;
-            var description = objective.description;
-            var needed = objective.needed;
-            var progress = objective.progress;
-            var syntax = objective.syntax;
-            if(syntax == undefined){syntax = ""}
+    payload.forEach(function(objective, i) {
+        if (!objective.visible) {
+            $("#objectivesList li:nth-child(" + (i + 1) + ")").hide();
+            return;
+        }
 
-            if(objective === undefined || visible === undefined || result === undefined || description === undefined || needed === undefined || progress === undefined){;}
-            else{
-                newObjectiveDescriptions.push(description)
-                newObjectiveProgresses.push(progress)
-                newObjectiveResults.push(result)
-                newObjectiveNeeded.push(needed)
-                newObjectiveSyntax.push(syntax)
+        $("#objectivesList li:nth-child(" + (i + 1) + ")").show();
+
+        if (objective.description !== undefined) {
+            $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_description").text(objective.description);
+        }
+
+        if (objective.progress !== undefined) {
+            // Currently disabled as no scenarios use the "king" syntax, and this probably doesn't work / is outdated
+            // if (objective.syntax === "king") {
+            //     var finalString = "";
+            //     var topPlayerString = "";
+            //     var highestNum = 0;
+            //     var playerName = payload[i].playerName;
+            //     var playerNumber = 0;
+            //
+            //     for(var j = 0; j < array[i].length; j++){
+            //         if (array[i][j] > highestNum) {
+            //           highestNum = array[i][j]; topPlayerString = payload[0].playerNames[j]
+            //         }
+            //
+            //         if (playerName === payload[0].playerNames[j]) {
+            //           playerNumber = array[i][j];
+            //         }
+            //     }
+            //
+            //     finalString += (playerName + ":" + playerNumber + "\r\n" + "Leader:" + topPlayerString + " with " + highestNum);
+            //
+            //     $(".progress" + visibleObjectiveIndex).html(finalString);
+            // } else {
+
+            if (_.includes(objective.syntax, "/") && objective.syntax.length > 1) {
+                var text = formatObjectiveValue(objective.progress,  objective.syntax.split("/")[0]);
+
+                $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress__current").text(text);
+            } else {
+                $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress__current").text(objective.progress);
+            }
+
+            var percentComplete = 100 / objective.needed * objective.progress;
+
+            $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress_bar > *").width(percentComplete + "%");
+        }
+
+        if (objective.syntax === "%") {
+            $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress__syntax").text("%");
+        } else if (_.includes(objective.syntax, "/")) {
+            $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress__syntax").text("/");
+        }
+
+        if (objective.needed !== undefined && objective.syntax !== "%") {
+            if (_.includes(objective.syntax, "/") && objective.syntax.length > 1) {
+                var text = formatObjectiveValue(objective.needed, objective.syntax.split("/")[1]);
+
+                $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress__needed").text(text);
+            } else {
+                $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress__needed").text(objective.needed);
             }
         }
-        
-        
-        
-        function updateSpan (className, array,syntax){
 
-           
-            if(array.length <4){for(var i = array.length;i<4;i++){array[i] = " "}}
-            for(var i = 0;i<array.length;i++){
-                
-                if(syntax[i] == "/" && className == "progress"){// addes slash between progress and needed
-                    array[i] = array[i] + "/"
-                }
-                if(syntax[i] == "%" && className == "progress"){//adds percent after progress and doesnt do needed
-                    array[i] = array[i] + "%"
-                }
-                if(syntax[i] == "%" && className == "needed"){//adds percent after progress and doesn't do needed
-                    return
-                }
-                if(syntax[i] == "king" && className == "needed"){return}
-                if(syntax[i] == "king" && className == "progress"){//displays your percent and the lead players name and percent
-                    
-                    var finalString = "";
-                    var topPlayerString = "";
-                    var highestNum = 0;
-                    var playerName = payload[i].playerName;
-                    var playerNumber = 0;
-                    for(var j = 0;j<array[i].length;j++){
-                        if(array[i][j]>highestNum){highestNum = array[i][j]; topPlayerString = payload[0].playerNames[j]}
-                        if(playerName == payload[0].playerNames[j]){playerNumber =  array[i][j]}
-                    }
-                   
-                    finalString += (playerName+":"+playerNumber+"\r\n"+"Leader:"+topPlayerString+" with "+highestNum)
-                    array[i] = finalString;
-
-
-                }
-               
-                $("."+className+i).html(array[i])
-              
-
+        if (objective.result !== undefined) {
+            $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_result").text(objective.result);
         }
-            }
-            
-        needsUpdating = [true,true,true,true]
-        //updating objectives if they have changed
-        
-        if(needsUpdating[0] == true){
-            model.objectiveDescriptions= newObjectiveDescriptions
-            updateSpan("description",model.objectiveDescriptions,newObjectiveSyntax)
-        }
-        if(needsUpdating[1] == true){
-            model.objectiveProgresses = newObjectiveProgresses
-            updateSpan("progress",model.objectiveProgresses,newObjectiveSyntax)
-        }
-        if(needsUpdating[2] == true){
-            model.objectiveNeeded = newObjectiveNeeded
-            updateSpan("needed",model.objectiveNeeded,newObjectiveSyntax)
-        }
-        if(needsUpdating[3] == true){
-            model.objectiveResults = newObjectiveResults
-            updateSpan("result",model.objectiveResults,newObjectiveSyntax)
-        }
-        
-    }
-        
-     };
-    })();
+    });
+};
 
-    //adds the author and scenario name to the ui
-    handlers.scenarioDetails = function(payload) {
-   
-        $(".author").html(payload[0])
-        $(".scenarioName").html(payload[1]+" by ")
+handlers.scenarioDetails = function(payload) {
+    $("#scenarioAuthor").html(payload[0]);
+    $("#scenarioName").html(payload[1] + " by ");
+}
 
+//updates the ingame clock on the scenario ui
+handlers.scenarioTime = function(payload) {
+    $("#landingTime").text(secondsToTime(payload));
+}
 
+handlers.scenarioWave = function(payload) {
+    if (model.waveTime === undefined || model.waveTime > payload.waveInterval) {
+        model.waveTime = payload.waveInterval;
     }
 
-    //updates the ingame clock on the scenario ui
-    handlers.scenarioTime = function(payload) {
-
-        var displayedMinutesSinceLanding = Math.floor(payload/60)
-        var displayedSecondsSinceLanding = Math.round(payload%60);
-        if(displayedSecondsSinceLanding < 10){displayedSecondsSinceLanding =  "0"+displayedSecondsSinceLanding}
-       
-        $(".landingTime").html(displayedMinutesSinceLanding+":"+displayedSecondsSinceLanding)
-        
+    if (model.waveTime < payload.waveInterval) {
+        return;
     }
 
-    handlers.scenarioWave = function(payload) {
-     
-        
-        var displayedSecondsSinceLanding = payload.waveInterval - Math.round(payload.elapsedTime%payload.waveInterval);
+    $("#waveTime").text(secondsToTime(payload.waveInterval - Math.round(payload.elapsedTime % payload.waveInterval)));
+}
 
-        //only affects wave mode and commented out sections not working with changing wave times
-        
-        // if(model.waveTime == null){model.waveTime = payload.waveInterval}
-        // if(model.waveTime>payload.waveInterval){model.waveTime = payload.waveInterval}
-        console.log(model.waveTime)
-        console.log(model.waveInterval,"|")
-        //if(model.waveTime<payload.waveInterval){return} 
-       
-        if(displayedSecondsSinceLanding < 10){displayedSecondsSinceLanding =  "0"+displayedSecondsSinceLanding}
-        $(".waveTime").html(displayedSecondsSinceLanding)
-       
-        
-    }
+$.get("coui://ui/mods/scenario-ui/objective_ui_live_game.html", function (html) {
+    var $html = $(html);
+    $html.insertAfter("script + svg");
+
+    // Activates knockout.js
+    ko.applyBindings(model, $html[0]);
+});
