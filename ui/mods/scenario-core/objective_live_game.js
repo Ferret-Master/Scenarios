@@ -29,9 +29,9 @@ var objectivesToActivate =  ko.observable(-1).extend({ session: 'activeObjective
 function removeByAttr(arr, attr, value){//courtesy of stack overflow but just what I needed
     var i = arr.length;
     while(i--){
-       if( arr[i] 
-           && arr[i].hasOwnProperty(attr) 
-           && (arguments.length > 2 && arr[i][attr] === value ) ){ 
+       if( arr[i]
+           && arr[i].hasOwnProperty(attr)
+           && (arguments.length > 2 && arr[i][attr] === value ) ){
 
            arr.splice(i,1);
 
@@ -59,13 +59,13 @@ function ObjectiveViewModel() {
 var objectiveModel = new ObjectiveViewModel();
 
 var totalObjectives = 0;
-/* 
+/*
 This function takes in the objectives list and assigns them to all objectives and active objectives if they have a active at beginning tag.
 */
 
 //checking for fnished scenario removed as it should be done via a trigger.
 
-/* 
+/*
 This function takes in an objective and activates the appropriate function from objective_functions.js which will check and return progress. progress will be stored in the objective object.
 
 many of the objective checking functions will be async so this is as well
@@ -77,18 +77,18 @@ function objectiveProgress(objectiveObject,playerId){
 if(objectiveObject == "empty"){return null}
 
 if(objectiveObject.activeEffect !== true && objectiveObject.effect !== undefined){
-      
+
     var effectPuppetId = model.objectiveEffectFunctions[objectiveObject.effect](objectiveObject.location,objectiveObject.effectDuration);
     objectiveObject.activeEffect = true;
     objectiveObject.effectPuppetId = effectPuppetId;
 
 }
 if(objectiveObject.waveInterval!==undefined){
-   
-    
-    api.Panel.message("LiveGame_FloatZone", 'scenarioWave',{waveInterval:objectiveObject.waveInterval, elapsedTime: model.scenarioModel.RealTimeSinceLanding})
-        
-        
+
+
+    api.Panel.message("players", 'scenarioWave',{waveInterval:objectiveObject.waveInterval, elapsedTime: model.scenarioModel.RealTimeSinceLanding})
+
+
 }
 
 var returnPromise = new Promise(function(resolve,reject){resolve(model.objectiveCheckFunctions[objectiveObject.type](objectiveObject,playerId));})
@@ -99,33 +99,33 @@ returnPromise.then(function(result){//TODO replace the 0 with playerId
     if(result == null){return}
     if(result === true){//move from active objectives into finished, update ui, activate success triggers
         if(objectiveObject.effectPuppetId !== undefined){
-            
+
             objectiveObject.effectPuppetId.then(function(result){api.puppet.killPuppet(result)})
         }
-      
+
         objectiveModel.finishedObjectives.push(objectiveObject)
 
-       
+
         objectiveModel.activeObjectives = removeByAttr(objectiveModel.activeObjectives,"id",objectiveObject.id)
-   
+
         for(var j = 0;j<objectiveObject.successTriggers.length;j++){
-           
+
             model.activateTrigger(objectiveObject.successTriggers[j]);
 
         }
         for(var j = 0;j<objectiveObject.successObjectives.length;j++){
-            
-          
+
+
              console.log("making objective active: "+objectiveObject.successObjectives[j])
                 model.makeObjectiveActiveByName(objectiveObject.successObjectives[j])
-                
-            
+
+
 
         }
 
     }
-    else if(result === false){//move from active to finished, update ui, activate failure triggers. 
-     
+    else if(result === false){//move from active to finished, update ui, activate failure triggers.
+
         objectiveModel.finishedObjectives.push(objectiveObject)
         objectiveModel.activeObjectives = objectiveModel.activeObjectives.filter(function(item) {
             return item !== value
@@ -135,23 +135,23 @@ returnPromise.then(function(result){//TODO replace the 0 with playerId
     else{//other result should be an update to progress, so update ui
 
         if(objectiveObject.timesCalled !== undefined){
-            
+
             objectiveObject.timesCalled += 1;
 
         }
         if(objectiveObject.progress !== undefined){objectiveObject.progress = result;}
     }
-    
-    
+
+
     }).catch(function(err){console.log(err)})
 
-    
+
 }
 /*
 
 this needs it's own function due to the visual nature of some objectives.
 
-e.g getting units in an area or king of the hill needs to show that area. 
+e.g getting units in an area or king of the hill needs to show that area.
 
 also triggers the needed ui components.
 
@@ -162,7 +162,7 @@ function pushObjective(objeciveObject){
     objectiveModel.activeObjectives.push(objeciveObject)
 }
 
-model.makeObjectiveActive = function(objectiveObject){ 
+model.makeObjectiveActive = function(objectiveObject){
     if(objectiveObject["delay_type"] == "spawn"){
 
         if(model.scenarioModel.landTime == 200000){_.delay(model.makeObjectiveActive,100,objectiveObject);return}
@@ -173,18 +173,18 @@ model.makeObjectiveActive = function(objectiveObject){
         console.log("activating objective with delay of "+ objectiveObject["delay"])
 
         if(objectiveObject["delay"] !== undefined || objectiveObject["delay"] == 0){
- 
+
             _.delay(pushObjective,delayMilliseconds,objectiveObject); return}
-        
+
         }
         else{
             console.log("activating objective")
-     
+
             objectiveModel.activeObjectives.push(objectiveObject);
         }
 }
 
-model.makeObjectiveActiveByName = function(objectiveName){ 
+model.makeObjectiveActiveByName = function(objectiveName){
     console.log(objectiveName)
     for(var i = 0;i<objectiveModel.allObjectives.length;i++){
         console.log(objectiveModel.allObjectives[i].name +" | "+objectiveName)
@@ -198,7 +198,7 @@ model.makeObjectiveActiveByName = function(objectiveName){
 model.setupObjectives = function(inputObjectiveArray){
     console.log("objective setup started")
     var objectiveArray = inputObjectiveArray["objectives"]
-   
+
     objectiveModel.playerId = 0;
 
     for(var i = 0;i<objectiveArray.length;i++){//converts shorthand values to easier to use ones
@@ -207,7 +207,7 @@ model.setupObjectives = function(inputObjectiveArray){
 
     }
     //hopefully none of this ends up being async
-    
+
 
     if(objectivesToActivate() !== -1 && objectivesToActivate().length !== 0){
         for(var i = 0;i<objectiveArray.length;i++){
@@ -215,10 +215,10 @@ model.setupObjectives = function(inputObjectiveArray){
 
             objectiveModel.allObjectives[i] = objectiveArray[i];
             if(_.contains(objectivesToActivate(),objectiveArray[i].id) == true){
-                
+
                 model.makeObjectiveActive(objectiveArray[i])
             }
-    
+
             totalObjectives++;
         }
 
@@ -229,10 +229,10 @@ model.setupObjectives = function(inputObjectiveArray){
 
             objectiveModel.allObjectives[i] = objectiveArray[i];
             if(objectiveArray[i].startingObjective == true){
-                
+
                 model.makeObjectiveActive(objectiveArray[i])
             }
-    
+
             totalObjectives++;
         }
 
@@ -246,18 +246,18 @@ model.objectiveLoop = function(){
     if(model.scenarioModel == undefined){setTimeout(model.objectiveLoop,1000);return;
     }
     var avatarId = model.scenarioModel["avatarId"];
- 
+
     if(avatarId == undefined || avatarId == -1){setTimeout(model.objectiveLoop,1000);return}
     objectiveModel.playerId = model.armyIndex()
     //console.log("objective loop running")
-    
-    
+
+
     //console.log(objectiveModel.playerId)
     if(objectiveModel){//if the model is defined
         var active = objectiveModel.activeObjectives;
         var activeObjectiveIds = []
         for(var i = 0;i<active.length;i++){
-            
+
             activeObjectiveIds.push(active[i].id)
             objectiveProgress(active[i],objectiveModel.playerId)
             if(objectiveModel.activeObjectives[i].playerNames == undefined){objectiveModel.activeObjectives[i].playerNames = model.scenarioModel.playerNameArray}
@@ -276,8 +276,8 @@ model.objectiveLoop = function(){
         setTimeout(model.objectiveLoop,1000);
 
     }
-    api.Panel.message("LiveGame_FloatZone", 'objectiveUpdate',objectiveModel.activeObjectives)
-    
+    api.Panel.message("players", 'objectiveUpdate' ,objectiveModel.activeObjectives)
+
 }
 
 
@@ -286,5 +286,5 @@ model.objectiveLoop = function(){
 
 //     console.log("setup Objectives called with "+ payload)
 //     objectiveModel.allObjectives = payload;
-    
+
 // };
