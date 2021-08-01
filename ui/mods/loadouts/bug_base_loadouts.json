@@ -1,0 +1,8 @@
+{
+    "loadouts":[
+       "bug_mode_loadouts/defender_loadout",
+       "bug_mode_loadouts/assault_loadout",
+       "bug_mode_loadouts/expansionist_loadout"
+    ]
+   
+}

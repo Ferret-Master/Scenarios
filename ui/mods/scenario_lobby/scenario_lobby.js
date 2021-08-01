@@ -22,6 +22,11 @@ model.annihilationModeShow = ko.observable(false);
 
 model.selectedScenario = ko.observable(-1).extend({ session: 'selectedScenario' });
 
+model.selectedLoadout = ko.observable(-1).extend({ session: 'selectedLoadout' });
+
+model.selectedScenario(-1);
+model.selectedLoadout(-1);
+
 var objectivesToActivate =  ko.observable(-1).extend({ session: 'activeObjectives' });
 
 objectivesToActivate(-1)
@@ -132,6 +137,7 @@ function fixComImage(){
     }
 
 $(".section.game_mode").after(loadHtml("coui://ui/mods/scenario_lobby/scenario_lobby.html"));
+//$(".lobby_table tbody:first tr:nth-child(2)").append(loadHtml("coui://ui/mods/scenario_lobby/scenario_lobby_panel.html"));
 
 var populateScenarios = function() {
     $.getJSON("coui:/mods/scenarios/scenario_list.json").then(function(importedScenarioList) {
@@ -166,6 +172,60 @@ var populateScenarios = function() {
                     }
                 });
         });
+    });
+}
+var lastLoadedLoadout = undefined;
+var populateLoadouts = function(loadoutName) {
+    if(loadoutName == "clear"){
+        $("#loadout-panel").remove()
+        model.selectedLoadout("none");
+        lastLoadedLoadout = undefined;
+        return
+    } 
+    if(lastLoadedLoadout == loadoutName){return}
+    else{lastLoadedLoadout = loadoutName}
+
+    $("#loadout-panel").remove()
+    $(".lobby_table tbody:first tr:nth-child(2)").append(loadHtml("coui://ui/mods/scenario_lobby/scenario_lobby_panel.html"));
+    $.getJSON("coui:/mods/loadouts/"+loadoutName+".json").then(function(importedLoadoutList) {
+        var loadoutListItemIndex = 0;
+        var loadedLoadouts = [];
+        $("#loadout-picker")[0] = '<select class="form-control loadout_picker" id="loadout-picker" onchange="model.setLoadout(this.value)"></select>'
+        var loadoutSelect = $("#loadout-picker")[0];
+
+        console.log(importedLoadoutList)
+        $.each(importedLoadoutList.loadouts, function(i, loadoutFilename) {
+            console.log("ran loadout: ",loadoutFilename)
+            $.getJSON('coui:/mods/loadouts/' + loadoutFilename + '.json')
+                .done(function(importedLoadout) {
+                    loadedLoadouts.push($("<option>", {
+                        value: loadoutFilename,
+                        text: importedLoadout.name || loadoutFilename
+                    }));
+                })
+                .fail(function() {
+                    console.error("Failed to import scenario:", loadoutFilename);
+                })
+                .always(function(importedLoadout) {
+                    if (++loadoutListItemIndex === importedLoadoutList.loadouts.length) {
+                        console.log("appending none")
+                        $(loadoutSelect).append($("<option>", {
+                            value: "none",
+                            text: "None"
+                        }));
+
+                        $.each(loadedLoadouts, function(loadoutIndex, loadout) {
+                            console.log("appending loadout")
+                            $(loadoutSelect).append(loadout);
+                        });
+
+                        loadoutSelect.dataset.bind = "selectPicker: selectedLoadout";
+                        ko.applyBindings(model, loadoutSelect);
+                    }
+                });
+                console.log(loadedLoadouts)
+        });
+        
     });
 }
 
@@ -226,7 +286,14 @@ model.setScenario = function(scenarioFilename) {
                 model.scenarioCommanderSpec = importedScenario.customCommander;
                 _.delay(initialCommanderSet, 1000);
             }
-
+   
+            if(importedScenario.loadout !== undefined) {
+                populateLoadouts(importedScenario.loadout);
+            }
+            else{
+             
+                populateLoadouts("clear")
+            }
             $("#scenarioFilenameWrapper").show();
             $("#scenarioFilename").text(scenarioFilename);
 
@@ -253,6 +320,36 @@ model.setScenario = function(scenarioFilename) {
     if (model.isGameCreator()) {
         _.delay(model.updatePlayersScenario, 500);
     }
+}
+
+model.setLoadout = function(loadoutFilename){
+    
+    if (loadoutFilename == "none") {
+        $("#loadoutFilenameWrapper").hide();
+        $("#loadoutSetupWrapper").hide();
+        $("#loadoutDescriptionWrapper").hide();
+    } else {
+        $.getJSON('coui:/mods/loadouts/' + loadoutFilename + '.json').then(function(importedloadout) {
+            // Sets all ai's commanders to the selected com upon loadout load if they are not already
+           
+           //model.selectedLoadout(importedloadout)
+
+            
+            $("#loadoutFilenameWrapper").show();
+            $("#loadoutFilename").text(loadoutFilename);
+
+          
+
+            if (importedloadout.description !== undefined) {
+                $("#loadoutDescriptionWrapper").show();
+                $("#loadoutDescription").html(importedloadout.description);
+            } else {
+                $("#loadoutDescriptionWrapper").hide();
+                $("#loadoutDescription").html('');
+            }
+        });
+
+}
 }
 
 //function here to set players com to invincible com if toggle ticked
@@ -313,7 +410,7 @@ model.updatePlayersScenario = function(){
 
 var scenarioHandler = function(msg)
 {
-    console.log(msg)
+    //console.log(msg)
     var data = msg.payload;
 
     if (!data)
@@ -333,12 +430,12 @@ var scenarioHandler = function(msg)
 
 // ignore our own messages
         case 'updateScenario':
-                console.log("updating scenario but HOST")
+                //console.log("updating scenario but HOST")
             break;
 
         default:
-            console.error('scenarios unknown host custom message');
-            console.error( JSON.stringify( data ) );
+            // console.error('scenarios unknown host custom message');
+            // console.error( JSON.stringify( data ) );
             break;
         }
     }
@@ -348,8 +445,8 @@ var scenarioHandler = function(msg)
         {
 // host is sending scenario to players
         case 'updateScenario':
-            console.log("updating scenario")
-            console.log(data.chosenScenario)
+            // console.log("updating scenario")
+            // console.log(data.chosenScenario)
             if (data.chosenScenario !== "")
             {
               model.selectedScenario(data.chosenScenario)

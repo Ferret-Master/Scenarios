@@ -1,0 +1,5 @@
+{
+    "name":"Defender loadout",
+    "description":"you start with 2 mends to allow rapid defense construction",
+    "units":[["/pa/units/land/fabrication_bot_combat_adv/fabrication_bot_combat_adv.json",2]]
+}

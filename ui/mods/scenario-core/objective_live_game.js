@@ -24,7 +24,7 @@ objective types(early):
 
 var objectivesToActivate =  ko.observable(-1).extend({ session: 'activeObjectives' });
 
-
+var chosenLoadout =  ko.observable(-1).extend({ session: 'selectedLoadout' });
 
 function removeByAttr(arr, attr, value){//courtesy of stack overflow but just what I needed
     var i = arr.length;

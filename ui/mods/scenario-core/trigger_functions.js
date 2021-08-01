@@ -182,6 +182,20 @@ model.triggerFunctions["build_at_existing_unit"] = function(triggerObject){
 
 }
 
+model.triggerFunctions["loadout"] = function(triggerObject){//spawns a unit in on the focussed planet that destroys every enemy unit on it, wipe system varient would move it to each planet.
+
+    if(chosenLoadout() !== -1 && chosenLoadout() !== undefined && chosenLoadout() !== "none" ){
+        $.getJSON('coui:/mods/loadouts/' + chosenLoadout() + '.json').then(function(importedloadout) {
+        triggerObject.newUnitName = importedloadout.units;
+        model.triggerFunctions["build_at_existing_unit"](triggerObject);
+        })
+    }
+       
+
+    return;
+
+}
+
 model.triggerFunctions["wipe_planet"] = function(triggerObject){//spawns a unit in on the focussed planet that destroys every enemy unit on it, wipe system varient would move it to each planet.
 
        

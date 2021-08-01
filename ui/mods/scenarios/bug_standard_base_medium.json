@@ -7,12 +7,35 @@
     "scenarioID": 2,
     "systemName": "Centax-3",
     "author": "Ferretmaster",
+    "loadout":"bug_base_loadouts",
     "gameType": "Multiplayer",
     "playerCount": 3,
     "aiCount": 2,
     "winCondition": "Default",
     "requireBuilders":true,
     "objectives": [
+        {
+            "name": "spawn loadout",
+            "id":8,
+            "description": "sets up loadout",
+            "hidden":true,
+            "type": "timed",
+            "time":0,
+            "startingObjective": true,
+            "successTriggers": [
+        
+               "loadout"
+            ],
+            "failureTriggers": [
+                ""
+            ],
+            "successObjectives": [
+                ""
+            ],
+            "failureObjectives": [
+                ""
+            ]
+        },
         {
             "name": "timed win",
             "id":2,
@@ -249,6 +272,17 @@
                 "special":"unit type",
                 "unitType":"UNITTYPE_Commander",
                 "newUnitName":[["/pa/units/land/fabrication_vehicle/fabrication_vehicle.json",3],["/pa/units/land/control_tower/control_tower.json",1],["/pa/units/land/energy_plant/energy_plant.json",2]]
+                
+            },
+            {
+                "name": "loadout",
+                "id": 9,
+                "delay": 0,
+                "planet":0,
+                "type": "loadout",
+                "special":"unit type",
+                "unitType":"UNITTYPE_Commander"
+             
                 
             },
 			{

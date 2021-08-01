@@ -1,0 +1,48 @@
+
+
+<td class="col_1" id = "loadout-panel" style="position:relative;">
+  <div style="height: 100%; width: 100%; overflow: auto; display:flex; flex-direction:column;">
+      <div style="position:relative; flex-shrink:0;">
+        
+            <div style="height: 100%; width: 100%; overflow: auto; display:flex; flex-direction:column;">
+               <div style="position:relative; flex-shrink:0; padding-left:50px ;text-align:center; height: 400px">
+                   <h1 style>Loadouts</h1>
+                  
+                  <div class="section loadout">
+                    <div class="form-group">
+                      <div class="section_header loadout">
+                        Loadout Selector
+                      </div>
+                  
+                      <select
+                        class="form-control loadout_picker"
+                        id="loadout-picker"
+                        onchange="model.setLoadout(this.value)"
+                      >
+                      </select>
+                  
+                      <div id="loadoutFilenameWrapper">
+                        Loaded: <span id="loadoutFilename"></span>
+                      </div>
+                  
+                      <div id="loadoutDescriptionWrapper">
+                        <div class="section_subheader loadout_description">
+                          Description
+                        </div>
+                  
+                        <div id="loadoutDescription" class="rich_text">
+                        </div>
+                      </div>
+                  
+                      <div id="loadoutImage" >
+                        <div class="section_subheader loadout_image">
+                         image goes here
+                        </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div> 
+                  </div>
+              </div>
+   
+</td>
