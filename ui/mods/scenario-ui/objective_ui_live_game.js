@@ -43,6 +43,10 @@ function secondsToTime(seconds) {
 function formatObjectiveValue(value, format) {
   var output = format;
 
+  if (format === "") {
+    return value > 1000 ? Math.round(value / 100) / 10 + "K" : value;
+  }
+
   if (format === "h") {
     return Math.floor(value / 3600) + "m";
   }
@@ -112,35 +116,27 @@ handlers.objectiveUpdate = function(payload) {
             //     $(".progress" + visibleObjectiveIndex).html(finalString);
             // } else {
 
-            if (_.includes(objective.syntax, "/") && objective.syntax.length > 1) {
-                var text = formatObjectiveValue(objective.progress,  objective.syntax.split("/")[0]);
-
-                $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress__current").text(text);
-            } else {
-                $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress__current").text(objective.progress);
-            }
-
             var percentComplete = 100 / objective.needed * objective.progress;
+
+            var text = (objective.syntax === "%")
+              ? Math.floor(percentComplete) + "%"
+              : formatObjectiveValue(objective.progress,  objective.syntax.split("/")[0]);
+
+            $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress__current").text(text);
+
             var progressBar = $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress_bar");
 
             progressBar.toggleClass('objective_progress_bar--flash', percentComplete >  90);
             progressBar.children(":first").width(percentComplete + "%");
         }
 
-        if (objective.syntax === "%") {
-            $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress__syntax").text("%");
-        } else if (_.includes(objective.syntax, "/")) {
+        if (_.includes(objective.syntax, "/")) {
             $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress__syntax").text("/");
         }
 
         if (objective.needed !== undefined && objective.syntax !== "%") {
-            if (_.includes(objective.syntax, "/") && objective.syntax.length > 1) {
-                var text = formatObjectiveValue(objective.needed, objective.syntax.split("/")[1]);
-
-                $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress__needed").text(text);
-            } else {
-                $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress__needed").text(objective.needed);
-            }
+            var text = formatObjectiveValue(objective.needed, objective.syntax.split("/")[1]);
+            $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress__needed").text(text);
         }
 
         if (objective.result !== undefined) {
