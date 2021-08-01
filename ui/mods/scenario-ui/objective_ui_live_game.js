@@ -121,8 +121,10 @@ handlers.objectiveUpdate = function(payload) {
             }
 
             var percentComplete = 100 / objective.needed * objective.progress;
+            var progressBar = $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress_bar");
 
-            $("#objectivesList li:nth-child(" + (i + 1) + ") .objective_progress_bar > *").width(percentComplete + "%");
+            progressBar.toggleClass('objective_progress_bar--flash', percentComplete >  90);
+            progressBar.children(":first").width(percentComplete + "%");
         }
 
         if (objective.syntax === "%") {
