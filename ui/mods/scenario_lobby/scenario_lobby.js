@@ -347,6 +347,14 @@ model.setLoadout = function(loadoutFilename){
                 $("#loadoutDescriptionWrapper").hide();
                 $("#loadoutDescription").html('');
             }
+
+            if (importedloadout.image !== undefined) {
+                $(".loadoutImage").show();
+                $("#loadout_image").html('<img src="'+importedloadout.image+'">');
+            } else {
+                $(".loadoutImage").hide();
+                $("#loadout_image").html('');
+            }
         });
 
 }

@@ -46,6 +46,8 @@ also keeps track of things, as it is not appropriate for objectives or triggers 
 
 */
 
+var chosenLoadout =  ko.observable(-1).extend({ session: 'selectedLoadout' });
+
 function ScenarioViewModel() {
 
     var self = this;
@@ -240,6 +242,9 @@ model.setupScenario = function(scenarioJSON){ // sets up necessary components fo
       model.scenarioModel.avatarId = -2
 
     }
+    if(scenarioJSON.loadout !== undefined){
+      model.applyLoadout();
+    }
     model.scenarioModel.author = scenarioJSON["author"]
     model.scenarioModel.scenarioName = scenarioJSON["name"]
 return;
@@ -281,4 +286,19 @@ handlers.ScenarioLandingPosition = function(payload) {
   //model.playerArmy(model.armyIndex(),payload.planet,payload.playerCom,false).then(function(result){model.scenarioModel.playerCommanderId = result[payload.playerCom]; console.log("player commander id is " + result)})
 
 
+}
+
+
+model.applyLoadout = function(){
+  if(chosenLoadout !== "None" && chosenLoadout !== undefined){
+    $.getJSON('coui:/mods/loadouts/' + chosenLoadout() + '.json').then(function(importedloadout) {
+    var replacementArrays = importedloadout.replace;
+    var unitsToLock = importedloadout.locked;
+    var startingUnits = importedloadout.units;
+    api.Panel.message("build_bar", 'replaceUnit',replacementArrays)
+    for(var i = 0;i<unitsToLock.length;i++){
+      api.Panel.message("build_bar", 'lockUnit',unitsToLock[i])
+    }
+    })
+  }
 }

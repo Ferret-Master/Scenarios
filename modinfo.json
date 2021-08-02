@@ -12,6 +12,9 @@
    "priority": 100,
    "icon": "",
    "scenes": {
+    "live_game_build_bar":[
+      "coui://ui/mods/scenario-research/live_build_bar.js"
+    ],
     "live_game": [
 
 
@@ -43,6 +46,7 @@
       "coui://ui/mods/scenario-ui/scenario_time_bar.js"
 
      ],
+     
      "new_game":[
       "coui://ui/mods/scenario_lobby/scenario_lobby.js"
      ]
