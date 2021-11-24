@@ -161,7 +161,8 @@ handlers.scenarioWave = function(payload) {
     }
 
     if (model.waveTime < payload.waveInterval) {
-        return;
+        model.waveTime = payload.waveInterval;
+        //return;
     }
 
     $("#waveTime").text(secondsToTime(payload.waveInterval - Math.round(payload.elapsedTime % payload.waveInterval)));

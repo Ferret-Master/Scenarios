@@ -16,7 +16,7 @@ model.executeAsPlayer = function(playerIndex, command, commandVars, timeout){
     if(playerIndex !== "" && playerIndex !== undefined && playerIndex !== model.armyIndex()){switchPlayer = true}
 
     if(switchPlayer == true){
-        console.log("attempting to switch player")                    
+                         
         api.Panel.message("devmode","switchControl",playerIndex);
 
         var tempFunc = function(commandVars){command(commandVars);}
@@ -26,7 +26,7 @@ model.executeAsPlayer = function(playerIndex, command, commandVars, timeout){
             
         }
     else{
-    console.log("running command as player")    
+   
     command(commandVars);
     
     

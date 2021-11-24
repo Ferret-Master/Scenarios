@@ -3,7 +3,7 @@
 
 
 bug_standard = {
-    
+    //this needs to be expanded with each unit type to facilitate upgrades
    waveObject:undefined,
    hivePointsAndTypes:[],
    creepPoints:[],
@@ -100,7 +100,7 @@ spawnStartingBugBase:function (baseValue){
         
         bug_standard.updateDontSpawnPoints()
         var validPoints = points;
-        console.log("validPoints: ",validPoints)
+    
         validPoints.forEach(function(point){
      
         model.spawnExact(bug_standard.bugPlayer,bug_standard.creep, bug_standard.planetId,point,[0,0,0])
@@ -391,7 +391,7 @@ model.objectiveCheckFunctions["bug_mode_base"] = function (waveObject){
         
         //wave is spawned
         bug_standard.updateHiveAndCreepPoints()
-        console.log("attempting to expand base")
+       
         _.delay(function(){
 
         var buildingMultiplier = (bug_standard.planetRadius*bug_standard.planetRadius*12)/(1080000)//multiplies spawn attempts by surface differencce
@@ -413,7 +413,7 @@ model.objectiveCheckFunctions["bug_mode_base"] = function (waveObject){
 
     }
     if((model.scenarioModel.RealTimeSinceLanding)%waveObject.waveInterval >0 && (model.scenarioModel.RealTimeSinceLanding%waveObject.waveInterval <2 && waveObject.timesCalled >0) && waveObject.lastCalled !==(model.scenarioModel.RealTimeSinceLanding)){
-
+        //this needs a more reliable fix so super waves are not spawned
         bug_standard.updateHiveAndCreepPoints();
       
         _.delay(function(){
@@ -423,7 +423,7 @@ model.objectiveCheckFunctions["bug_mode_base"] = function (waveObject){
       
 
     }
-
+    waveObject.lastCalled = model.scenarioModel.RealTimeSinceLanding;
     if(bug_standard.dontSpawnPoints.length<1 && bug_standard.startComplete == false){bug_standard.updateDontSpawnPoints();return 10}
     if(bug_standard.startComplete == false && model.scenarioModel.RealTimeSinceLanding <5){bug_standard.updateDontSpawnPoints()}
     if(bug_standard.creepPoints.length<1 && bug_standard.startComplete == false && model.scenarioModel.RealTimeSinceLanding > 5){bug_standard.updateDontSpawnPoints();bug_standard.spawnStartingBugBase(3);return 10}

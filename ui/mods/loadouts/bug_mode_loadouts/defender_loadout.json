@@ -1,7 +1,6 @@
 {
     "name":"Defender loadout",
-    "description":"<center>A more defensive loadout</center><br><li>Lob replaced with unique mine launcher <br><li>Buffed single laser turret <br><li>Galata can target ground <br><li>Artillery fires directly at the enemy <br><li>Basic economy much tankier <br><li>You lose access to vehicles</li>",
-    "units":[["/pa/units/land/fabrication_bot_combat_adv/fabrication_bot_combat_adv.json",2]],
+    "description":"<center>A more defensive loadout</center><br><li>Lob replaced with unique mine launcher <br><li>Single Laser turret has double the fire rate <br><li>Galata can target ground but do 80% damage to it <br><li>Artillery fires directly at the enemy and is 25% cheaper <br><li>Basic economy has 4 times the hp. <br><li>You lose access to vehicles</li>",
     "locked":["/pa/units/land/vehicle_factory/vehicle_factory.json","/pa/units/land/vehicle_factory_adv/vehicle_factory_adv.json"],
     "replace":[
         [
@@ -12,7 +11,8 @@
         "/pa/units/land/laser_defense_single/laser_defense_single.json",
         "/pa/units/land/metal_extractor/metal_extractor.json",
         "/pa/units/land/energy_plant/energy_plant.json",
-        "/pa/units/land/land_barrier/land_barrier.json"
+        "/pa/units/land/land_barrier/land_barrier.json",
+        "/pa/units/land/metal_extractor_adv/metal_extractor_adv.json"
         ],
         [
         "/pa/units/loadouts/defender/galata/galata.json",
@@ -22,5 +22,6 @@
         "/pa/units/loadouts/defender/single_laser/single_laser.json",
         "/pa/units/loadouts/defender/t1_metal/t1_metal.json",
         "/pa/units/loadouts/defender/t1_power/t1_power.json",
-        "/pa/units/loadouts/defender/wall/wall.json"]]
+        "/pa/units/loadouts/defender/wall/wall.json",
+        "/pa/units/loadouts/defender/t2_metal/t2_metal.json"]]
 }

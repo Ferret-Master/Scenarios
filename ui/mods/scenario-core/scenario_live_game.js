@@ -301,4 +301,17 @@ model.applyLoadout = function(){
     }
     })
   }
+  if(chosenLoadout == "assault_loadout"){//trigger custom behaviour for the assault loadout
+    //adds custom visible objective to active objectives that spawns rewards at a given unit type every time the metal destroyed reaches a certain amount.
+    // each existing reward structure also passivley gains the player income to spawn these waves
+
+    var assaultObjective = {
+      rewardStructure1:[],
+      rewardStructure2:[],
+      amountNeededPerReward:4000,
+      structure1Passive:0,
+      structure2Passive:0,
+    }
+    model.makeObjectiveActive(assaultObjective)
+  }
 }

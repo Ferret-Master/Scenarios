@@ -297,7 +297,7 @@ model.setScenario = function(scenarioFilename) {
             $("#scenarioFilenameWrapper").show();
             $("#scenarioFilename").text(scenarioFilename);
 
-            if (importedScenario.setup !== undefined) {
+            if (importedScenario.setup !== undefined && model.isGameCreator()) {
                 $("#scenarioSetupWrapper").show();
                 $("#scenarioSetup").html(importedScenario.setup);
             } else {
@@ -305,7 +305,7 @@ model.setScenario = function(scenarioFilename) {
                 $("#scenarioSetup").html('');
             }
 
-            if (importedScenario.description !== undefined) {
+            if (importedScenario.description !== undefined && model.isGameCreator()) {
                 $("#scenarioDescriptionWrapper").show();
                 $("#scenarioDescription").html(importedScenario.description);
             } else {

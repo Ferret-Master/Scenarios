@@ -430,6 +430,25 @@ model.triggerFunctions["spawn_effect"] = function(triggerObject){
 
 }
 
+model.triggerFunctions["spawn_effect_vanilla"] = function(triggerObject){
+    
+    var location = {};
+    location.planet = triggerObject.planet;
+    location.pos = triggerObject.pos;
+    location.scale = triggerObject.scale;
+    if(location.scale == undefined){location.scale =1}
+    
+    api.puppet.createEffectVanilla(triggerObject.effectName,location,triggerObject.duration,triggerObject.snap);
+
+    return;
+
+
+
+
+   
+
+}
+
 model.triggerFunctions["prevent_unit_selection"] = function(triggerObject){//prevents the selection of a particular unit
     model.scenarioModel.noSelection.push(triggerObject.unitJSON)
     return;

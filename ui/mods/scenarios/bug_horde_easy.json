@@ -8,6 +8,7 @@
     "systemName": "Centax-3",
     "author": "Ferretmaster",
     "gameType": "Multiplayer",
+    "loadout":"bug_base_loadouts",
     "playerCount": 3,
     "aiCount": 2,
     "winCondition": "Default",
@@ -96,7 +97,8 @@
                     "value":1,
                     "units":[
                          ["/pa/units/land/bug_warrior/bug_warrior.json",250,1250],
-                         ["/pa/units/land/bug_warrior_big/bug_warrior_big.json",200,100000]
+                         ["/pa/units/land/bug_warrior_big/bug_warrior_big.json",200,1000],
+                         ["/pa/units/land/bug_titan/bug_titan.json",1000,100000]
                          ]
 
                 }

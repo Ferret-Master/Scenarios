@@ -1,6 +1,6 @@
  {
    "context": "server",
-   "identifier": "com.pa.ferretmaster.scenarios-local",
+   "identifier": "com.pa.ferretmaster.scenarios-hosting",
    "display_name": "scenarios(ALPHA) local",
    "description": "A mod that allows for the creation of custom scenarios, includes scenarios such as annihilation mode and bug horde mode",
    "author": "ferretmaster",
@@ -55,7 +55,7 @@
       "com.pa.raevn.rfloatframe"
     ],
     "dependencies": [
-      "com.pa.ferretmaster.scenario-server-local"
+      "com.pa.ferretmaster.scenario-server-hosting"
     ],
 
    "category": ["ui","titans", "in-game","server"]
