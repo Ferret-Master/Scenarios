@@ -61,6 +61,10 @@ model.replaceUnit = function(originalNames, replacementNames){
             }
         }
     }
+
+    for(var i = 0; i< originalNames.length;i++){
+        api.Panel.message(api.Panel.parentId,'replaceHotkey',[originalNames[i],replacementNames[i]]);
+    }
    
 
 }
