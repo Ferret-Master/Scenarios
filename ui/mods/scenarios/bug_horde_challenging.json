@@ -18,10 +18,10 @@
             "name": "timed win",
             "id":3,
             "visible":true,
-            "description": "survive for 30 mins",
+            "description": "survive for 35 mins",
             "result":"win the game",
-            "needed":1800,
-            "time":1800,
+            "needed":2100,
+            "time":2100,
             "syntax":"/",
             "type":"survive_time",
             "progress":0,
@@ -97,7 +97,7 @@
                     "value":1,
                     "units":[
                          ["/pa/units/land/bug_warrior/bug_warrior.json",200,1000],
-                         ["/pa/units/land/bug_warrior_big/bug_warrior_big.json",200,1000],
+                         ["/pa/units/land/bug_warrior_big/bug_warrior_big.json",200,800],
                          ["/pa/units/land/bug_titan/bug_titan.json",1000,100000]
                          ]
 
@@ -110,7 +110,7 @@
                 "runners":{
                     "value":1,
                     "units":[
-                         ["/pa/units/land/bug_runner/runner.json",10,500000]
+                         ["/pa/units/land/bug_runner/runner.json",8,500000]
                       
                          ]
 
@@ -207,7 +207,7 @@
         },
         {
             "name": "kill_counter_1",
-            "id":3,
+            "id":7,
             "visible":true,
             "description": "Tons Of Biomass Destroyed",
             "result":"Get rewarded with a kaiju for each control tower",
