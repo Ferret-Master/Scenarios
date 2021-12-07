@@ -281,10 +281,12 @@ spawnHiveWave:function(hivePointsAndTypes, difficulty,waveObject){
         model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_grunt/bug_grunt.json", bug_standard.planetId,point[1],[0,0,0])
         model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_grunt/bug_grunt.json", bug_standard.planetId,point[1],[0,0,0])
         model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_grunt/bug_grunt.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_grunt/bug_grunt.json", bug_standard.planetId,point[1],[0,0,0])
         }
        }
        if(point[0] == "/pa/units/bug_base/basic_hive/basic_hive.json"){//spawn scouts
         if(!nestOnly == true){
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_scout/bug_scout.json", bug_standard.planetId,point[1],[0,0,0])
         model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_scout/bug_scout.json", bug_standard.planetId,point[1],[0,0,0])
         model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_scout/bug_scout.json", bug_standard.planetId,point[1],[0,0,0])
         }
@@ -296,11 +298,13 @@ spawnHiveWave:function(hivePointsAndTypes, difficulty,waveObject){
         model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_warrior/bug_warrior.json", bug_standard.planetId,point[1],[0,0,0])
         model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_grunt_big/bug_grunt_big.json", bug_standard.planetId,point[1],[0,0,0])
         model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_grunt_big/bug_grunt_big.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_grunt_big/bug_grunt_big.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_grunt_big/bug_grunt_big.json", bug_standard.planetId,point[1],[0,0,0])
         }
        
        }
        if(point[0] == "/pa/units/bug_base/medium_hive/medium_hive.json"){//spawn scorcher
-        if(!nestOnly == true && medium_hive_amount>3 && model.scenarioModel.RealTimeSinceLanding > 300){
+        if(!nestOnly == true && medium_hive_amount>2 && model.scenarioModel.RealTimeSinceLanding > 300){
         model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_scorcher/bug_scorcher.json", bug_standard.planetId,point[1],[0,0,0])
         }
        }
