@@ -120,7 +120,7 @@ spawnStartingBugBase:function (baseValue){
 spawnCreep:function(attempts){
     
     
-
+    console.log("attempting to spawn creep")
     generateValidRandomSpawns(this.planetRadius,attempts,this.planetId,bug_standard.creep,true).then(function(points){
     // console.log(points,this.creepPoints)
     // console.log(validPoints)
@@ -140,6 +140,7 @@ spawnCreep:function(attempts){
 },
 
 spawnBasicHives:function(attempts, ratios){
+    console.log("attempting to spawn hives")
     generateValidRandomSpawns(this.planetRadius,attempts,this.planetId,bug_standard.basicHive).then(function(points){
     var validPoints = pointsInArrayBands(points, bug_standard.creepPoints,0,100,true)
     if(validPoints.length < 1){return}
@@ -402,6 +403,7 @@ model.objectiveCheckFunctions["bug_mode_base"] = function (waveObject){
         
         buildingMultiplier = waveObject.spreadRate //+ buildingMultiplier/2;//natrually more players on larger maps so until I factor playerocunt to scaling this is here
         //after wave is spawned the base grows, currently this scaled inversly with map radius so needs some form of scaling for that, spawn method is fundementally worse the bigger the planet gets
+        console.log("attempting to expand base")
         bug_standard.spawnCreep(25*buildingMultiplier)
         bug_standard.spawnBasicHives(6*buildingMultiplier)
         bug_standard.upgradeHive()

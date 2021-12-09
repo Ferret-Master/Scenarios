@@ -3,6 +3,8 @@ This will contain all the functions that each trigger type uses.
 
 currently it is all under triggerFunctions but may be split by purpose later.
 
+model.spawnExact(6,"/pa/units/land/world_wipe/world_wipe.json",0,[300,200,100],[0,0,0]) = kill all players(for orbital turtles)
+
 */
 
 
