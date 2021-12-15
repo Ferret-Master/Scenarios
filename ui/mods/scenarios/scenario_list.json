@@ -6,6 +6,10 @@
 	"bug_horde_medium",
 	"bug_horde_challenging",
     "bug_horde_expert",
+	"bug_standard_base_expert",
+    "bug_standard_base_challenging",
+    "bug_standard_base_medium",
+    "bug_standard_base_easy",
 	"annihilation_mode"
 
  ]
