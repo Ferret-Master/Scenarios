@@ -1,5 +1,5 @@
 {
-    "name": "Bug waves challenging",
+    "name": "Bug Hive Mode Easy",
     "description": "An medium variation of bug wave defense. You start with units and a control tower(zapper) that prevents bugs from spawning near you. exponentially larger waves of bugs will assault you over time.",
     "setup":"There needs to be an ai,the last one in the lobby will act as the bugs. this ai needs to have the scenario ai commander(DO NOT SELECT) selected for it. This mode should only be played on single planet maps",
     "aiComRequired":true,
@@ -7,16 +7,38 @@
     "scenarioID": 2,
     "systemName": "Centax-3",
     "author": "Ferretmaster",
+    "loadout":"bug_base_loadouts",
     "gameType": "Multiplayer",
     "playerCount": 3,
-
     "aiCount": 2,
     "winCondition": "Default",
     "requireBuilders":true,
     "objectives": [
         {
+            "name": "spawn loadout",
+            "id":8,
+            "description": "sets up loadout",
+            "hidden":true,
+            "type": "timed",
+            "time":0,
+            "startingObjective": true,
+            "successTriggers": [
+        
+               "loadout"
+            ],
+            "failureTriggers": [
+                ""
+            ],
+            "successObjectives": [
+                ""
+            ],
+            "failureObjectives": [
+                ""
+            ]
+        },
+        {
             "name": "timed win",
-            "id":6,
+            "id":2,
             "visible":true,
             "description": "survive for 35 mins",
             "result":"win the game",
@@ -51,8 +73,9 @@
             "effectContext":"groups",
             "group":true,
             "show_area":false,
-            "type":"spawn_waves",
+            "type":"bug_mode_base",
             "planet":0,
+            "playerIndex":0,
             "dont_spawn_near_unit_type":"UNITTYPE_Shield",
             "accelerate_by_dont_spawn_type":true,
             "accelerate_value":0.05,
@@ -61,12 +84,14 @@
             "spawn_near_unit_types":[],
             "spawn_near_radius":800,
             "lastCalled":0,
-            "timesCalled":-60,
-            "progress":-16,
+            "timesCalled":-100,
+            "progress":0,
             "maxDifficulty":100000,
             "scalingNumber":0.25,
             "scalingRatio":0.14,
-            "waveInterval":80,
+            "waveInterval":70,
+            "baseInterval":80,
+            "spreadRate":1,
       
             "unitValues":[
 
@@ -97,7 +122,7 @@
                     "value":1,
                     "units":[
                          ["/pa/units/land/bug_warrior/bug_warrior.json",200,1000],
-                         ["/pa/units/land/bug_warrior_big/bug_warrior_big.json",200,10000000]
+                         ["/pa/units/land/bug_warrior_big/bug_warrior_big.json",200,100000]
                          ]
 
                 }
@@ -109,7 +134,7 @@
                 "runners":{
                     "value":1,
                     "units":[
-                         ["/pa/units/land/bug_runner/runner.json",8,500000]
+                         ["/pa/units/land/bug_runner/runner.json",10,500000]
                       
                          ]
 
@@ -133,80 +158,8 @@
             ]
         },
         {
-            "name": "spawn_waves_2",
-            "id":2,
-            "visible":false,
-            "description": "Spawns waves of bugs periodically.",
-            "playerType":"ai",
-            "spawnEffect":"pingRed",
-            "spawnEffectDuration":3,
-            "effectContext":"groups",
-            "show_area":false,
-            "type":"spawn_waves",
-            "maxTime":1800,
-            "group":false,
-            "planet":0,
-            "dont_spawn_near_unit_type":"UNITTYPE_Shield",
-            "dont_spawn_radius":250,
-            "spreadGroupSize":4,
-            "spawn_near_unit_types":[],
-            "spawn_near_radius":500,
-            "lastCalled":0,
-            "timesCalled":0,
-            "progress":-4,
-            "spawn_close_radius":500,
-            "maxDifficulty":100000,
-            "scalingNumber":0.12,
-            "scalingRatio":0.12,
-            "waveInterval":40,
-      
-            "unitValues":[{
-
-                "waveChance":1.0,
-                "spitters":{
-                    "value":3,
-                    "units":[
-                        ["/pa/units/land/bug_scout/bug_scout.json",1,30],
-                        ["/pa/units/land/bug_scorcher/bug_scorcher.json",80,400],
-                        ["/pa/units/land/bug_basilisk/bug_basilisk.json",500,300000]
-                    ]
-                },
-                "melee":{
-                    "value":3,
-                    "units":[
-                         ["/pa/units/land/bug_grunt/bug_grunt.json",1,25],
-                         ["/pa/units/land/bug_grunt_big/bug_grunt_big.json",20,400]
-                         ]
-
-                },
-                "warrior":{
-                    "value":2,
-                    "units":[
-                         ["/pa/units/land/bug_warrior/bug_warrior.json",50,500],
-                         ["/pa/units/land/bug_warrior_big/bug_warrior_big.json",300,100000]
-                         ]
-                }
-               
-
-            }],
-            "startingObjective": true,
-            "finishDuration": null,
-            "successTriggers": [
-                ""
-            ],
-            "failureTriggers": [
-                ""
-            ],
-            "successObjectives": [
-                ""
-            ],
-            "failureObjectives": [
-                ""
-            ]
-        },
-        {
             "name": "kill_counter_1",
-            "id":7,
+            "id":3,
             "visible":true,
             "description": "Tons Of Biomass Destroyed",
             "result":"Get rewarded with a kaiju for each control tower",
@@ -292,7 +245,7 @@
             "startingObjective": true,
             "successTriggers": [
         
-               "starting zappers","starting units"
+               "starting zappers"
             ],
             "failureTriggers": [
                 ""
@@ -318,18 +271,18 @@
                 "type": "build_at_existing_unit",
                 "special":"unit type",
                 "unitType":"UNITTYPE_Commander",
-                "newUnitName":[["/pa/units/land/control_tower/control_tower.json",1]]
+                "newUnitName":[["/pa/units/land/control_tower/control_tower.json",1],["/pa/units/land/energy_plant/energy_plant.json",2]]
                 
             },
             {
-                "name": "starting units",
-                "id": 3,
+                "name": "loadout",
+                "id": 9,
                 "delay": 0,
                 "planet":0,
-                "type": "build_at_existing_unit",
+                "type": "loadout",
                 "special":"unit type",
-                "unitType":"UNITTYPE_Commander",
-                "newUnitName":[["/pa/units/land/fabrication_vehicle/fabrication_vehicle.json",3],["/pa/units/land/attack_vehicle/attack_vehicle.json",20],["/pa/units/land/energy_plant/energy_plant.json",2]]
+                "unitType":"UNITTYPE_Commander"
+             
                 
             },
 			{

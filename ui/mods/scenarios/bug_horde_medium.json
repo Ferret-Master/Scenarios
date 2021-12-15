@@ -1,11 +1,12 @@
 {
-    "name": "Bug Mode Normal",
+    "name": "Bug Waves Normal",
     "description": "An medium variation of bug wave defense. You start with units and a control tower(zapper) that prevents bugs from spawning near you. exponentially larger waves of bugs will assault you over time.",
     "setup":"There needs to be an ai,the last one in the lobby will act as the bugs. this ai needs to have the scenario ai commander(DO NOT SELECT) selected for it. This mode should only be played on single planet maps",
     "aiComRequired":true,
     "aiCommander":"/pa/units/commanders/scenario_ai_invincible_com/scenario_ai_invincible_com.json",
     "scenarioID": 2,
     "systemName": "Centax-3",
+
     "author": "Ferretmaster",
     "gameType": "Multiplayer",
     "playerCount": 3,
@@ -15,7 +16,9 @@
     "objectives": [
         {
             "name": "timed win",
-            "id":6,
+
+            "id":7,
+
             "visible":true,
             "description": "survive for 30 mins",
             "result":"win the game",
@@ -96,7 +99,8 @@
                     "value":1,
                     "units":[
                          ["/pa/units/land/bug_warrior/bug_warrior.json",200,1000],
-                         ["/pa/units/land/bug_warrior_big/bug_warrior_big.json",200,100000]
+                         ["/pa/units/land/bug_warrior_big/bug_warrior_big.json",200,10000000]
+                    
                          ]
 
                 }
@@ -317,7 +321,7 @@
                 "type": "build_at_existing_unit",
                 "special":"unit type",
                 "unitType":"UNITTYPE_Commander",
-                "newUnitName":[["/pa/units/land/zap/bugzapper.json",1]]
+                "newUnitName":[["/pa/units/land/control_tower/control_tower.json",1]]
                 
             },
             {

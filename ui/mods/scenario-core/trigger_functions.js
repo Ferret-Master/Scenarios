@@ -3,6 +3,8 @@ This will contain all the functions that each trigger type uses.
 
 currently it is all under triggerFunctions but may be split by purpose later.
 
+model.spawnExact(6,"/pa/units/land/world_wipe/world_wipe.json",0,[300,200,100],[0,0,0]) = kill all players(for orbital turtles)
+
 */
 
 
@@ -103,8 +105,18 @@ model.triggerFunctions["preset_unit"] = function(triggerObject){//different vers
 "special":"playerCom"}
 */
 model.triggerFunctions["build_at_existing_unit"] = function(triggerObject){
-     console.log("builda at existing unit running")
+     console.log("build at existing unit running")
     // console.log(model.scenarioModel.landTime)
+
+
+    players = model.players()
+    for(var i = 0;i<players.length;i++){
+        if(players[i].id == model.armyId && players[i].slots.length>1){
+           if(model.playerName() !== players[i].slots[0]){return}
+        } 
+    }
+
+
     var avatarId = model.scenarioModel["avatarId"];
  
     if(avatarId == undefined || avatarId == -1){_.delay(model.triggerFunctions["build_at_existing_unit"],100,triggerObject);return}
@@ -143,7 +155,9 @@ model.triggerFunctions["build_at_existing_unit"] = function(triggerObject){
             console.log(result)
             for(unitIndex in result){
                 unit = result[unitIndex]
-                if(unit !== undefined){if(unit == undefined){continue} locations.push(unit.pos)}
+                if(unit !== undefined){if(unit == undefined){continue} if(unit.built_frac == undefined){
+                    locations.push(unit.pos)
+                }}
               
             }
             console.log(locations)
@@ -167,6 +181,20 @@ model.triggerFunctions["build_at_existing_unit"] = function(triggerObject){
     //api.build_preset.exactPreFab(avatarId,preset,playerIndex)
 
 
+
+}
+
+model.triggerFunctions["loadout"] = function(triggerObject){//spawns a unit in on the focussed planet that destroys every enemy unit on it, wipe system varient would move it to each planet.
+
+    if(chosenLoadout() !== -1 && chosenLoadout() !== undefined && chosenLoadout() !== "none" ){
+        $.getJSON('coui:/mods/loadouts/' + chosenLoadout() + '.json').then(function(importedloadout) {
+        triggerObject.newUnitName = importedloadout.units;
+        model.triggerFunctions["build_at_existing_unit"](triggerObject);
+        })
+    }
+       
+
+    return;
 
 }
 
@@ -394,6 +422,25 @@ model.triggerFunctions["spawn_effect"] = function(triggerObject){
     if(location.scale == undefined){location.scale =1}
     
     api.puppet.createEffect(triggerObject.effectName,location,triggerObject.duration,triggerObject.snap);
+
+    return;
+
+
+
+
+   
+
+}
+
+model.triggerFunctions["spawn_effect_vanilla"] = function(triggerObject){
+    
+    var location = {};
+    location.planet = triggerObject.planet;
+    location.pos = triggerObject.pos;
+    location.scale = triggerObject.scale;
+    if(location.scale == undefined){location.scale =1}
+    
+    api.puppet.createEffectVanilla(triggerObject.effectName,location,triggerObject.duration,triggerObject.snap);
 
     return;
 

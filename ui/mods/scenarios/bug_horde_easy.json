@@ -1,5 +1,5 @@
 {
-    "name": "Bug Mode Easy",
+    "name": "Bug waves easy",
     "description": "An easy variation of bug wave defense. You start with units and a control tower(zapper) that prevents bugs from spawning near you. exponentially larger waves of bugs will assault you over time.",
     "setup":"There needs to be an ai,the last one in the lobby will act as the bugs. this ai needs to have the scenario ai commander(DO NOT SELECT) selected for it. This mode should only be played on single planet maps",
     "aiComRequired":true,
@@ -8,6 +8,7 @@
     "systemName": "Centax-3",
     "author": "Ferretmaster",
     "gameType": "Multiplayer",
+  
     "playerCount": 3,
     "aiCount": 2,
     "winCondition": "Default",
@@ -21,7 +22,7 @@
             "result":"win the game",
             "needed":1800,
             "time":1800,
-            "syntax":"/",
+            "syntax":"mm:ss/m",
             "type":"survive_time",
             "progress":0,
             "startingObjective": true,
@@ -66,12 +67,12 @@
             "scalingNumber":0.12,
             "scalingRatio":0.1,
             "waveInterval":80,
-      
+
             "unitValues":[
 
-                
+
             {
-                
+
                 "waveChance":0.6,
 
                 "spitters":{
@@ -80,7 +81,7 @@
                         ["/pa/units/land/bug_scout/bug_scout.json",2,30],
                         ["/pa/units/land/bug_scorcher/bug_scorcher.json",80,600],
                         ["/pa/units/land/bug_basilisk/bug_basilisk.json",300,300000]
-                    
+
                     ]
                 },
                 "melee":{
@@ -96,20 +97,20 @@
                     "value":1,
                     "units":[
                          ["/pa/units/land/bug_warrior/bug_warrior.json",250,1250],
-                         ["/pa/units/land/bug_warrior_big/bug_warrior_big.json",200,100000]
+                         ["/pa/units/land/bug_warrior_big/bug_warrior_big.json",200,10000000]
                          ]
 
                 }
             },
             {
-                
+
                 "waveChance":0.4,
 
                 "runners":{
                     "value":1,
                     "units":[
                          ["/pa/units/land/bug_runner/runner.json",25,50000000]
-                      
+
                          ]
 
                 }
@@ -158,7 +159,7 @@
             "scalingNumber":0.05,
             "scalingRatio":0.05,
             "waveInterval":40,
-      
+
             "unitValues":[{
 
                 "waveChance":1.0,
@@ -185,7 +186,7 @@
                          ["/pa/units/land/bug_warrior_big/bug_warrior_big.json",300,100000]
                          ]
                 }
-               
+
 
             }],
             "startingObjective": true,
@@ -290,7 +291,7 @@
             "time":0,
             "startingObjective": true,
             "successTriggers": [
-        
+
                "starting zappers","starting units"
             ],
             "failureTriggers": [
@@ -304,11 +305,11 @@
             ]
         }
     ],
-    
-      
+
+
     "triggers": [
- 
-        
+
+
             {
                 "name": "starting zappers",
                 "id": 3,
@@ -317,8 +318,8 @@
                 "type": "build_at_existing_unit",
                 "special":"unit type",
                 "unitType":"UNITTYPE_Commander",
-                "newUnitName":[["/pa/units/land/zap/bugzapper.json",1]]
-                
+                "newUnitName":[["/pa/units/land/control_tower/control_tower.json",1]]
+
             },
             {
                 "name": "starting units",
@@ -329,7 +330,7 @@
                 "special":"unit type",
                 "unitType":"UNITTYPE_Commander",
                 "newUnitName":[["/pa/units/land/fabrication_vehicle/fabrication_vehicle.json",3],["/pa/units/land/attack_vehicle/attack_vehicle.json",20],["/pa/units/land/energy_plant/energy_plant.json",2]]
-                
+
             },
 			{
                 "name": "reward1",
@@ -340,7 +341,7 @@
                 "special":"unit type",
                 "unitType":"UNITTYPE_Shield",
                 "newUnitName":[["/pa/units/sea/hover_ship/hover_ship.json",1]]
-                
+
             },
             {
                 "name": "reward2",
@@ -351,7 +352,7 @@
                 "special":"unit type",
                 "unitType":"UNITTYPE_Shield",
                 "newUnitName":[["/pa/units/sea/hover_ship/hover_ship.json",3]]
-                
+
             },
             {
                 "name": "win",
@@ -359,8 +360,8 @@
                 "delay": 0,
                 "planet":0,
                 "type": "kill_all_invincible_ai"
-               
+
             }
-        
+
     ]
 }

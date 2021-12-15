@@ -1,20 +1,23 @@
  {
    "context": "server",
    "identifier": "com.pa.ferretmaster.scenarios",
-   "display_name": "scenarios(ALPHA)",
+   "display_name": "Bug Mode",
    "description": "A mod that allows for the creation of custom scenarios, includes scenarios such as annihilation mode and bug horde mode",
    "author": "ferretmaster",
-   "version": "1.02",
+   "version": "1.03",
    "build": "115626",
-   "date": "2021-5-6",
+   "date": "2021-10-12",
    "signature": "not yet implemented",
    "forum": "https://forums.planetaryannihilation.com/threads/server-scenarios.73550/",
    "priority": 100,
    "icon": "",
    "scenes": {
+    "live_game_build_bar":[
+      "coui://ui/mods/scenario-research/live_build_bar.js"
+    ],
     "live_game": [
-            
-            
+
+            "coui://ui/mods/scenario-research/research_live_game.js",
             "coui://ui/mods/scenario-core/objective_functions.js",
             "coui://ui/mods/scenario-core/objective_live_game.js",
             "coui://ui/mods/custom-api/build_preset.js",
@@ -25,11 +28,15 @@
             "coui://ui/mods/scenario-core/scenario_live_game.js",
             "coui://ui/mods/scenario-core/trigger_functions.js",
             "coui://ui/mods/scenario-core/triggers_live_game.js",
-            "coui://ui/mods/scenario-core/handlers_live_game.js"
-          
-            
-            
+            "coui://ui/mods/scenario-core/handlers_live_game.js",
+            "coui://ui/mods/scenario-bugmode/bugmode-functions.js",
+            "coui://ui/mods/scenario-bugmode/bugmode-wars.js",
+            "coui://ui/mods/scenario-bugmode/bugmode-standard.js"
         ],
+      "live_game_players": [
+        "coui://ui/mods/scenario-ui/objective_ui_live_game.css",
+        "coui://ui/mods/scenario-ui/objective_ui_live_game.js"
+      ],
       "global_mod_list": [
         "coui://ui/mods/scenario-core/global.js"
       ],
@@ -39,16 +46,10 @@
       "coui://ui/mods/scenario-ui/scenario_time_bar.js"
 
      ],
+     
      "new_game":[
       "coui://ui/mods/scenario_lobby/scenario_lobby.js"
-     ],
-    
-      "LiveGame_FloatZone": [
-        "coui://ui/mods/scenario-ui/objective_ui_live_game.js"
-  
-      ]
-        
-        
+     ]
     },
     "companions":[
       "com.pa.raevn.rfloatframe"
@@ -56,8 +57,6 @@
     "dependencies": [
       "com.pa.ferretmaster.scenario-server"
     ],
-    
+
    "category": ["ui","titans", "in-game","server"]
  }
-
- 

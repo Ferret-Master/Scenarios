@@ -382,6 +382,7 @@ model.objectiveCheckFunctions["spawn_waves"] = function (waveObject){
             
             else{
                 army.push(model.playerArmy(playerIndex,waveObject.planet,"",true,waveObject.dont_spawn_near_unit_type))
+                army.push(model.playerArmy(playerIndex,waveObject.planet,"",true,"UNITTYPE_Commander"))
             }
 
         }
@@ -398,7 +399,12 @@ model.objectiveCheckFunctions["spawn_waves"] = function (waveObject){
      
         for(unitIndex in result[armyIndex]){
             unit = result[armyIndex][unitIndex]
-            if(unit !== undefined){if(unit == undefined){continue} locations.push(unit.pos)}
+            if(unit !== undefined){
+                if(unit == undefined){continue} 
+                if(unit.built_frac == undefined){
+                    locations.push(unit.pos)
+                }
+               }
           
         }
 
@@ -426,6 +432,7 @@ model.objectiveCheckFunctions["spawn_waves"] = function (waveObject){
                     if (distance < maxDist) {closeEnough = true}
                 }
                 }
+                if(locations.length <1){closeEnough = true}
                 if(tooClose == true || closeEnough == false){ return randomPoint()}
                 else{return posArray}
             }
@@ -525,7 +532,7 @@ model.objectiveCheckFunctions["spawn_waves"] = function (waveObject){
                         }
                         else{groupCounter += 1}
                     }
-                    console.log("unit to be spawned from array ",unitName)
+                   // console.log("unit to be spawned from array ",unitName)
                     model.spawnExact(controllingPlayer,unitName,waveObject.planet,groupSpawnPoint,[0,0,0]);
 
                 })

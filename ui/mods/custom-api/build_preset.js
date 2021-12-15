@@ -246,7 +246,7 @@ init_build_preset(window.api);
 })
  */
 model.spawnExact = function(army,spec,planet,location,orientation){
-
+    
     var createJson = {
 
         army: model.players()[army].id,
@@ -255,7 +255,6 @@ model.spawnExact = function(army,spec,planet,location,orientation){
           location: location,
           orientation: orientation
     }
-   
     model.send_message('create_unit', createJson)
 
 }

@@ -1,5 +1,5 @@
 {
-    "name": "Bug waves challenging",
+    "name": "Bug Mode Normal",
     "description": "An medium variation of bug wave defense. You start with units and a control tower(zapper) that prevents bugs from spawning near you. exponentially larger waves of bugs will assault you over time.",
     "setup":"There needs to be an ai,the last one in the lobby will act as the bugs. this ai needs to have the scenario ai commander(DO NOT SELECT) selected for it. This mode should only be played on single planet maps",
     "aiComRequired":true,
@@ -9,19 +9,18 @@
     "author": "Ferretmaster",
     "gameType": "Multiplayer",
     "playerCount": 3,
-
     "aiCount": 2,
     "winCondition": "Default",
     "requireBuilders":true,
     "objectives": [
         {
             "name": "timed win",
-            "id":6,
+            "id":3,
             "visible":true,
-            "description": "survive for 35 mins",
+            "description": "survive for 30 mins",
             "result":"win the game",
-            "needed":2100,
-            "time":2100,
+            "needed":1800,
+            "time":1800,
             "syntax":"/",
             "type":"survive_time",
             "progress":0,
@@ -41,7 +40,7 @@
             ]
         },
         {
-            "name": "spawn_waves",
+            "name": "bug_wars",
             "id":1,
             "visible":false,
             "description": "Spawns waves of bugs periodically.",
@@ -51,15 +50,15 @@
             "effectContext":"groups",
             "group":true,
             "show_area":false,
-            "type":"spawn_waves",
+            "type":"bug_wars",
             "planet":0,
             "dont_spawn_near_unit_type":"UNITTYPE_Shield",
             "accelerate_by_dont_spawn_type":true,
             "accelerate_value":0.05,
-            "dont_spawn_radius":250,
-            "spawn_close_radius":500,
+            "dont_spawn_radius":200,
+            "spawn_close_radius":400,
             "spawn_near_unit_types":[],
-            "spawn_near_radius":800,
+            "spawn_near_radius":400,
             "lastCalled":0,
             "timesCalled":-60,
             "progress":-16,
@@ -97,7 +96,7 @@
                     "value":1,
                     "units":[
                          ["/pa/units/land/bug_warrior/bug_warrior.json",200,1000],
-                         ["/pa/units/land/bug_warrior_big/bug_warrior_big.json",200,10000000]
+                         ["/pa/units/land/bug_warrior_big/bug_warrior_big.json",200,100000]
                          ]
 
                 }
@@ -109,7 +108,7 @@
                 "runners":{
                     "value":1,
                     "units":[
-                         ["/pa/units/land/bug_runner/runner.json",8,500000]
+                         ["/pa/units/land/bug_runner/runner.json",10,500000]
                       
                          ]
 
@@ -142,19 +141,19 @@
             "spawnEffectDuration":3,
             "effectContext":"groups",
             "show_area":false,
-            "type":"spawn_waves",
+            "type":"bug_wars",
             "maxTime":1800,
             "group":false,
             "planet":0,
             "dont_spawn_near_unit_type":"UNITTYPE_Shield",
-            "dont_spawn_radius":250,
+            "dont_spawn_radius":200,
             "spreadGroupSize":4,
             "spawn_near_unit_types":[],
-            "spawn_near_radius":500,
+            "spawn_near_radius":400,
             "lastCalled":0,
             "timesCalled":0,
             "progress":-4,
-            "spawn_close_radius":500,
+            "spawn_close_radius":400,
             "maxDifficulty":100000,
             "scalingNumber":0.12,
             "scalingRatio":0.12,
@@ -206,7 +205,7 @@
         },
         {
             "name": "kill_counter_1",
-            "id":7,
+            "id":3,
             "visible":true,
             "description": "Tons Of Biomass Destroyed",
             "result":"Get rewarded with a kaiju for each control tower",
@@ -318,7 +317,7 @@
                 "type": "build_at_existing_unit",
                 "special":"unit type",
                 "unitType":"UNITTYPE_Commander",
-                "newUnitName":[["/pa/units/land/control_tower/control_tower.json",1]]
+                "newUnitName":[["/pa/units/land/zap/bugzapper.json",1]]
                 
             },
             {
