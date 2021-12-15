@@ -1,9 +1,6 @@
 {
  "scenarios":[
-    "bug_standard_base_expert",
-    "bug_standard_base_challenging",
-    "bug_standard_base_medium",
-    "bug_standard_base_easy",
+  
     "bug_wars",
 	"bug_horde_easy",
 	"bug_horde_medium",
@@ -15,3 +12,4 @@
 
 
 }
+

@@ -333,9 +333,10 @@ spawnHiveWave:function(hivePointsAndTypes, difficulty,waveObject){
     else{
          bug_standard.spawnNest(medium_hive_amount*5+(1*5),40,bug_standard.smallEgg)
     }
-      _.delay(function(){
-            waveObject.waveInterval +=1;
-        },10000)
+    //commented out incase it is causing the overspawn bug
+    //   _.delay(function(){
+    //         waveObject.waveInterval +=1;
+    //     },10000)
 },
 getBugPlayer:function(){
     players = model.players()

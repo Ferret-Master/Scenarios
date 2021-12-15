@@ -55,7 +55,7 @@
       "com.pa.raevn.rfloatframe"
     ],
     "dependencies": [
-      "com.pa.ferretmaster.scenario-server-hosting"
+      "com.pa.ferretmaster.scenario-server"
     ],
 
    "category": ["ui","titans", "in-game","server"]

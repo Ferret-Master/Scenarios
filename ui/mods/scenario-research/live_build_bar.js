@@ -5,6 +5,10 @@
  */
 
 
+ model.oldUnits = []
+
+ model.newUnits = []
+
 var lockedUnits = []
 
 model.lockUnit = function(unitName){//units are locked by adding _disabled to the end of the id
@@ -39,9 +43,7 @@ model.unlockUnit = function(unitName){//units are unlocked by removing the _disa
 
 //takes in array of units to replace and what to replace them with
 model.replaceUnit = function(originalNames, replacementNames){
-    console.log(originalNames)
-    console.log(" new line ")
-    console.log(replacementNames)
+  
     var tabs = model.buildSet().tabs()
     for(var i = 0;i<tabs.length;i++){
         var tab = tabs[i].items();
@@ -50,9 +52,9 @@ model.replaceUnit = function(originalNames, replacementNames){
             for(var k = 0;k<row.length;k++){
                 var slot = row[k];
                 for(var nameIndex = 0;nameIndex < originalNames.length;nameIndex++){
-                    console.log(slot, " | " ,originalNames[nameIndex])
+                 
                     if(slot.id == originalNames[nameIndex]){
-                        console.log("replacing ",slot.id ," with ",replacementNames[nameIndex])
+                        
                         model.buildSet().tabs()[i].items()[j][k].id =  replacementNames[nameIndex]
                         // var buildbarReplacement = replacementNames[nameIndex].replace('.json','_icon_buildbar.png')
                         // model.buildSet.tabs()[i].items()[j][k].buildIcon(buildbarReplacement)
@@ -64,6 +66,7 @@ model.replaceUnit = function(originalNames, replacementNames){
 
     for(var i = 0; i< originalNames.length;i++){
         api.Panel.message(api.Panel.parentId,'replaceHotkey',[originalNames[i],replacementNames[i]]);
+        model.setupReplaceCount([originalNames[i],replacementNames[i]])
     }
    
 
@@ -84,3 +87,95 @@ handlers.replaceUnit = function(payload){
     console.log("replacing units"+payload)
     model.replaceUnit(payload[0],payload[1])
 }
+
+var tempfunction = function(selection)//shadowing the selection function to fake unit counts
+{
+ 
+    var curSpecs = model.buildSet().selectedSpecs();
+    var removeSpecs = _.clone(curSpecs);
+    var addSpecs = {};
+
+    // Calculate the spec delta
+    _.forIn(selection.spec_ids, function(count, id)
+    {
+        if (removeSpecs[id] || curSpecs[id])
+        {
+            delete removeSpecs[id];
+            return;
+        }
+
+        if (model.buildSet().buildLists[id])
+            addSpecs[id] = model.buildSet().buildLists[id];
+    });
+
+    var addEmpty = _.isEmpty(addSpecs);
+    var removeEmpty = _.isEmpty(removeSpecs);
+    if (!addEmpty || !removeEmpty)
+    {
+        if (!removeEmpty)
+        {
+            _.forIn(removeSpecs, function(build, id)
+            {
+                delete curSpecs[id];
+            });
+        }
+        if (!addEmpty)
+        {
+            _.assign(curSpecs, addSpecs);
+        }
+        model.buildSet().selectedSpecs.notifySubscribers(curSpecs);
+    }
+
+    // Update counts
+    var buildItems = model.buildSet().buildItems();
+    var clears = _.transform(buildItems, function(result, item, id) { result[id] = item.count(); });
+    _.forIn(selection.build_orders, function(count, id)
+    {
+        if (count)
+            delete clears[id];
+        if (buildItems[id])
+            buildItems[id].count(count);
+    });
+    _.forIn(clears, function(value, id)
+    {
+        if (value)
+            buildItems[id].count(0);
+    });
+
+    for(key in selection.build_orders){// if a new unit is queued is adds the count to the old unit to update the ui
+        var unit = key
+     
+        for(var i = 0;i<model.newUnits.length;i++){
+           
+            if(unit == model.newUnits[i]){
+          
+                var newUnitCount = selection.build_orders[model.newUnits[i]]
+                
+
+                var oldUnit =  model.oldUnits[i];
+            
+       
+                model.buildSet().buildItems()[oldUnit].count(newUnitCount)
+               
+            }
+        }
+
+    }
+};
+
+model.setupReplaceCount = function(unitPair){
+    for(var i = 0;i<model.oldUnits.length;i++){
+        if(unitPair[0] == model.oldUnits[i]){
+            model.newUnits[i] = unitPair[1];
+            return;
+        }
+    }
+    model.oldUnits.push(unitPair[0])
+    model.newUnits.push(unitPair[1])
+}
+
+var delayedAssign = function(){
+    model.buildSet().parseSelection = tempfunction;
+}
+
+_.delay(delayedAssign,5000)
