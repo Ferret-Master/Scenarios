@@ -1,5 +1,7 @@
 {
+
     "name": "Bug Mode Challenging",
+
     "description": "An medium variation of bug wave defense. You start with units and a control tower(zapper) that prevents bugs from spawning near you. exponentially larger waves of bugs will assault you over time.",
     "setup":"There needs to be an ai,the last one in the lobby will act as the bugs. this ai needs to have the scenario ai commander(DO NOT SELECT) selected for it. This mode should only be played on single planet maps",
     "aiComRequired":true,
@@ -9,6 +11,7 @@
     "author": "Ferretmaster",
     "gameType": "Multiplayer",
     "playerCount": 3,
+
     "aiCount": 2,
     "winCondition": "Default",
     "requireBuilders":true,
@@ -17,10 +20,10 @@
             "name": "timed win",
             "id":7,
             "visible":true,
-            "description": "survive for 30 mins",
+            "description": "survive for 35 mins",
             "result":"win the game",
-            "needed":1800,
-            "time":1800,
+            "needed":2100,
+            "time":2100,
             "syntax":"/",
             "type":"survive_time",
             "progress":0,
@@ -96,7 +99,7 @@
                     "value":1,
                     "units":[
                          ["/pa/units/land/bug_warrior/bug_warrior.json",200,1000],
-                         ["/pa/units/land/bug_warrior_big/bug_warrior_big.json",200,100000]
+                         ["/pa/units/land/bug_warrior_big/bug_warrior_big.json",200,10000000]
                          ]
 
                 }
@@ -108,7 +111,7 @@
                 "runners":{
                     "value":1,
                     "units":[
-                         ["/pa/units/land/bug_runner/runner.json",10,500000]
+                         ["/pa/units/land/bug_runner/runner.json",8,500000]
                       
                          ]
 
@@ -142,7 +145,7 @@
             "effectContext":"groups",
             "show_area":false,
             "type":"spawn_waves",
-            "maxTime":900,
+            "maxTime":1800,
             "group":false,
             "planet":0,
             "dont_spawn_near_unit_type":"UNITTYPE_Shield",
@@ -205,7 +208,7 @@
         },
         {
             "name": "kill_counter_1",
-            "id":3,
+            "id":7,
             "visible":true,
             "description": "Tons Of Biomass Destroyed",
             "result":"Get rewarded with a kaiju for each control tower",
@@ -317,7 +320,7 @@
                 "type": "build_at_existing_unit",
                 "special":"unit type",
                 "unitType":"UNITTYPE_Commander",
-                "newUnitName":[["/pa/units/land/zap/bugzapper.json",1]]
+                "newUnitName":[["/pa/units/land/control_tower/control_tower.json",1]]
                 
             },
             {

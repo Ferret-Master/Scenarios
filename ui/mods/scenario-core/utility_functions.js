@@ -16,7 +16,7 @@ model.executeAsPlayer = function(playerIndex, command, commandVars, timeout){
     if(playerIndex !== "" && playerIndex !== undefined && playerIndex !== model.armyIndex()){switchPlayer = true}
 
     if(switchPlayer == true){
-        console.log("attempting to switch player")                    
+                         
         api.Panel.message("devmode","switchControl",playerIndex);
 
         var tempFunc = function(commandVars){command(commandVars);}
@@ -26,7 +26,7 @@ model.executeAsPlayer = function(playerIndex, command, commandVars, timeout){
             
         }
     else{
-    console.log("running command as player")    
+   
     command(commandVars);
     
     
@@ -435,6 +435,12 @@ model.getCommanderData = function(){
     generateRandomPoints = function(r,numPoints){
         var pointsArray= [];
         for(var i = 0; i<numPoints; i++){pointsArray.push(rand_sphere_point(r))}
+        return pointsArray;
+    }
+    generateValidRandomSpawns = function(r,numPoints,planet){
+        var pointsArray= [];
+        for(var i = 0; i<numPoints; i++){pointsArray.push(rand_sphere_point(r))}
+        return validSpawns(pointsArray,planet);
 
     }
     //takes in an array of points and returns a sub array of all points close enough to the given point
@@ -446,3 +452,4 @@ model.getCommanderData = function(){
         }
 
     }
+   

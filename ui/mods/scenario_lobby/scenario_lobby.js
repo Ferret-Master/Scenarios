@@ -18,16 +18,21 @@ currently does not work if player doesnt modify com selection, won't be an issue
 
 
 
-model.annihilationModeShow = ko.observable(false)    ;
+model.annihilationModeShow = ko.observable(false);
 
 model.selectedScenario = ko.observable(-1).extend({ session: 'selectedScenario' });
+
+model.selectedLoadout = ko.observable(-1).extend({ session: 'selectedLoadout' });
+
+model.selectedScenario(-1);
+model.selectedLoadout(-1);
 
 var objectivesToActivate =  ko.observable(-1).extend({ session: 'activeObjectives' });
 
 objectivesToActivate(-1)
 
 model.scenarioCommanderSpec = "";
-                              
+
 model.selectedCommanderSpec = ko.observable("/pa/units/commanders/raptor_rallus/raptor_rallus.json").extend({ session: 'selectedCommanderSpec' });
 
 model.selectedCommander = ko.computed(function () {
@@ -43,7 +48,7 @@ model.selectedCommander = ko.computed(function () {
             var commander = model.preferredCommander();
             if (_.has(commander, 'UnitSpec')){
                 if(model.annihilationModeShow() == true){
-                    
+
                       model.send_message('update_commander',
                      {
                          commander: model.scenarioCommanderSpec
@@ -60,7 +65,7 @@ model.selectedCommander = ko.computed(function () {
                         commander: model.scenarioCommanderSpec
                     });
                      _.delay(fixComImage,200)
-                     
+
                      model.selectedCommanderSpec(model.preferredCommander());
                 }
                 return commander;
@@ -71,7 +76,7 @@ model.selectedCommander = ko.computed(function () {
 
     model.selectedCommanderSpec(model.commanders()[index]);
     if(model.commanders()[index] == "/pa/units/commanders/scenario_invincible_com/scenario_invincible_com.json" || model.commanders()[index] == "/pa/units/commanders/scenario_ai_invincible_com/scenario_ai_invincible_com.json"){model.selectedCommanderSpec("/pa/units/commanders/raptor_rallus/raptor_rallus.json");return "/pa/units/commanders/raptor_rallus/raptor_rallus.json"}
- 
+
     return model.commanders()[index];
 });
 
@@ -88,7 +93,7 @@ model.setCommander = function (index) {
     {
         commander: model.selectedCommander()
     });
-    
+
 }
     else{
         console.log("setting special com")
@@ -104,7 +109,7 @@ function fixComImage(){
 
     for(i in model.armies()){
     for(j in model.armies()[i].slots()){
-        
+
         if(model.armies()[i].slots()[j].containsThisPlayer()){
             console.log("fixing commander")
             model.armies()[i].slots()[j].commander(model.selectedCommander())
@@ -131,92 +136,106 @@ function fixComImage(){
         model.commanderPrep()
     }
 
-$('div.section.game_mode').append(
+$(".section.game_mode").after(loadHtml("coui://ui/mods/scenario_lobby/scenario_lobby.html"));
+//$(".lobby_table tbody:first tr:nth-child(2)").append(loadHtml("coui://ui/mods/scenario_lobby/scenario_lobby_panel.html"));
 
-    '<style> .show {display: block;} #scenarioName:hover{font-weight:bold}#scenarioName{border-style: solid solid solid solid} </style>'+
-   '<div class="dropdown">'+
- ' <button onclick="dropdownScenario()" class="dropbtn">Scenarios</button>'+
-  '<div id="dropdownScenario" class="dropdown-content">'+
-   ' <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">'+
-  
-    '</div>'+
-    '</div> '
-    
-    );
+var populateScenarios = function() {
+    $.getJSON("coui:/mods/scenarios/scenario_list.json").then(function(importedScenarioList) {
+        var scenarioListItemIndex = 0;
+        var loadedScenarios = [];
+        var scenarioSelect = $("#scenario-picker")[0];
 
-$('div.section.game_mode').append(
+        $.each(importedScenarioList.scenarios, function(i, scenarioFilename) {
+            $.getJSON('coui:/mods/scenarios/' + scenarioFilename + '.json')
+                .done(function(importedScenario) {
+                    loadedScenarios.push($("<option>", {
+                        value: scenarioFilename,
+                        text: importedScenario.name || scenarioFilename
+                    }));
+                })
+                .fail(function() {
+                    console.error("Failed to import scenario:", scenarioFilename);
+                })
+                .always(function(importedScenario) {
+                    if (++scenarioListItemIndex === importedScenarioList.scenarios.length) {
+                        $(scenarioSelect).append($("<option>", {
+                            value: "none",
+                            text: "None"
+                        }));
 
-        '<style> .show {display: block;} #scenarioName:hover{font-weight:bold}#scenarioName{border-style: solid solid solid solid} </style>'+
-       '<div class="dropdown">'+
-     '<button onclick="dropdownDescription()" class="dropbtn">Scenario Description</button>'+
-      '<div id="dropdownDescription" class="dropdown-content">'+
-        '</div>'+
-        '</div> '
+                        $.each(loadedScenarios, function(scenarioIndex, scenario) {
+                            $(scenarioSelect).append(scenario);
+                        });
+
+                        scenarioSelect.dataset.bind = "enable: canChangeSettings, selectPicker: selectedScenario";
+                        ko.applyBindings(model, scenarioSelect);
+                    }
+                });
+        });
+    });
+}
+var lastLoadedLoadout = undefined;
+var populateLoadouts = function(loadoutName) {
+    if(loadoutName == "clear"){
+        $("#loadout-panel").remove()
+        model.selectedLoadout("none");
+        lastLoadedLoadout = undefined;
+        return
+    } 
+    if(lastLoadedLoadout == loadoutName){return}
+    else{lastLoadedLoadout = loadoutName}
+
+    $("#loadout-panel").remove()
+    $(".lobby_table tbody:first tr:nth-child(2)").append(loadHtml("coui://ui/mods/scenario_lobby/scenario_lobby_panel.html"));
+    $.getJSON("coui:/mods/loadouts/"+loadoutName+".json").then(function(importedLoadoutList) {
+        var loadoutListItemIndex = 0;
+        var loadedLoadouts = [];
+        $("#loadout-picker")[0] = '<select class="form-control loadout_picker" id="loadout-picker" onchange="model.setLoadout(this.value)"></select>'
+        var loadoutSelect = $("#loadout-picker")[0];
+
+        console.log(importedLoadoutList)
+        $.each(importedLoadoutList.loadouts, function(i, loadoutFilename) {
+            console.log("ran loadout: ",loadoutFilename)
+            $.getJSON('coui:/mods/loadouts/' + loadoutFilename + '.json')
+                .done(function(importedLoadout) {
+                    loadedLoadouts.push($("<option>", {
+                        value: loadoutFilename,
+                        text: importedLoadout.name || loadoutFilename
+                    }));
+                })
+                .fail(function() {
+                    console.error("Failed to import scenario:", loadoutFilename);
+                })
+                .always(function(importedLoadout) {
+                    if (++loadoutListItemIndex === importedLoadoutList.loadouts.length) {
+                        console.log("appending none")
+                        $(loadoutSelect).append($("<option>", {
+                            value: "none",
+                            text: "None"
+                        }));
+
+                        $.each(loadedLoadouts, function(loadoutIndex, loadout) {
+                            console.log("appending loadout")
+                            $(loadoutSelect).append(loadout);
+                        });
+
+                        loadoutSelect.dataset.bind = "selectPicker: selectedLoadout";
+                        ko.applyBindings(model, loadoutSelect);
+                    }
+                });
+                console.log(loadedLoadouts)
+        });
         
-        );
-
-        
-$('div.section.game_mode').append(
-
-    '<style> .show {display: block;} #scenarioName:hover{font-weight:bold}#scenarioName{border-style: solid solid solid solid} </style>'+
-    '<div class="dropdown">'+
-    ' <button onclick="dropdownSetup()" class="dropbtn">Scenario Setup</button>'+
-    '<div id="dropdownSetup" class="dropdown-content">'+
-    '</div>'+
-    '</div> '
-    
-    );        
-
-
-
-
-
-var gameBar = document.getElementById("game-bar")
-var scenarioName =  document.createElement('div')
-scenarioName.id = "scenario_name"
-scenarioName.innerText = "No scenario has been loaded"
-
-gameBar.appendChild(scenarioName)
-
-
-
-
-
-var populateScenarios = function(){
-
-    $.getJSON('coui:/mods/scenarios/scenario_list.json').then(function(imported) {
-        
-        try{
-    imported.scenarios.push("None")
-
-    var scenarioCount = imported.scenarios.length;
-    var scenarioList = document.getElementById("dropdownScenario");
-
-    for(var i = 0;i<scenarioCount;i++){
-        var scenarioName = imported.scenarios[i]
-        var appendString = document.createElement('div')
-        var scenarioHtml = "<div data-bind='disabled: !model.isGameCreator()'>"+"<div id = 'scenarioName' onclick='model.setScenario("+'"'+scenarioName+'"'+")'>"+scenarioName+"</div></div>"
-        appendString.innerHTML = (scenarioHtml)
-        scenarioList.appendChild(appendString)
-
-    }   
-       
-     }
-     catch(err){console.log(err)}
- 
-     });
-
+    });
 }
 
-populateScenarios()
+populateScenarios();
 
 function initialCommanderSet(){
-
     model.send_message('update_commander',
     {
         commander: model.scenarioCommanderSpec
     }); _.delay(fixComImage,200)
-
 }
 
 function setAICommanders(commander){
@@ -226,7 +245,7 @@ function setAICommanders(commander){
         for(slotIndex in army.slots()){
             var slot = army.slots()[slotIndex]
             if(slot.ai() == true && slot.commander() !== commander){
-                
+
             model.send_message('set_ai_commander',
             {
                 id: slot.playerId(),
@@ -238,86 +257,107 @@ function setAICommanders(commander){
 
 }
 
-model.setScenario = function(scenarioName){//there may be issues with people being unreadied, I know that altering the ai's commander does that, so need to check things like that before re setting them
-    if(scenarioName == "None"){document.getElementById("scenario_name").innerHTML = "No scenario has been loaded"}
-    else{
-        document.getElementById("scenario_name").innerHTML= " Scenario "+scenarioName +" is active <br>(please read the setup/description, sandbox is needed)"
-      
-        $.getJSON('coui:/mods/scenarios/'+scenarioName+'.json').then(function(imported) {
-            if(imported.aiComRequired == true){//sets all ai's commanders to the selected com upon scenario load if they are not already
-                setAICommanders(imported.aiCommander)
-                model.scenarioAiCommander = imported.aiCommander
-            }
-            else{
+//there may be issues with people being unreadied, I know that altering the ai's commander does that, so need to check things like that before re setting them
+model.setScenario = function(scenarioFilename) {
+    if (scenarioFilename == "none") {
+        $("#scenarioFilenameWrapper").hide();
+        $("#scenarioSetupWrapper").hide();
+        $("#scenarioDescriptionWrapper").hide();
+    } else {
+        $.getJSON('coui:/mods/scenarios/' + scenarioFilename + '.json').then(function(importedScenario) {
+            // Sets all ai's commanders to the selected com upon scenario load if they are not already
+            if (importedScenario.aiComRequired == true) {
+                setAICommanders(importedScenario.aiCommander)
+                model.scenarioAiCommander = importedScenario.aiCommander
+            } else {
                 model.scenarioAiCommander = undefined
             }
-            if(imported.requireSandbox == true){model.sandbox(true)}
-            if(imported.annihilation == true){model.annihilationModeToggle(); model.annihilationModeShow(true)}
-            if(imported.customCommander !== undefined){model.scenarioCommanderSpec = imported.customCommander; _.delay(initialCommanderSet,1000)}
 
-            var scenarioDescription = document.getElementById("dropdownDescription");
-            var scenarioSetup = document.getElementById("dropdownSetup");
-            
-            if(imported.setup !== undefined){
-                scenarioSetup.innerText = imported.setup
+            if (importedScenario.requireSandbox == true) {
+                model.sandbox(true)
+            }
+
+            if (importedScenario.annihilation == true) {
+                model.annihilationModeToggle();
+                model.annihilationModeShow(true)
+            }
+
+            if (importedScenario.customCommander !== undefined) {
+                model.scenarioCommanderSpec = importedScenario.customCommander;
+                _.delay(initialCommanderSet, 1000);
+            }
+   
+            if(importedScenario.loadout !== undefined) {
+                populateLoadouts(importedScenario.loadout);
             }
             else{
-                scenarioSetup.innerText = 'No setup listed'
+             
+                populateLoadouts("clear")
+            }
+            $("#scenarioFilenameWrapper").show();
+            $("#scenarioFilename").text(scenarioFilename);
+
+            if (importedScenario.setup !== undefined && model.isGameCreator()) {
+                $("#scenarioSetupWrapper").show();
+                $("#scenarioSetup").html(importedScenario.setup);
+            } else {
+                $("#scenarioSetupWrapper").hide();
+                $("#scenarioSetup").html('');
             }
 
-            if(imported.description !== undefined){
-                scenarioDescription.innerText = imported.description
+            if (importedScenario.description !== undefined && model.isGameCreator()) {
+                $("#scenarioDescriptionWrapper").show();
+                $("#scenarioDescription").html(importedScenario.description);
+            } else {
+                $("#scenarioDescriptionWrapper").hide();
+                $("#scenarioDescription").html('');
             }
-            else{
-                scenarioDescription.innerText = 'No description listed'
-            }
-
-
-            scenarioDescription.innerText = imported.description
-        })
+        });
     }
-    model.selectedScenario(scenarioName)
-    if(model.isGameCreator()){_.delay(model.updatePlayersScenario,500)}
 
+    model.selectedScenario(scenarioFilename);
+
+    if (model.isGameCreator()) {
+        _.delay(model.updatePlayersScenario, 500);
+    }
 }
 
-function dropdownScenario() {
-
-  if(document.getElementById("dropdownScenario").style.display !== "none"){ document.getElementById("dropdownScenario").style.display = "none"}
-  else{if(!model.isGameCreator()){return} document.getElementById("dropdownScenario").style.display = ""}
-  
-}
-function dropdownDescription() {
-
-    if(document.getElementById("dropdownDescription").style.display !== "none"){ document.getElementById("dropdownDescription").style.display = "none"}
-    else{document.getElementById("dropdownDescription").style.display = ""}
+model.setLoadout = function(loadoutFilename){
     
-  }
-  function dropdownSetup() {
-
-    if(document.getElementById("dropdownSetup").style.display !== "none"){ document.getElementById("dropdownSetup").style.display = "none"}
-    else{document.getElementById("dropdownSetup").style.display = ""}
-    
-  }
-dropdownScenario()
-dropdownDescription()
-dropdownSetup()
-
-
-function filterFunction() {
-  var input, filter, ul, li, a, i;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  div = document.getElementById("myDropdown");
-  a = div.getElementsByTagName("div");
-  for (i = 0; i < a.length; i++) {
-    txtValue = a[i].textContent || a[i].innerText;
-    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-      a[i].style.display = "";
+    if (loadoutFilename == "none") {
+        $("#loadoutFilenameWrapper").hide();
+        $("#loadoutSetupWrapper").hide();
+        $("#loadoutDescriptionWrapper").hide();
     } else {
-      a[i].style.display = "none";
-    }
-  }
+        $.getJSON('coui:/mods/loadouts/' + loadoutFilename + '.json').then(function(importedloadout) {
+            // Sets all ai's commanders to the selected com upon loadout load if they are not already
+           
+           //model.selectedLoadout(importedloadout)
+
+            
+            $("#loadoutFilenameWrapper").show();
+            $("#loadoutFilename").text(loadoutFilename);
+
+          
+
+            if (importedloadout.description !== undefined) {
+                $("#loadoutDescriptionWrapper").show();
+                $("#loadoutDescription").html(importedloadout.description);
+            } else {
+                $("#loadoutDescriptionWrapper").hide();
+                $("#loadoutDescription").html('');
+            }
+
+            if (importedloadout.image !== undefined) {
+                $(".loadoutImage").show();
+                $("#loadout_image").html('<img src="'+importedloadout.image+'">');
+            } else {
+                $(".loadoutImage").hide();
+                $("#loadout_image").html('');
+            }
+        });
+
+}
 }
 
 //function here to set players com to invincible com if toggle ticked
@@ -332,9 +372,9 @@ model.commanderPrep =function(){
             commander: model.scenarioCommanderSpec
         });
         _.delay(fixComImage,200)
-       
+
     }
-    
+
     else{
 
         model.send_message('update_commander',
@@ -342,7 +382,7 @@ model.commanderPrep =function(){
             commander: model.selectedCommander()
 
             })
-            
+
         }
 
 
@@ -378,7 +418,7 @@ model.updatePlayersScenario = function(){
 
 var scenarioHandler = function(msg)
 {
-    console.log(msg)
+    //console.log(msg)
     var data = msg.payload;
 
     if (!data)
@@ -398,12 +438,12 @@ var scenarioHandler = function(msg)
 
 // ignore our own messages
         case 'updateScenario':
-                console.log("updating scenario but HOST")
+                //console.log("updating scenario but HOST")
             break;
 
         default:
-            console.error('scenarios unknown host custom message');
-            console.error( JSON.stringify( data ) );
+            // console.error('scenarios unknown host custom message');
+            // console.error( JSON.stringify( data ) );
             break;
         }
     }
@@ -413,8 +453,8 @@ var scenarioHandler = function(msg)
         {
 // host is sending scenario to players
         case 'updateScenario':
-            console.log("updating scenario")
-            console.log(data.chosenScenario)
+            // console.log("updating scenario")
+            // console.log(data.chosenScenario)
             if (data.chosenScenario !== "")
             {
               model.selectedScenario(data.chosenScenario)
@@ -422,7 +462,7 @@ var scenarioHandler = function(msg)
             }
 
             break;
-            
+
         }
     }
 };
@@ -436,6 +476,8 @@ model.registerJsonMessageHandler( scenariosIdentifier, scenarioHandler );
 function loopedScenarioUpdate(){
     _.delay(model.updatePlayersScenario,500)
     _.delay(model.updateAi,500)
+    if (model.isGameCreator() && model.slotsAreEmpty() == false && model.selectedScenario() !== -1 && model.sandbox() == false){model.toggleSandbox()}
+
     _.delay(loopedScenarioUpdate, 10000)
 
 }

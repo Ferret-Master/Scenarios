@@ -1,0 +1,10 @@
+{
+    "name":"Assault loadout",
+    "description":"you start with a small army to quickly take the fight to the bugs",
+    "rewardStructure1":"",
+    "rewardStructure2":"",
+    "amountNeededPerReward":4000,
+    "structure1Passive":"",
+    "structure2Passive":"",
+    "units":[["/pa/units/land/tank_light_laser/tank_light_laser.json",8],["/pa/units/land/tank_armor/tank_armor.json",2],["/pa/units/land/attack_vehicle/attack_vehicle.json",6]]
+}

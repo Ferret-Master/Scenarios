@@ -38,3 +38,7 @@ function loadTestScenario(){console.log("no scenario loaded")}
 if(chosenScenario().length <2 || chosenScenario() == undefined || chosenScenario() == -1){loadTestScenario()}
 
 else{_.delay(loadScenario,100,chosenScenario())}
+
+function loadBasetest(){
+    loadScenario("bug_standard_base")
+}

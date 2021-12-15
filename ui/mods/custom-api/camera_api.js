@@ -13,3 +13,5 @@ most of these functions would have an optional jump back feature that brings you
 - execute preset(would go through a defined camera control preset for doing scenes/going through the planet. By itself this could be good for guides)
 
 */
+
+function notEmpty(){}

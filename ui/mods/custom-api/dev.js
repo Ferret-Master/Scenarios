@@ -6,3 +6,5 @@ things like live swapping/editing and resetting things.
 
 
 */
+
+function notEmpty(){}

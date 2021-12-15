@@ -127,6 +127,60 @@ createEffect: function(effectName, location,duration, snap){
 	api.getWorldView(0).unPuppet(puppetid);
 },
 
+createEffectVanilla: function(effectName, location,duration, snap){
+	console.log(effectName,location,duration,snap)
+	if(snap == true){location.snap = true}
+	if(duration == undefined || duration == 0){duration = 21600}//set to 6 hours if unspecified
+	var config = [{}];
+	config[0].fx_offsets =  
+		
+			{
+			  "type": "energy",
+			  "filename": effectName,
+			  "offset": [
+				0,
+				0,
+				-2
+			  ],
+			  "orientation": [
+				0,
+				0,
+				0
+			  ]
+			}
+		  
+	
+	
+
+	config[0].location = location;
+	config[0].material = { //unsure if needed for just effect
+	"shader":"pa_unit_ghost",
+	"constants":{
+	   "GhostColor":[0,0,0,0] ,
+	   "BuildInfo":[
+		  0,
+		  0,
+		  0,
+		  0
+	   ]
+	},
+	"textures":{
+	   "Diffuse":"/pa/effects/textures/diffuse.papa"
+	}}
+
+	return api.getWorldView(0).puppet(config, true).then((function(result){
+		setTimeout(function() { api.puppet.killPuppet(result[0].id); }, duration*1000);
+		return result[0].id;
+	}));
+
+
+
+},
+
+killPuppet:function (puppetid){
+console.log("attempting to kill puppet "+puppetid)
+api.getWorldView(0).unPuppet(puppetid);
+},
 // var mutePings = false; may need to be re added
 
 	
