@@ -16,7 +16,7 @@
     "objectives": [
         {
             "name": "timed win",
-            "id":3,
+            "id":6,
             "visible":true,
             "description": "survive for 35 mins",
             "result":"win the game",
