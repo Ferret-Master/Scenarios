@@ -10,7 +10,7 @@
    "signature": "not yet implemented",
    "forum": "https://forums.planetaryannihilation.com/threads/server-scenarios.73550/",
    "priority": 100,
-   "icon": "https://github.com/Ferret-Master/Scenarios/blob/Release/bug_image.png?raw=true",
+   "icon": "https://github.com/Ferret-Master/Scenarios/blob/release/bug_image.png?raw=true",
    "scenes": {
     "live_game_build_bar":[
       "coui://ui/mods/scenario-research/live_build_bar.js"
