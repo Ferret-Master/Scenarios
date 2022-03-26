@@ -198,6 +198,7 @@ model.triggerFunctions["loadout"] = function(triggerObject){//spawns a unit in o
 
 }
 
+
 model.triggerFunctions["wipe_planet"] = function(triggerObject){//spawns a unit in on the focussed planet that destroys every enemy unit on it, wipe system varient would move it to each planet.
 
        

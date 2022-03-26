@@ -101,6 +101,7 @@ spawnStartingBugBase:function (baseValue){
         bug_standard.updateDontSpawnPoints()
         var validPoints = points;
     
+
         validPoints.forEach(function(point){
      
         model.spawnExact(bug_standard.bugPlayer,bug_standard.creep, bug_standard.planetId,point,[0,0,0])

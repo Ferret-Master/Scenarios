@@ -66,6 +66,12 @@ function formatObjectiveValue(value, format) {
   if (_.includes(format, "ss")) {
     output = output.replace("ss", Math.floor(value % 60).toString().padStart(2, "0"));
   }
+model.objectiveDescriptions =[];
+model.objectiveProgresses = [];
+model.objectiveNeeded = [];
+model.objectiveResults = [];
+model.testValue = ko.observable(0);
+model.waveTime = null;
 
   return output;
 }
@@ -175,3 +181,29 @@ $.get("coui://ui/mods/scenario-ui/objective_ui_live_game.html", function (html) 
     // Activates knockout.js
     ko.applyBindings(model, $html[0]);
 });
+        var displayedMinutesSinceLanding = Math.floor(payload/60)
+        var displayedSecondsSinceLanding = Math.round(payload%60);
+        if(displayedSecondsSinceLanding < 10){displayedSecondsSinceLanding =  "0"+displayedSecondsSinceLanding}
+       
+        $(".landingTime").html(displayedMinutesSinceLanding+":"+displayedSecondsSinceLanding)
+        
+    
+
+    handlers.scenarioWave = function(payload) {
+     
+        
+        var displayedSecondsSinceLanding = payload.waveInterval - Math.round(payload.elapsedTime%payload.waveInterval);
+
+        //only affects wave mode and commented out sections not working with changing wave times
+        
+        // if(model.waveTime == null){model.waveTime = payload.waveInterval}
+        // if(model.waveTime>payload.waveInterval){model.waveTime = payload.waveInterval}
+        console.log(model.waveTime)
+        console.log(model.waveInterval,"|")
+        //if(model.waveTime<payload.waveInterval){return} 
+       
+        if(displayedSecondsSinceLanding < 10){displayedSecondsSinceLanding =  "0"+displayedSecondsSinceLanding}
+        $(".waveTime").html(displayedSecondsSinceLanding)
+       
+        
+    }
