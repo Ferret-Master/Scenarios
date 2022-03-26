@@ -90,8 +90,8 @@
             "scalingNumber":0.25,
             "scalingRatio":0.14,
             "waveInterval":70,
-            "baseInterval":70,
-            "spreadRate":1.6,
+            "baseInterval":80,
+            "spreadRate":1,
       
             "unitValues":[
 

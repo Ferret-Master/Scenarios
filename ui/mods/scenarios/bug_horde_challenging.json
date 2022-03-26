@@ -73,50 +73,98 @@
             "unitValues":[
 
                 
-            {
+                {
                 
-                "waveChance":0.6,
-
-                "spitters":{
-                    "value":1,
-                    "units":[
-                        ["/pa/units/land/bug_scout/bug_scout.json",2,40],
-                        ["/pa/units/land/bug_scorcher/bug_scorcher.json",80,600],
-                        ["/pa/units/land/bug_basilisk/bug_basilisk.json",300,300000]
+                    "waveChance":0.5,
+    
+                    "spitters":{
+                        "value":1,
+                        "units":[
+                            ["/pa/units/bug_land/bug_scout/bug_scout.json",2,40],
+                            ["/pa/units/bug_land/bug_needler/bug_needler.json",5,100],
+                            ["/pa/units/bug_land/bug_scorcher/bug_scorcher.json",80,600],
+                            ["/pa/units/bug_land/bug_basilisk/bug_basilisk.json",300,300000]
+                        
+                        ]
+                    },
+                    "melee":{
+                        "value":1,
+                        "units":[
+                             ["/pa/units/bug_land/bug_grunt/bug_grunt.json",2,40],
+                             ["/pa/units/bug_land/bug_grunt_big/bug_grunt_big.json",20,400],
+                             ["/pa/units/bug_land/bug_warrior/bug_warrior.json",60,600]
+                             ]
+    
+                    },
+                    "warrior":{
+                        "value":1,
+                        "units":[
+                             ["/pa/units/bug_land/bug_warrior/bug_warrior.json",200,1000],
+                             ["/pa/units/bug_land/bug_warrior_big/bug_warrior_big.json",200,10000000]
+                        
+                             ]
+    
+                    }
+                },
+                {
                     
-                    ]
+                    "waveChance":0.15,
+    
+                    "rippers":{
+                        "value":1,
+                        "units":[
+                             ["/pa/units/bug_land/bug_ripper/bug_ripper.json",5,200],
+                             ["/pa/units/bug_land/bug_ripper_stealth/bug_ripper_stealth.json",5,50000000]
+                          
+                             ]
+    
+                    }
                 },
-                "melee":{
-                    "value":1,
-                    "units":[
-                         ["/pa/units/land/bug_grunt/bug_grunt.json",2,40],
-                         ["/pa/units/land/bug_grunt_big/bug_grunt_big.json",20,400],
-                         ["/pa/units/land/bug_warrior/bug_warrior.json",60,600]
-                         ]
-
+                {
+                    
+                    "waveChance":0.15,
+    
+                    "boomers":{
+                        "value":1,
+                        "units":[
+                             ["/pa/units/bug_land/bug_boomer/bug_boomer.json",10,500],
+                             ["/pa/units/bug_land/bug_boomer_big/bug_boomer_big.json",20,500],
+                             ["/pa/units/bug_land/bug_matriarch/bug_matriarch.json",200,50000000]
+                          
+                             ]
+    
+                    }
                 },
-                "warrior":{
-                    "value":1,
-                    "units":[
-                         ["/pa/units/land/bug_warrior/bug_warrior.json",200,1000],
-                         ["/pa/units/land/bug_warrior_big/bug_warrior_big.json",200,10000000]
-                         ]
-
+                {
+                    
+                    "waveChance":0.2,
+    
+                    "air_gunship":{
+                        "value":1,
+                        "units":[
+                             ["/pa/units/bug_air/bug_harpy/bug_harpy.json",30,300],
+                             ["/pa/units/bug_air/bug_basilisk/bug_basilisk.json",60,50000000]
+                          
+                             ]
+    
+                    },
+                    "air_fighter":{
+                        "value":1,
+                        "units":[
+                             ["/pa/units/bug_air/bug_fighter/bug_fighter.json",20,99999]
+                          
+                             ]
+    
+                    },
+                    "air_bomber":{
+                        "value":1,
+                        "units":[
+                             ["/pa/units/bug_air/bug_bomber/bug_bomber.json",40,50000000]
+                          
+                             ]
+    
+                    }
                 }
-            },
-            {
-                
-                "waveChance":0.4,
-
-                "runners":{
-                    "value":1,
-                    "units":[
-                         ["/pa/units/land/bug_runner/runner.json",8,500000]
-                      
-                         ]
-
-                }
-            }
 
         ],
             "startingObjective": true,
@@ -168,24 +216,24 @@
                 "spitters":{
                     "value":3,
                     "units":[
-                        ["/pa/units/land/bug_scout/bug_scout.json",1,30],
-                        ["/pa/units/land/bug_scorcher/bug_scorcher.json",80,400],
-                        ["/pa/units/land/bug_basilisk/bug_basilisk.json",500,300000]
+                        ["/pa/units/bug_land/bug_scout/bug_scout.json",1,40],
+                        ["/pa/units/bug_land/bug_scorcher/bug_scorcher.json",80,400],
+                        ["/pa/units/bug_land/bug_basilisk/bug_basilisk.json",500,300000]
                     ]
                 },
                 "melee":{
                     "value":3,
                     "units":[
-                         ["/pa/units/land/bug_grunt/bug_grunt.json",1,25],
-                         ["/pa/units/land/bug_grunt_big/bug_grunt_big.json",20,400]
+                         ["/pa/units/bug_land/bug_grunt/bug_grunt.json",1,25],
+                         ["/pa/units/bug_land/bug_grunt_big/bug_grunt_big.json",20,400]
                          ]
 
                 },
                 "warrior":{
                     "value":2,
                     "units":[
-                         ["/pa/units/land/bug_warrior/bug_warrior.json",50,500],
-                         ["/pa/units/land/bug_warrior_big/bug_warrior_big.json",300,100000]
+                         ["/pa/units/bug_land/bug_warrior/bug_warrior.json",50,500],
+                         ["/pa/units/bug_land/bug_warrior_big/bug_warrior_big.json",300,100000]
                          ]
                 }
                

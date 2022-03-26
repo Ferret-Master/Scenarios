@@ -15,7 +15,7 @@ bug_standard = {
    antiAir:"/pa/units/land/air_defense/air_defense.json",
    mediumEgg:"/pa/units/bug_base/bug_egg_medium/bug_egg_medium.json",
    smallEgg:"/pa/units/bug_base/bug_egg_small/bug_egg_small.json",
-   titan:"/pa/units/land/bug_titan/bug_titan.json",
+   titan:"/pa/units/bug_land/bug_titan/bug_titan.json",
    bugPlayer:undefined,
    planetRadius:undefined,
    planetId:undefined,
@@ -24,7 +24,7 @@ bug_standard = {
 updateHiveAndCreepPoints:function(){
 
     bugPlayerCreepPromise = model.playerArmy(this.bugPlayer,this.planetId,"/pa/units/bug_base/bug_creep/bug_creep.json",true,"")
-    bugPlayerHivePromise = model.playerArmy(this.bugPlayer,this.planetId,"",true,["UNITTYPE_NoBuild","UNITTYPE_Custom2","UNITTYPE_Factory"])
+    bugPlayerHivePromise = model.playerArmy(this.bugPlayer,this.planetId,"",true,["UNITTYPE_NoBuild","UNITTYPE_Factory"])
     bugPlayerHivePromise.then(function(result){
  
       
@@ -117,11 +117,11 @@ spawnStartingBugBase:function (baseValue){
     
 },
 
-spawnCreep:function(attempts){
+spawnCreep:function(amount){
     
     
     console.log("attempting to spawn creep")
-    generateValidRandomSpawns(this.planetRadius,attempts,this.planetId,bug_standard.creep,true).then(function(points){
+    generateValidRandomSpawns(this.planetRadius,300,this.planetId,bug_standard.creep,true).then(function(points){
     // console.log(points,this.creepPoints)
     // console.log(validPoints)
     if(points.length < 1){return}
@@ -131,30 +131,37 @@ spawnCreep:function(attempts){
     
     newValidPoints = pointsInArrayBands(validPoints, bug_standard.dontSpawnPoints,300,2000)
  
-    newValidPoints.forEach(function(point){
+    for(var i = 0; i < amount; i++){
+        if(i>newValidPoints.length){return}
+        var point = newValidPoints[i];
+
         model.spawnExact(bug_standard.bugPlayer,bug_standard.creep, bug_standard.planetId,point,[0,0,0])
         model.spawnExact(model.armyIndex(),"/pa/units/land/temp_vision_small/temp_vision_small.json", bug_standard.planetId,point,[0,0,0])
-    })
+    }
+
 })
 
 },
 
-spawnBasicHives:function(attempts, ratios){
+spawnBasicHives:function(amount, ratios){
     console.log("attempting to spawn hives")
-    generateValidRandomSpawns(this.planetRadius,attempts,this.planetId,bug_standard.basicHive).then(function(points){
+    generateValidRandomSpawns(this.planetRadius,300,this.planetId,bug_standard.basicHive).then(function(points){
     var validPoints = pointsInArrayBands(points, bug_standard.creepPoints,0,100,true)
     if(validPoints.length < 1){return}
     validPoints = pointsInArrayBands(validPoints, bug_standard.dontSpawnPoints,300,2000)
-    validPoints.forEach(function(point){
+
+    for(var i = 0; i < amount; i++){
+        if(i>validPoints.length){return}
+        var point = validPoints[i];
         model.spawnExact(bug_standard.bugPlayer,bug_standard.basicHive, bug_standard.planetId,point,[0,0,0])
-    })
+    }
 
 })
 
 
 },
 
-//waas planned to do distance but will do quantity for upgrading
+//was planned to do distance but will do quantity for upgrading
 upgradeHive:function(ratios){//upgrades basic hives into other types such as medium/runner, also upgrades medium to advanced
     if(model.armyIndex() !== bug_standard.waveObject.playerIndex){return}
     var hivePoints = bug_standard.hivePointsAndTypes;
@@ -184,29 +191,31 @@ upgradeHive:function(ratios){//upgrades basic hives into other types such as med
 
 },
 
-spawnSpire:function(attempts){
+spawnSpire:function(amount){
     
-    generateValidRandomSpawns(this.planetRadius,attempts,this.planetId,bug_standard.spire,true).then(function(points){
+    generateValidRandomSpawns(this.planetRadius,300,this.planetId,bug_standard.spire,true).then(function(points){
     var validPoints = pointsInArrayBands(points, bug_standard.creepPoints,0,100,true)
     if(validPoints.length < 1){return}
     validPoints = pointsInArrayBands(validPoints, bug_standard.dontSpawnPoints,300,2000)
-    validPoints.forEach(function(point){
+    for(var i = 0; i < amount; i++){
+        if(i>newValidPoints.length){return}
+        var point = validPoints[i];
         model.spawnExact(bug_standard.bugPlayer,bug_standard.spire, bug_standard.planetId,point,[0,0,0])
-
-    })
+    }
 })
 },
 
-spawnWall:function(attempts){
-    generateValidRandomSpawns(this.planetRadius,attempts,this.planetId,bug_standard.wall,true).then(function(points){
+spawnWall:function(amount){
+    generateValidRandomSpawns(this.planetRadius,300,this.planetId,bug_standard.wall,true).then(function(points){
     var validPoints = pointsInArrayBands(points, bug_standard.creepPoints,60,100,true)
     if(validPoints.length < 1){return}
     validPoints = pointsInArrayBands(validPoints, bug_standard.dontSpawnPoints,300,2000)
-    validPoints.forEach(function(point){
+    for(var i = 0; i < amount; i++){
+        if(i>newValidPoints.length){return}
+        var point = validPoints[i];
         model.spawnExact(bug_standard.bugPlayer,bug_standard.wall, bug_standard.planetId,point,[0,0,0])
-        
+    }
        
-    })
 
 })
 
@@ -276,47 +285,96 @@ spawnHiveWave:function(hivePointsAndTypes, difficulty,waveObject){
     var medium_hive_amount = 0;
    hivePointsAndTypes.forEach(function(point){
        for(var i = 0;i<difficulty;i++){//difficulty directly multiplies spawns
-
+        var randomUnitNumber = Math.round(getRndInteger(0,5));
        if(point[0] == "/pa/units/bug_base/basic_hive/basic_hive.json"){//spawn grunts/alpha grunts if time/upgrade building?
         if(!nestOnly == true){
-        model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_grunt/bug_grunt.json", bug_standard.planetId,point[1],[0,0,0])
-        model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_grunt/bug_grunt.json", bug_standard.planetId,point[1],[0,0,0])
-        model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_grunt/bug_grunt.json", bug_standard.planetId,point[1],[0,0,0])
-        model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_grunt/bug_grunt.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_land/bug_grunt/bug_grunt.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_land/bug_grunt/bug_grunt.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_land/bug_grunt/bug_grunt.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_land/bug_grunt/bug_grunt.json", bug_standard.planetId,point[1],[0,0,0])
+        }
+        if(!nestOnly == true && randomUnitNumber == 1){
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_land/bug_boomer/bug_boomer.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_land/bug_boomer/bug_boomer.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_land/bug_boomer/bug_boomer.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_land/bug_boomer/bug_boomer.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_land/bug_boomer/bug_boomer.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_land/bug_boomer/bug_boomer.json", bug_standard.planetId,point[1],[0,0,0])
+      
+        }
+        if(!nestOnly == true && randomUnitNumber == 2){
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_air/bug_fighter/bug_fighter.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_air/bug_fighter/bug_fighter.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_air/bug_harpy/bug_harpy.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_air/bug_harpy/bug_harpy.json", bug_standard.planetId,point[1],[0,0,0])
         }
        }
        if(point[0] == "/pa/units/bug_base/basic_hive/basic_hive.json"){//spawn scouts
         if(!nestOnly == true){
-        model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_scout/bug_scout.json", bug_standard.planetId,point[1],[0,0,0])
-        model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_scout/bug_scout.json", bug_standard.planetId,point[1],[0,0,0])
-        model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_scout/bug_scout.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_land/bug_scout/bug_scout.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_land/bug_scout/bug_scout.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_land/bug_scout/bug_scout.json", bug_standard.planetId,point[1],[0,0,0])
         }
      
        }
        if(point[0] == "/pa/units/bug_base/medium_hive/medium_hive.json"){//spawns warriors
         medium_hive_amount++
         if(!nestOnly == true && model.scenarioModel.RealTimeSinceLanding > 300){
-        model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_warrior/bug_warrior.json", bug_standard.planetId,point[1],[0,0,0])
-        model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_grunt_big/bug_grunt_big.json", bug_standard.planetId,point[1],[0,0,0])
-        model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_grunt_big/bug_grunt_big.json", bug_standard.planetId,point[1],[0,0,0])
-        model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_grunt_big/bug_grunt_big.json", bug_standard.planetId,point[1],[0,0,0])
-        model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_grunt_big/bug_grunt_big.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_land/bug_warrior/bug_warrior.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_land/bug_grunt_big/bug_grunt_big.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_land/bug_grunt_big/bug_grunt_big.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_land/bug_grunt_big/bug_grunt_big.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_land/bug_grunt_big/bug_grunt_big.json", bug_standard.planetId,point[1],[0,0,0])
         }
        
        }
        if(point[0] == "/pa/units/bug_base/medium_hive/medium_hive.json"){//spawn scorcher
         if(!nestOnly == true && medium_hive_amount>2 && model.scenarioModel.RealTimeSinceLanding > 300){
-        model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_scorcher/bug_scorcher.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_land/bug_scorcher/bug_scorcher.json", bug_standard.planetId,point[1],[0,0,0])
+        }
+       }
+       if(point[0] == "/pa/units/bug_base/medium_hive/medium_hive.json" && randomUnitNumber == 1){//spawn boomers
+        if(!nestOnly == true && medium_hive_amount>2 && model.scenarioModel.RealTimeSinceLanding > 300){
+            model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_land/bug_boomer_big/bug_boomer_big.json", bug_standard.planetId,point[1],[0,0,0])
+            model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_land/bug_boomer_big/bug_boomer_big.json", bug_standard.planetId,point[1],[0,0,0])
+            model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_land/bug_boomer_big/bug_boomer_big.json", bug_standard.planetId,point[1],[0,0,0])
+            model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_land/bug_boomer_big/bug_boomer_big.json", bug_standard.planetId,point[1],[0,0,0])
+        }
+       }
+       if(point[0] == "/pa/units/bug_base/medium_hive/medium_hive.json" && randomUnitNumber == 2){//spawn stronger air
+        if(!nestOnly == true && medium_hive_amount>2 && model.scenarioModel.RealTimeSinceLanding > 300){
+            model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_air/bug_bomber/bug_bomber.json", bug_standard.planetId,point[1],[0,0,0])
+            model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_air/bug_bomber/bug_bomber.json", bug_standard.planetId,point[1],[0,0,0])
+            model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_air/bug_bomber/bug_bomber.json", bug_standard.planetId,point[1],[0,0,0])
+            model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_air/bug_bomber/bug_bomber.json", bug_standard.planetId,point[1],[0,0,0])
+            model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_air/bug_bomber/bug_bomber.json", bug_standard.planetId,point[1],[0,0,0])
+            model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_air/bug_bomber/bug_bomber.json", bug_standard.planetId,point[1],[0,0,0])
+            model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_air/bug_fighter/bug_fighter.json", bug_standard.planetId,point[1],[0,0,0])
+            model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_air/bug_fighter/bug_fighter.json", bug_standard.planetId,point[1],[0,0,0])
+            model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_air/bug_fighter/bug_fighter.json", bug_standard.planetId,point[1],[0,0,0])
+            model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_air/bug_fighter/bug_fighter.json", bug_standard.planetId,point[1],[0,0,0])
         }
        }
        if(point[0] == "/pa/units/bug_base/advanced_hive/advanced_hive.json"){//spawn basilisk
         if(!nestOnly == true){
-        model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_basilisk/bug_basilisk.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_land/bug_basilisk/bug_basilisk.json", bug_standard.planetId,point[1],[0,0,0])
+        }
+       }
+       if(point[0] == "/pa/units/bug_base/advanced_hive/advanced_hive.json" && randomUnitNumber == 1){//spawn matriarch
+        if(!nestOnly == true){
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_land/bug_matriarch/bug_matriarch.json", bug_standard.planetId,point[1],[0,0,0])
+        }
+       }
+       if(point[0] == "/pa/units/bug_base/advanced_hive/advanced_hive.json" && randomUnitNumber == 2){//spawn t2 gunship
+        if(!nestOnly == true){
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_air/bug_basilisk/bug_basilisk.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_air/bug_basilisk/bug_basilisk.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_air/bug_basilisk/bug_basilisk.json", bug_standard.planetId,point[1],[0,0,0])
         }
        }
        if(point[0] == "/pa/units/bug_base/advanced_hive/advanced_hive.json"){//spawn alpha warrior
         if(!nestOnly == true){
-        model.spawnExact(bug_standard.bugPlayer,"/pa/units/land/bug_warrior_big/bug_warrior_big.json", bug_standard.planetId,point[1],[0,0,0])
+        model.spawnExact(bug_standard.bugPlayer,"/pa/units/bug_land/bug_warrior_big/bug_warrior_big.json", bug_standard.planetId,point[1],[0,0,0])
         }
         advanced_hive_exists = true;
         advanced_hive_amount++;
@@ -401,15 +459,20 @@ model.objectiveCheckFunctions["bug_mode_base"] = function (waveObject){
         _.delay(function(){
 
         var buildingMultiplier = (bug_standard.planetRadius*bug_standard.planetRadius*12)/(1080000)//multiplies spawn attempts by surface differencce
+
+        //linear diff based amount(1-4) + 5/(1-1/nests )
         
-        buildingMultiplier = waveObject.spreadRate //+ buildingMultiplier/2;//natrually more players on larger maps so until I factor playerocunt to scaling this is here
-        //after wave is spawned the base grows, currently this scaled inversly with map radius so needs some form of scaling for that, spawn method is fundementally worse the bigger the planet gets
+        buildingMultiplier = waveObject.spreadRate //+ buildingMultiplier/2;//naturally more players on larger maps so until I factor player count to scaling this is here
+        //after wave is spawned the base grows, currently this scaled inversely with map radius so needs some form of scaling for that, spawn method is fundamentally worse the bigger the planet gets
+
+        buildingMultiplier = buildingMultiplier + 1//addition to make the new linear method scale
+
         console.log("attempting to expand base")
-        bug_standard.spawnCreep(25*buildingMultiplier)
-        bug_standard.spawnBasicHives(6*buildingMultiplier)
+        bug_standard.spawnCreep(2*buildingMultiplier)
+        bug_standard.spawnBasicHives(1*buildingMultiplier)
         bug_standard.upgradeHive()
-        bug_standard.spawnSpire(8*buildingMultiplier)
-        bug_standard.spawnWall(100*buildingMultiplier)
+        bug_standard.spawnSpire(2*buildingMultiplier)
+        bug_standard.spawnWall(10*buildingMultiplier)
         bug_standard.spawnDefenders()
 
         },3000)
