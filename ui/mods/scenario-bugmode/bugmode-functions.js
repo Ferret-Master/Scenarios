@@ -87,6 +87,7 @@ function validSpawns(points,planet,spec,ignoreFeatures){//takes in array of poin
 
 var result = engine.call('worldview.fixupBuildLocations', world.id, spec, Number(planet), JSON.stringify(fixupPointsArray)).then(function(ready) {
     
+
    
             
     var returnArray = []
@@ -101,6 +102,7 @@ var result = engine.call('worldview.fixupBuildLocations', world.id, spec, Number
             
             if(fixupResult.ok == false || fixupResult.desc !== undefined && !((fixupResult.desc == "feature warning" || fixupResult.desc == "hit structure") && ignoreFeatures == true)){
                 
+                console.log(fixupResult.desc)
             
                 
 
@@ -110,6 +112,7 @@ var result = engine.call('worldview.fixupBuildLocations', world.id, spec, Number
 
         }
         
+        console.log("returning checked array")
         return returnArray;
                                         
                                         
@@ -123,6 +126,7 @@ filterValidRandomSpawns = function(r,numPoints,planet,spec,ignoreFeatures){
     for(var i = 0; i<numPoints; i++){pointsArray.push(rand_sphere_point(r))}
     var temp = validSpawns(pointsArray,planet,spec,ignoreFeatures)
    
+
     return temp;
 
 }
@@ -151,6 +155,7 @@ generateValidRandomSpawnsOutsideTower = function(r,numPoints,planet,spec,ignoreF
             }
         }
        
+     
         return returnedPoints;
     })
 }

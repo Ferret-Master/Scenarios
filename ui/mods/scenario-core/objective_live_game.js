@@ -23,7 +23,7 @@ objective types(early):
 */
 
 var objectivesToActivate =  ko.observable(-1).extend({ session: 'activeObjectives' });
-
+var chosenLoadout =  ko.observable(-1).extend({ session: 'selectedLoadout' });
 
 function removeByAttr(arr, attr, value){//courtesy of stack overflow but just what I needed
     var i = arr.length;
@@ -83,11 +83,11 @@ if(objectiveObject.activeEffect !== true && objectiveObject.effect !== undefined
 
 }
 if(objectiveObject.waveInterval!==undefined){
-
-
-    api.Panel.message("players", 'scenarioWave',{waveInterval:objectiveObject.waveInterval, elapsedTime: model.scenarioModel.RealTimeSinceLanding})
-
-
+   
+    
+    api.Panel.message("LiveGame_FloatZone", 'scenarioWave',{waveInterval:objectiveObject.waveInterval, elapsedTime: model.scenarioModel.RealTimeSinceLanding})
+        
+        
 }
 
 var returnPromise = new Promise(function(resolve,reject){resolve(model.objectiveCheckFunctions[objectiveObject.type](objectiveObject,playerId));})

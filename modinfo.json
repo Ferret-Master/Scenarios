@@ -1,4 +1,5 @@
  {
+
    "context": "server",
    "identifier": "com.pa.ferretmaster.scenarios",
    "display_name": "Bug Mode",
