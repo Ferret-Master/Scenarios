@@ -1,6 +1,7 @@
 {
  "scenarios":[
   
+    "bug_horde_ffa",
     "bug_wars",
 	"bug_horde_easy",
 	"bug_horde_medium",

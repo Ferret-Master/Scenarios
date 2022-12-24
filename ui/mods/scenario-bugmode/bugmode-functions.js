@@ -102,7 +102,7 @@ var result = engine.call('worldview.fixupBuildLocations', world.id, spec, Number
             
             if(fixupResult.ok == false || fixupResult.desc !== undefined && !((fixupResult.desc == "feature warning" || fixupResult.desc == "hit structure") && ignoreFeatures == true)){
                 
-                console.log(fixupResult.desc)
+                //console.log(fixupResult.desc)
             
                 
 
@@ -112,7 +112,7 @@ var result = engine.call('worldview.fixupBuildLocations', world.id, spec, Number
 
         }
         
-        console.log("returning checked array")
+        //console.log("returning checked array")
         return returnArray;
                                         
                                         

@@ -40,7 +40,7 @@ $(document).ready(function () {
             var clientControlFlags = _.map(newControlFlags, function(flag) { return flag ? 1 : 0; });
           
             
-            console.log(clientControlFlags)
+            //console.log(clientControlFlags)
            
 
             // Tell the server

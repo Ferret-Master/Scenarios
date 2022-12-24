@@ -84,13 +84,13 @@
             "spawn_near_unit_types":[],
             "spawn_near_radius":800,
             "lastCalled":0,
-            "timesCalled":-100,
+            "timesCalled":-140,
             "progress":0,
             "maxDifficulty":100000,
-            "scalingNumber":0.25,
-            "scalingRatio":0.14,
-            "waveInterval":70,
-            "baseInterval":80,
+            "scalingNumber":0.24,
+            "scalingRatio":0.13,
+            "waveInterval":85,
+            "baseInterval":100,
             "spreadRate":1,
       
             "unitValues":[

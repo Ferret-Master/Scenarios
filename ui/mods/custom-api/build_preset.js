@@ -38,8 +38,8 @@ function init_build_preset(api) {
     api.build_preset = {
     buildCommand: function(id,planet,structure){//keeping build command seperate from spawn unit for now as some buildings need to abuse the fact you can build in the air
                           
-        console.log("attempting build command with unitid: " + id + " planet: "+planet + " spec: "+ structure+" at location "+ structure.pos);
-        // console.log(api.getWorldView(0).sendOrder({units: unitid,command: 'build',location: {planet: planet,multi_pos: [location,location]},spec: spec,queue: true}));
+        //console.log("attempting build command with unitid: " + id + " planet: "+planet + " spec: "+ structure+" at location "+ structure.pos);
+        console.log(api.getWorldView(0).sendOrder({units: unitid,command: 'build',location: {planet: planet,multi_pos: [location,location]},spec: spec,queue: true}));
        
         //api.getWorldView(0).sendOrder({units: id,command: 'build',location: {planet: planet,multi_pos: [structure.pos,structure.pos],orient: structure.orientation},spec: structure.unitType,queue: true,group:true});
         console.log(api.getWorldView(0).sendOrder({units: id,command: 'build',location: {planet: planet,multi_pos: [structure.pos,structure.pos],orient: structure.orientation},spec: structure.unitType,queue: true,group:true
@@ -59,7 +59,7 @@ function init_build_preset(api) {
     },
     buildCommandOld: function(unitid,planet,spec,location){
                         
-        console.log("attempting build command with unitid: " + unitid + " planet: "+planet + " spec: "+ spec+" at location "+ location[0]);
+        //console.log("attempting build command with unitid: " + unitid + " planet: "+planet + " spec: "+ spec+" at location "+ location[0]);
         // console.log(api.getWorldView(0).sendOrder({units: unitid,command: 'build',location: {planet: planet,multi_pos: [location,location]},spec: spec,queue: true}));
         api.getWorldView(0).sendOrder({units: unitid,command: 'build',location: {planet: planet,multi_pos: [location[0],location[0]],orient: location[1]},spec: spec,queue: true,group:true});
     
@@ -109,7 +109,7 @@ function init_build_preset(api) {
                                             
                                             
             var postfix = ready;
-            console.log("postfix: "+JSON.stringify(postfix))
+           // console.log("postfix: "+JSON.stringify(postfix))
             //var spec = postfix[0]; unused?
         
             for(var building = 0;building<prefab.length;building++){

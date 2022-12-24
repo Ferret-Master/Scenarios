@@ -89,8 +89,8 @@
             "maxDifficulty":100000,
             "scalingNumber":0.25,
             "scalingRatio":0.14,
-            "waveInterval":80,
-            "baseInterval":90,
+            "waveInterval":100,
+            "baseInterval":100,
             "spreadRate":1.0,
       
             "unitValues":[
