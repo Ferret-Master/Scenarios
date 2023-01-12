@@ -207,3 +207,8 @@ $.get("coui://ui/mods/scenario-ui/objective_ui_live_game.html", function (html) 
        
         
     }
+
+
+    displayBanner = function(text,size, color, sound){
+    
+    }

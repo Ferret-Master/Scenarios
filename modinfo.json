@@ -1,17 +1,17 @@
  {
 
    "context": "server",
-   "identifier": "com.pa.ferretmaster.scenarios-local",
+   "identifier": "com.pa.ferretmaster.scenarios-hive",
    "display_name": "Bug Mode",
    "description": "A mod that allows for the creation of custom scenarios, includes scenarios such as annihilation mode and bug horde mode",
    "author": "ferretmaster",
-   "version": "1.06",
+   "version": "1.07",
    "build": "115626",
    "date": "2021-10-12",
    "signature": "not yet implemented",
    "forum": "https://forums.planetaryannihilation.com/threads/server-scenarios.73550/",
    "priority": 100,
-   "icon": "https://github.com/Ferret-Master/Scenarios/blob/Release/bug_image.png?raw=true",
+   "icon": "https://github.com/Ferret-Master/Scenarios/blob/release/bug_image.png?raw=true",
    "scenes": {
     "live_game_build_bar":[
       "coui://ui/mods/scenario-research/live_build_bar.js"

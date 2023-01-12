@@ -159,3 +159,4 @@ generateValidRandomSpawnsOutsideTower = function(r,numPoints,planet,spec,ignoreF
         return returnedPoints;
     })
 }
+

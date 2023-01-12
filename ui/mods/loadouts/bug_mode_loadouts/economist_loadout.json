@@ -1,6 +1,7 @@
 {
     "name":"Economist loadout",
     "description":"<center>An economic loadout</center><br><li>T2 Eco is slightly cheaper<br><li>All fabs consume 25% less power",
+    "image":"economist",
     "replace":[
         [
         "/pa/units/air/fabrication_aircraft_adv/fabrication_aircraft_adv.json",

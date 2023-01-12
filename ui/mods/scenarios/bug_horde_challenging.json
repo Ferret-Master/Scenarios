@@ -11,7 +11,7 @@
     "author": "Ferretmaster",
     "gameType": "Multiplayer",
     "playerCount": 3,
-
+    "loadout":"bug_base_loadouts",
     "aiCount": 2,
     "winCondition": "Default",
     "requireBuilders":true,
@@ -66,9 +66,9 @@
             "timesCalled":-60,
             "progress":-16,
             "maxDifficulty":100000,
-            "scalingNumber":0.25,
-            "scalingRatio":0.14,
-            "waveInterval":80,
+            "scalingNumber":0.23,
+            "scalingRatio":0.12,
+            "waveInterval":90,
       
             "unitValues":[
 
@@ -206,9 +206,9 @@
             "progress":-4,
             "spawn_close_radius":500,
             "maxDifficulty":100000,
-            "scalingNumber":0.12,
-            "scalingRatio":0.12,
-            "waveInterval":40,
+            "scalingNumber":0.10,
+            "scalingRatio":0.10,
+            "waveInterval":50,
       
             "unitValues":[{
 

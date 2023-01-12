@@ -1,16 +1,71 @@
 
 
-<td class="col_1" id = "loadout-panel" style="position:relative;">
-  <div style="height: 100%; width: 100%; overflow: auto; display:flex; flex-direction:column;">
-      <div style="position:relative; flex-shrink:0;">
-        
-            <div style="height: 100%; width: 100%; overflow: auto; display:flex; flex-direction:column;">
-               <div style="position:relative; flex-shrink:0; padding-left:50px ;text-align:center; height: 600px">
-                   <h1 style>Loadouts</h1>
+
+<td class="col_1" id = "loadout-panel" style="position:relative; z-index:1;">
+  <style>
+
+
+    .loadout_description {
+  
+      color: rgb(255, 166, 0);
+      
+    }
+    #loadoutDescription{
+      border-style: solid;
+      border-color:rgb(255, 166, 0);
+      border-width: 1px;
+      font-weight: bold;
+      color:rgb(0, 245, 171);
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  
+    #loadoutDescriptionWrapper{
+      padding-right: 20px;
+      padding-left: 20px;
+    }
+    #scenarioPickerWrapper{
+      padding-right: 20px;
+  
+    }
+    .loadout_title{
+      color: rgb(255, 255, 255);
+      font-size: 20px;
+      padding-right: 20px;
+      font-style: bold;
+    }
+    .loadout_selector{
+      border-top: solid;
+      border-color: black;
+      color: rgb(0, 210, 247);
+      font-size: 20px;
+      padding-right: 20px;
+      padding-left: 20px;
+      font-style: bold;
+    }
+    .loadout-border{
+      border: solid;
+      border-width: 3px;
+      padding-top: 5px;
+      border-color: rgb(14, 183, 196);
+    }
+    .loadout-panel-border{
+      padding-left: 20px;
+      padding-top: 20px;
+      padding-right: 20px;
+    }
+    #loadoutFilenameWrapper{color:cyan}
+  
+  </style>
+  <div class = "col_1" style = "position:relative">
+  <div class = "loadout-panel-border"style="right 10px; height: 100%; width: 100%; max-width:500px; overflow: auto; display:flex; flex-direction:row;">
+    
+               <div class = "loadout-border" style="text-align:center; height: 20%; min-height: 500px; min-width: 300px;">
+                   <div class = "loadout_title">Loadouts</div>
                   
                   <div class="section loadout">
                     <div class="form-group">
-                      <div class="section_header loadout">
+                      <div class="loadout_selector">
                         Loadout Selector
                       </div>
                   
@@ -26,7 +81,7 @@
                       </div>
                   
                       <div id="loadoutDescriptionWrapper"> 
-                        <div class="section_subheader loadout_description">
+                        <div class="loadout_description">
                           Description
                         </div>
                   
@@ -42,7 +97,6 @@
                       </div>
                     </div>
                   </div> 
-                  </div>
-              </div>
+                </div>
    
 </td>

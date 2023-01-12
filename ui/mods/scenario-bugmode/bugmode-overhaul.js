@@ -36,7 +36,7 @@ function playerDirector(){//controls rewards for struggling players/over time. t
 
 }
 
-function aggressionBehaviour(){//based on the bugs aggression value it tweaks values used for expansion/wave spawning
+function aggressionBehavior(){//based on the bugs aggression value it tweaks values used for expansion/wave spawning
 
 }
 

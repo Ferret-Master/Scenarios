@@ -2,6 +2,7 @@
     "name":"Defender loadout",
     "description":"<center>A more defensive loadout</center><br><li>Lob replaced with unique mine launcher <br><li>Single Laser turret has double the fire rate <br><li>Galata can target ground but do 80% damage to it <br><li>Artillery fires directly at the enemy and is 25% cheaper <br><li>Basic economy has 4 times the hp. <br><li>Energy storage has a turret on it</li><br><li>You lose access to vehicles</li>",
     "locked":["/pa/units/land/vehicle_factory/vehicle_factory.json","/pa/units/land/vehicle_factory_adv/vehicle_factory_adv.json"],
+    "image":"defender",
     "replace":[
         [
         "/pa/units/land/air_defense/air_defense.json",

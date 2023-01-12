@@ -24,8 +24,10 @@ model.selectedScenario = ko.observable(-1).extend({ session: 'selectedScenario' 
 
 model.selectedLoadout = ko.observable(-1).extend({ session: 'selectedLoadout' });
 
-model.selectedScenario(-1);
-model.selectedLoadout(-1);
+// model.selectedScenario(-1);
+// model.selectedLoadout(-1);
+
+
 
 var objectivesToActivate =  ko.observable(-1).extend({ session: 'activeObjectives' });
 
@@ -186,7 +188,7 @@ var populateLoadouts = function(loadoutName) {
     else{lastLoadedLoadout = loadoutName}
 
     $("#loadout-panel").remove()
-    $(".lobby_table tbody:first tr:nth-child(2)").append(loadHtml("coui://ui/mods/scenario_lobby/scenario_lobby_panel.html"));
+    $(".lobby_table tbody:first tr:first").append(loadHtml("coui://ui/mods/scenario_lobby/scenario_lobby_panel.html"));
     $.getJSON("coui:/mods/loadouts/"+loadoutName+".json").then(function(importedLoadoutList) {
         var loadoutListItemIndex = 0;
         var loadedLoadouts = [];
@@ -198,33 +200,46 @@ var populateLoadouts = function(loadoutName) {
             console.log("ran loadout: ",loadoutFilename)
             $.getJSON('coui:/mods/loadouts/' + loadoutFilename + '.json')
                 .done(function(importedLoadout) {
+                    if(importedLoadoutList.default !== loadoutFilename){
                     loadedLoadouts.push($("<option>", {
                         value: loadoutFilename,
                         text: importedLoadout.name || loadoutFilename
-                    }));
+                    }
+                            )
+                        );
+                    }
+                    else{
+                        loadedLoadouts.unshift($("<option>", {
+                            value: loadoutFilename,
+                            text: importedLoadout.name || loadoutFilename
+                        }
+                                )
+                            );
+                    }
                 })
                 .fail(function() {
                     console.error("Failed to import scenario:", loadoutFilename);
                 })
                 .always(function(importedLoadout) {
                     if (++loadoutListItemIndex === importedLoadoutList.loadouts.length) {
-                        console.log("appending none")
-                        $(loadoutSelect).append($("<option>", {
-                            value: "none",
-                            text: "None"
-                        }));
 
                         $.each(loadedLoadouts, function(loadoutIndex, loadout) {
                             console.log("appending loadout")
                             $(loadoutSelect).append(loadout);
                         });
-
+                   
+                        $(loadoutSelect).append($("<option>", {
+                            value: "none",
+                            text: "None"
+                        }));
                         loadoutSelect.dataset.bind = "selectPicker: selectedLoadout";
                         ko.applyBindings(model, loadoutSelect);
                     }
                 });
                 console.log(loadedLoadouts)
         });
+        
+        _.delay(model.setLoadout,1000, importedLoadoutList.default);
         
     });
 }
@@ -250,6 +265,12 @@ function setAICommanders(commander){
             {
                 id: slot.playerId(),
                 ai_commander: commander
+            });
+            var idleAI = model.aiPersonalities()["Idle"];
+            idleAI.name = "Idle"
+            model.send_message('set_ai_personality', {
+                id: slot.playerId(),
+                ai_personality: idleAI
             });
             }
         }
@@ -322,9 +343,17 @@ model.setScenario = function(scenarioFilename) {
     }
 }
 
+if(model.selectedScenario() !== -1){
+
+    _.delay(model.setScenario, 1000, model.selectedScenario())
+
+}
+
 model.setLoadout = function(loadoutFilename){
-    
+    console.log("set loadout ran")
+    console.log(loadoutFilename)
     if (loadoutFilename == "none") {
+        $("#loadoutImage").hide();
         $("#loadoutFilenameWrapper").hide();
         $("#loadoutSetupWrapper").hide();
         $("#loadoutDescriptionWrapper").hide();
@@ -332,8 +361,8 @@ model.setLoadout = function(loadoutFilename){
         $.getJSON('coui:/mods/loadouts/' + loadoutFilename + '.json').then(function(importedloadout) {
             // Sets all ai's commanders to the selected com upon loadout load if they are not already
            
-           //model.selectedLoadout(importedloadout)
-
+          
+           console.log(importedloadout)
             
             $("#loadoutFilenameWrapper").show();
             $("#loadoutFilename").text(loadoutFilename);
@@ -347,10 +376,10 @@ model.setLoadout = function(loadoutFilename){
                 $("#loadoutDescriptionWrapper").hide();
                 $("#loadoutDescription").html('');
             }
-
+            
             if (importedloadout.image !== undefined) {
-                $(".loadoutImage").show();
-                $("#loadout_image").html('<img src="'+importedloadout.image+'">');
+                $("#loadoutImage").show();
+                $("#loadoutImage").html('<img src="coui://ui/mods/loadouts/loadout_images/'+importedloadout.image+'.png">');
             } else {
                 $(".loadoutImage").hide();
                 $("#loadout_image").html('');
