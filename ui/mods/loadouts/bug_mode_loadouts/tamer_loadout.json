@@ -1,5 +1,5 @@
 {
-    "name": "Tamer loadout",
+    "name": "Tamer Loadout",
     "description": "<center>A loadout that lets the player build their own bugs to fight off the horde</center><br><li>Air tech tree replaced by hives, still use air fabs to progress in it<br><li>Titan class runner added to the advanced hive<br><li>Metal extractors produce slightly less<br><li>bugs are comparatively cheaper than normal units",
     "locked": [
         "/pa/units/air/transport/transport.json",

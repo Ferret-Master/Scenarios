@@ -1,12 +1,11 @@
 {
-    "name":"Defender Loadout",
-    "description":"<center>A more defensive loadout</center><br><li>Lob replaced with unique mine launcher <br><li>Single Laser turret has double the fire rate <br><li>Anti Air Turrets can target ground but do 80% damage to it <br><li>Artillery fires directly at the enemy and is 25% cheaper <br><li>Basic economy has 4 times the hp. <br><li>Energy storage has a turret on it</li><br><li class = 'negativeChange'>You lose access to vehicles</li>",
+    "name":"Air Loadout",
+    "description":"<center>A more defensive loadout</center><br><li>Lob replaced with unique mine launcher <br><li>Single Laser turret has double the fire rate <br><li>Galata can target ground but do 80% damage to it <br><li>Artillery fires directly at the enemy and is 25% cheaper <br><li>Basic economy has 4 times the hp. <br><li>Energy storage has a turret on it</li><br><li class = 'negativeChange'>You lose access to vehicles</li>",
     "locked":["/pa/units/land/vehicle_factory/vehicle_factory.json","/pa/units/land/vehicle_factory_adv/vehicle_factory_adv.json"],
     "image":"defender",
     "replace":[
         [
         "/pa/units/land/air_defense/air_defense.json",
-        "/pa/units/land/air_defense_adv/air_defense_adv.json",
         "/pa/units/land/artillery_long/artillery_long.json",
         "/pa/units/land/artillery_unit_launcher/artillery_unit_launcher.json",
         "/pa/units/land/artillery_short/artillery_short.json",
@@ -19,7 +18,6 @@
         ],
         [
         "/pa/units/loadouts/defender/galata/galata.json",
-        "/pa/units/loadouts/defender/flak/flak.json",
         "/pa/units/loadouts/defender/holkins/holkins.json",
         "/pa/units/loadouts/defender/mine_launcher/mine_launcher.json",
         "/pa/units/loadouts/defender/pelter/pelter.json",
