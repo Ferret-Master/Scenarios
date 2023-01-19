@@ -159,20 +159,26 @@ handlers.scenarioDetails = function(payload) {
 //updates the ingame clock on the scenario ui
 handlers.scenarioTime = function(payload) {
     $("#landingTime").text(secondsToTime(payload));
+    var displayedMinutesSinceLanding = Math.floor(payload/60)
+    var displayedSecondsSinceLanding = Math.round(payload%60);
+    if(displayedSecondsSinceLanding < 10){displayedSecondsSinceLanding =  "0"+displayedSecondsSinceLanding}
+   
+    $(".landingTime").html(displayedMinutesSinceLanding+":"+displayedSecondsSinceLanding)
 }
 
-handlers.scenarioWave = function(payload) {
-    if (model.waveTime === undefined || model.waveTime > payload.waveInterval) {
-        model.waveTime = payload.waveInterval;
-    }
+// handlers.scenarioWave = function(payload) {
+    
+//     if (model.waveTime === undefined || model.waveTime > payload.waveInterval) {
+//         model.waveTime = payload.waveInterval;
+//     }
 
-    if (model.waveTime < payload.waveInterval) {
-        model.waveTime = payload.waveInterval;
-        //return;
-    }
+//     if (model.waveTime < payload.waveInterval) {
+//         model.waveTime = payload.waveInterval;
+//         //return;
+//     }
 
-    $("#waveTime").text(secondsToTime(payload.waveInterval - Math.round(payload.elapsedTime % payload.waveInterval)));
-}
+//     $("#waveTime").text(secondsToTime(payload.waveInterval - Math.round(payload.elapsedTime % payload.waveInterval)));
+// }
 
 $.get("coui://ui/mods/scenario-ui/objective_ui_live_game.html", function (html) {
     var $html = $(html);
@@ -181,14 +187,8 @@ $.get("coui://ui/mods/scenario-ui/objective_ui_live_game.html", function (html) 
     // Activates knockout.js
     ko.applyBindings(model, $html[0]);
 });
-        var displayedMinutesSinceLanding = Math.floor(payload/60)
-        var displayedSecondsSinceLanding = Math.round(payload%60);
-        if(displayedSecondsSinceLanding < 10){displayedSecondsSinceLanding =  "0"+displayedSecondsSinceLanding}
-       
-        $(".landingTime").html(displayedMinutesSinceLanding+":"+displayedSecondsSinceLanding)
-        
+      
     
-
     handlers.scenarioWave = function(payload) {
      
         
@@ -198,12 +198,12 @@ $.get("coui://ui/mods/scenario-ui/objective_ui_live_game.html", function (html) 
         
         // if(model.waveTime == null){model.waveTime = payload.waveInterval}
         // if(model.waveTime>payload.waveInterval){model.waveTime = payload.waveInterval}
-        console.log(model.waveTime)
-        console.log(model.waveInterval,"|")
+        // console.log(payload.waveTime)
+       
         //if(model.waveTime<payload.waveInterval){return} 
        
         if(displayedSecondsSinceLanding < 10){displayedSecondsSinceLanding =  "0"+displayedSecondsSinceLanding}
-        $(".waveTime").html(displayedSecondsSinceLanding)
+        $("#waveTime").text(displayedSecondsSinceLanding)
        
         
     }

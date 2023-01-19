@@ -146,28 +146,43 @@ var populateScenarios = function() {
         var scenarioListItemIndex = 0;
         var loadedScenarios = [];
         var scenarioSelect = $("#scenario-picker")[0];
-
+        var defaultOrLoaded = model.selectedScenario();
+        var noneOption  = $("<option>", {
+            value: "none",
+            text: "None"
+        })
+        if(defaultOrLoaded == -1){
+            defaultOrLoaded = noneOption}
         $.each(importedScenarioList.scenarios, function(i, scenarioFilename) {
             $.getJSON('coui:/mods/scenarios/' + scenarioFilename + '.json')
                 .done(function(importedScenario) {
-                    loadedScenarios.push($("<option>", {
-                        value: scenarioFilename,
-                        text: importedScenario.name || scenarioFilename
-                    }));
+                    if(scenarioFilename == defaultOrLoaded){
+                        defaultOrLoaded = $("<option>", {
+                            value: scenarioFilename,
+                            text: importedScenario.name || scenarioFilename
+                        })
+                    }
+                    else{
+                        loadedScenarios.push($("<option>", {
+                            value: scenarioFilename,
+                            text: importedScenario.name || scenarioFilename
+                        }));
+                    }
+                   
                 })
                 .fail(function() {
                     console.error("Failed to import scenario:", scenarioFilename);
                 })
                 .always(function(importedScenario) {
-                    if (++scenarioListItemIndex === importedScenarioList.scenarios.length) {
-                        $(scenarioSelect).append($("<option>", {
-                            value: "none",
-                            text: "None"
-                        }));
-
+                    if (++scenarioListItemIndex === importedScenarioList.scenarios.length) {//runs on last scenario
+                        
+                      
+                        $(scenarioSelect).append(defaultOrLoaded)
+                        
                         $.each(loadedScenarios, function(scenarioIndex, scenario) {
                             $(scenarioSelect).append(scenario);
                         });
+
 
                         scenarioSelect.dataset.bind = "enable: canChangeSettings, selectPicker: selectedScenario";
                         ko.applyBindings(model, scenarioSelect);
@@ -180,7 +195,7 @@ var lastLoadedLoadout = undefined;
 var populateLoadouts = function(loadoutName) {
     if(loadoutName == "clear"){
         $("#loadout-panel").remove()
-        model.selectedLoadout("none");
+       // model.selectedLoadout("none");
         lastLoadedLoadout = undefined;
         return
     } 
@@ -196,11 +211,14 @@ var populateLoadouts = function(loadoutName) {
         var loadoutSelect = $("#loadout-picker")[0];
 
         console.log(importedLoadoutList)
+        var defaultOrLoaded = importedLoadoutList.default;
+        if(model.selectedLoadout() !== -1){defaultOrLoaded = model.selectedLoadout()}
+        console.log(defaultOrLoaded)
         $.each(importedLoadoutList.loadouts, function(i, loadoutFilename) {
             console.log("ran loadout: ",loadoutFilename)
             $.getJSON('coui:/mods/loadouts/' + loadoutFilename + '.json')
                 .done(function(importedLoadout) {
-                    if(importedLoadoutList.default !== loadoutFilename){
+                    if(defaultOrLoaded !== loadoutFilename){
                     loadedLoadouts.push($("<option>", {
                         value: loadoutFilename,
                         text: importedLoadout.name || loadoutFilename
@@ -239,7 +257,7 @@ var populateLoadouts = function(loadoutName) {
                 console.log(loadedLoadouts)
         });
         
-        _.delay(model.setLoadout,1000, importedLoadoutList.default);
+        _.delay(model.setLoadout,1000, defaultOrLoaded);
         
     });
 }
@@ -326,7 +344,8 @@ model.setScenario = function(scenarioFilename) {
                 $("#scenarioSetup").html('');
             }
 
-            if (importedScenario.description !== undefined && model.isGameCreator()) {
+            if (importedScenario.description !== undefined) {
+              
                 $("#scenarioDescriptionWrapper").show();
                 $("#scenarioDescription").html(importedScenario.description);
             } else {
