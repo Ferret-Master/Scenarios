@@ -10,6 +10,7 @@
     "systemName": "Centax-3",
     "author": "Ferretmaster",
     "gameType": "Multiplayer",
+     "style":{"color":"yellow"},
     "playerCount": 3,
     "loadout":"bug_base_loadouts",
     "aiCount": 2,

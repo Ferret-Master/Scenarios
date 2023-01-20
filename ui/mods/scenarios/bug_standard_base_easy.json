@@ -7,6 +7,7 @@
     "scenarioID": 2,
     "systemName": "Centax-3",
     "author": "Ferretmaster",
+    "style":{"color":"lime"},
     "loadout":"bug_base_loadouts",
     "gameType": "Multiplayer",
     "playerCount": 3,

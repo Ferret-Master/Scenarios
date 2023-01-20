@@ -9,6 +9,7 @@
     "author": "Ferretmaster",
     "gameType": "Multiplayer",
     "loadout":"bug_base_loadouts",
+     "style":{"color":"yellow"},
     "playerCount": 3,
     "aiCount": 2,
     "winCondition": "Default",

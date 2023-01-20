@@ -2,6 +2,7 @@
     "name": "Loadouts Only",
     "description": "A scenario that allows you to use loadouts without anything else",
     "setup":"no special setup needed",
+    "style":{"color":"orange"},
     "aiComRequired":false,
     "aiCommander":"/pa/units/commanders/scenario_ai_invincible_com/scenario_ai_invincible_com.json",
     "scenarioID": 2,

@@ -5,6 +5,7 @@
     "aiComRequired":true,
     "aiCommander":"/pa/units/commanders/scenario_ai_invincible_com/scenario_ai_invincible_com.json",
     "scenarioID": 2,
+    "style":{"color":"lime"},
     "systemName": "Centax-3",
     "loadout":"bug_base_loadouts",
     "author": "Ferretmaster",
