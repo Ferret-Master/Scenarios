@@ -1,18 +1,14 @@
 {
  "scenarios":[
-  
-    "bug_horde_ffa",
-    "bug_wars",
 	"bug_horde_easy",
 	"bug_horde_medium",
 	"bug_horde_challenging",
     "bug_horde_expert",
-	"bug_standard_base_expert",
-    "bug_standard_base_challenging",
-    "bug_standard_base_medium",
     "bug_standard_base_easy",
-	"annihilation_mode"
-
+    "bug_standard_base_medium",
+    "bug_standard_base_challenging",
+	"bug_standard_base_expert",
+    "loadouts_only"
  ]
 
 

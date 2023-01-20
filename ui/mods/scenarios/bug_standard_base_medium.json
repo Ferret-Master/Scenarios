@@ -1,7 +1,7 @@
 {
     "name": "Bug Hive Mode Normal",
-    "description": "An medium variation of bug wave defense. You start with units and a control tower(zapper) that prevents bugs from spawning near you. exponentially larger waves of bugs will assault you over time.",
-    "setup":"There needs to be an ai,the last one in the lobby will act as the bugs. this ai needs to have the scenario ai commander(DO NOT SELECT) selected for it. This mode should only be played on single planet maps",
+    "description": "A medium version of hive mode. You start with units and a control tower(zapper) that prevents bugs from spawning near you. The hive will grow over time if not stopped. <br><br> don't spawn directly on metal",
+    "setup":"There needs to be an AI in the last lobby slot. this AI needs to have the Bug Mode AI Commander selected for it and set to IDLE difficulty. This mode should only be played on single planet maps",
     "aiComRequired":true,
     "aiCommander":"/pa/units/commanders/scenario_ai_invincible_com/scenario_ai_invincible_com.json",
     "scenarioID": 2,
@@ -16,7 +16,7 @@
     "objectives": [
         {
             "name": "spawn loadout",
-            "id":8,
+            "id":1,
             "description": "sets up loadout",
             "hidden":true,
             "type": "timed",
@@ -64,7 +64,7 @@
         },
         {
             "name": "spawn_waves",
-            "id":1,
+            "id":3,
             "visible":false,
             "description": "Spawns waves of bugs periodically.",
             "playerType":"ai",
@@ -159,7 +159,7 @@
         },
         {
             "name": "kill_counter_1",
-            "id":3,
+            "id":4,
             "visible":true,
             "description": "Tons Of Biomass Destroyed",
             "result":"Get rewarded with a kaiju for each control tower",
@@ -185,7 +185,7 @@
         },
 		{
             "name": "kill_counter_2",
-            "id":4,
+            "id":5,
             "visible":true,
             "description": "Tons Of Biomass Destroyed",
             "result":"Get rewarded with 3 kaiju for each control tower",
@@ -211,7 +211,7 @@
         },
         {
             "name": "kill_counter_3",
-            "id":5,
+            "id":6,
             "visible":true,
             "description": "Tons Of Biomass Destroyed",
             "result":"Survive",
@@ -237,7 +237,7 @@
         },
         {
             "name": "setup start zapper",
-            "id":6,
+            "id":7,
             "description": "sets up starting zapper",
             "hidden":true,
             "type": "timed",
@@ -265,7 +265,7 @@
         
             {
                 "name": "starting zappers",
-                "id": 3,
+                "id": 8,
                 "delay": 0,
                 "planet":0,
                 "type": "build_at_existing_unit",
@@ -287,7 +287,7 @@
             },
 			{
                 "name": "reward1",
-                "id": 3,
+                "id": 10,
                 "delay": 0,
                 "planet":0,
                 "type": "build_at_existing_unit",
@@ -298,7 +298,7 @@
             },
             {
                 "name": "reward2",
-                "id": 3,
+                "id": 11,
                 "delay": 0,
                 "planet":0,
                 "type": "build_at_existing_unit",
@@ -309,7 +309,7 @@
             },
             {
                 "name": "win",
-                "id": 4,
+                "id": 12,
                 "delay": 0,
                 "planet":0,
                 "type": "kill_all_invincible_ai"
