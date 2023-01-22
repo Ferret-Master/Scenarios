@@ -1,7 +1,7 @@
 {
     "name":"Assault Loadout",
     "image":"assault",
-    "description":"<center>A t1 focused tank loadout</center><br><li>Basic vehicle factory cooldown reduced from 4 → 0.5 <br><li>T1 combat vehicle costs reduced by 20% <br><li>T1 combat vehicle speed increased by 2 <br><li>Spinners can target land at 50% damage <br><li>Stryker fire rate doubled <br><li>Inferno range increased 20 → 50 </li><br><li>Drifter weapon changed to a low arc and lands as a spark shot </li><br><li>Ant damage increased 84 → 100 and health increased 250 → 300 </li><br><li class = 'negativeChange'>T2 cost increased by 50%</li><br><li class = 'negativeChange'>You lose access to advanced bots and air</li>",
+    "description":"<center>A T1 focused tank loadout</center><br><li>Basic vehicle factory cooldown reduced from 4 → 0.5 <br><li>T1 combat vehicle costs reduced by 20% <br><li>T1 combat vehicle speed increased by 2 <br><li>Spinners can target land at 50% damage <br><li>Stryker fire rate doubled <br><li>Inferno range increased 20 → 50 </li><li>Drifter weapon changed to a low arc and lands as a spark shot </li><li>Ant damage increased 84 → 100 and health increased 250 → 300 </li><br><li class = 'negativeChange'>T2 cost increased by 50%</li><li class = 'negativeChange'>You lose access to advanced bots and air</li>",
     "locked":["//pa/units/land/bot_factory_adv/bot_factory_adv.json","/pa/units/air/air_factory_adv/air_factory_adv.json"],
     "replace":[
         [
