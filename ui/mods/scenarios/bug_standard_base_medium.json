@@ -1,6 +1,6 @@
 {
     "name": "Bug Hive Mode Normal",
-    "description": "A medium version of hive mode. You start with units and a control tower(zapper) that prevents bugs from spawning near you. The hive will grow over time if not stopped. <br><br> don't spawn directly on metal",
+    "description": "A medium version of hive mode. You start with units and a control tower(zapper) that prevents bugs from spawning near you. The hive will grow over time if not stopped. <br><br> <div style = 'color:red'>don't spawn directly on metal</div>",
     "setup":"There needs to be an AI in the last lobby slot. this AI needs to have the Bug Mode AI Commander selected for it and set to IDLE difficulty. This mode should only be played on single planet maps",
     "aiComRequired":true,
     "aiCommander":"/pa/units/commanders/scenario_ai_invincible_com/scenario_ai_invincible_com.json",
@@ -272,7 +272,7 @@
                 "type": "build_at_existing_unit",
                 "special":"unit type",
                 "unitType":"UNITTYPE_Commander",
-                "newUnitName":[["/pa/units/land/fabrication_vehicle/fabrication_vehicle.json",3],["/pa/units/land/control_tower/control_tower.json",1],["/pa/units/land/energy_plant/energy_plant.json",2]]
+                "newUnitName":[["/pa/units/land/fabrication_vehicle/fabrication_vehicle.json",1],["/pa/units/land/control_tower/control_tower.json",1]]
                 
             },
             {

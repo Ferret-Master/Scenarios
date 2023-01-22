@@ -1,6 +1,6 @@
 {
     "name": "Bug Horde Expert",
-    "description": "A expert variation of bug wave defense. You start with units and a control tower(zapper) that prevents bugs from spawning near you. exponentially larger waves of bugs will assault you over time. <br><br> don't spawn directly on metal",
+    "description": "A expert variation of bug wave defense. You start with units and a control tower(zapper) that prevents bugs from spawning near you. exponentially larger waves of bugs will assault you over time. <br><br> <div style = 'color:red'>don't spawn directly on metal</div>",
     "setup":"There needs to be an AI in the last lobby slot. this AI needs to have the Bug Mode AI Commander selected for it and set to IDLE difficulty. This mode should only be played on single planet maps",
     "aiComRequired":true,
     "aiCommander":"/pa/units/commanders/scenario_ai_invincible_com/scenario_ai_invincible_com.json",
