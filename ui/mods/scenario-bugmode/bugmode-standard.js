@@ -544,7 +544,7 @@ model.objectiveCheckFunctions["bug_mode_base"] = function (waveObject){
     waveObject.lastCalled = model.scenarioModel.RealTimeSinceLanding;
     if(bug_standard.dontSpawnPoints.length<1 && bug_standard.startComplete == false){bug_standard.updateDontSpawnPoints();return 10}
     if(bug_standard.startComplete == false && model.scenarioModel.RealTimeSinceLanding <5){bug_standard.updateDontSpawnPoints()}
-    if(bug_standard.creepPoints.length<1 && bug_standard.startComplete == false && model.scenarioModel.RealTimeSinceLanding > 5){bug_standard.updateDontSpawnPoints();bug_standard.spawnStartingBugBase(2);_.delay(bug_standard.spawnSpire(1));return 10}
+    if(bug_standard.creepPoints.length<1 && bug_standard.startComplete == false && model.scenarioModel.RealTimeSinceLanding > 5){bug_standard.updateDontSpawnPoints();bug_standard.spawnStartingBugBase(2);_.delay(bug_standard.spawnSpire(5000));return 10}
     if(bug_standard.creepPoints.length<1 && bug_standard.startComplete == true && model.scenarioModel.RealTimeSinceLanding > 5){bug_standard.updateDontSpawnPoints(); bug_standard.updateHiveAndCreepPoints();return 10}
     if(bug_standard.hivePointsAndTypes.length <1  && model.scenarioModel.RealTimeSinceLanding > 100){model.triggerFunctions["kill_all_invincible_ai"]({})}//if all creep and hives have been defeated kill the bug ai
     return 10;//dummy value since progress is not timed based directly
