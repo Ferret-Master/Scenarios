@@ -1,5 +1,5 @@
 {
-    "name": "Support Loadout",
+    "name": "Support",
     "image":"support",
     "description": "<center>A loadout designed around helping your team anywhere on the map</center><br><li>Lobs have massive range and make dox at normal cost<br><li>Heavily Buffed Dox <br><li>Slammers can teleport <br><li>basic combat fabs can teleport themselves and surrounding t1 bots<br><li>Nuke replaced with cheaper less powerful version, great for killing hordes but does not damage buildings<br><br><li  class = 'negativeChange'>You lose access to t2 vehicles and t2 air</li>",
     "locked": [

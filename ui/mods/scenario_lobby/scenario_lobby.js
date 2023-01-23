@@ -527,7 +527,20 @@ model.setPlayerLoadout = function(playerName, loadoutName){
  
 }
 
+var playersInLobby = [];
+
 model.populatePlayerLoadouts = function(){
+    playersInLobby = [];
+    for(i in model.armies()){
+        for(j in model.armies()[i].slots()){
+    
+           playersInLobby.push(model.armies()[i].slots()[j].playerName())
+    
+        }
+    
+    }
+
+
 
     $("#playerLoadoutTable")[0].innerHTML = "";
     var playerLoadouts = model.playerLoadouts;
@@ -537,8 +550,10 @@ model.populatePlayerLoadouts = function(){
      $.each(playerKeys, function(playerKey){
         var chosenLoadout = playerLoadouts[playerKeys[playerKey]];
         var loadoutName = loadoutNameKeyMap[chosenLoadout];
-        $("#playerLoadoutTable").append('<tr><td class = "playerCellName">'+playerKeys[playerKey]+':</td>><td class = "loadoutCellName">'+loadoutName+'</td></tr>')
-     })
+        if(_.contains(playersInLobby, playerKeys[playerKey])){
+            $("#playerLoadoutTable").append('<tr><td class = "playerCellName">'+playerKeys[playerKey]+':</td>><td class = "loadoutCellName">'+loadoutName+'</td></tr>')
+        } 
+    })
 }
 
 var scenarioHandler = function(msg)
