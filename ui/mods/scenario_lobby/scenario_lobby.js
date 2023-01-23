@@ -173,7 +173,7 @@ var populateScenarios = function() {
                        
                     }
                    
-                    console.log(importedScenarioCSS)
+                
                  
                     if(scenarioFilename == defaultOrLoaded){
         
@@ -207,7 +207,7 @@ var populateScenarios = function() {
                         $(scenarioSelect).append(defaultOrLoaded)
                     
                         $.each(loadedScenarios, function(scenarioIndex, scenario) {
-                            console.log(scenario)
+                     
                             $(scenarioSelect).append(scenario);
                         });
                         scenarioSelect.dataset.bind = "enable: canChangeSettings, selectPicker: selectedScenario";
@@ -219,6 +219,7 @@ var populateScenarios = function() {
     });
 }
 var lastLoadedLoadout = undefined;
+var loadoutNameKeyMap = {};
 var populateLoadouts = function(loadoutName) {
     if(loadoutName == "clear"){
         $("#loadout-panel").remove()
@@ -227,6 +228,7 @@ var populateLoadouts = function(loadoutName) {
         return
     } 
     if(lastLoadedLoadout == loadoutName){return}
+    if(loadoutName == "" || loadoutName == undefined){return}
     else{lastLoadedLoadout = loadoutName}
 
     $("#loadout-panel").remove()
@@ -237,12 +239,12 @@ var populateLoadouts = function(loadoutName) {
         $("#loadout-picker")[0] = '<select class="form-control loadout_picker" id="loadout-picker" onchange="model.setLoadout(this.value)"></select>'
         var loadoutSelect = $("#loadout-picker")[0];
 
-        console.log(importedLoadoutList)
+       
         var defaultOrLoaded = importedLoadoutList.default;
         if(model.selectedLoadout() !== -1){defaultOrLoaded = model.selectedLoadout()}
-        console.log(defaultOrLoaded)
+   
         $.each(importedLoadoutList.loadouts, function(i, loadoutFilename) {
-            console.log("ran loadout: ",loadoutFilename)
+        
             $.getJSON('coui:/mods/loadouts/' + loadoutFilename + '.json')
                 .done(function(importedLoadout) {
                     if(defaultOrLoaded !== loadoutFilename){
@@ -266,10 +268,11 @@ var populateLoadouts = function(loadoutName) {
                     console.error("Failed to import scenario:", loadoutFilename);
                 })
                 .always(function(importedLoadout) {
+                    loadoutNameKeyMap[loadoutFilename] = importedLoadout.name;
                     if (++loadoutListItemIndex === importedLoadoutList.loadouts.length) {
 
                         $.each(loadedLoadouts, function(loadoutIndex, loadout) {
-                            console.log("appending loadout")
+                          
                             $(loadoutSelect).append(loadout);
                         });
                    
@@ -281,7 +284,7 @@ var populateLoadouts = function(loadoutName) {
                         ko.applyBindings(model, loadoutSelect);
                     }
                 });
-                console.log(loadedLoadouts)
+              
         });
         
         _.delay(model.setLoadout,1000, defaultOrLoaded);
@@ -325,7 +328,11 @@ function setAICommanders(commander){
 
 //there may be issues with people being unreadied, I know that altering the ai's commander does that, so need to check things like that before re setting them
 model.setScenario = function(scenarioFilename) {
+    if(scenarioFilename == -1){return}
     if (scenarioFilename == "none") {
+
+            
+        $("#scenario-picker")[0].value = "none";
         $("#scenario-picker")[0].style.color = "cyan"
         populateLoadouts("clear")
         $("#scenarioFilenameWrapper").hide();
@@ -335,6 +342,8 @@ model.setScenario = function(scenarioFilename) {
         $.getJSON('coui:/mods/scenarios/' + scenarioFilename + '.json').then(function(importedScenario) {
             // Sets all ai's commanders to the selected com upon scenario load if they are not already
             //console.log(importedScenario.style !== undefined)
+           
+            $("#scenario-picker")[0].value = scenarioFilename;
             if(importedScenario.style !== undefined){
                 $("#scenario-picker")[0].style.color = importedScenario.style.color;
              
@@ -404,8 +413,7 @@ if(model.selectedScenario() !== -1){
 }
 
 model.setLoadout = function(loadoutFilename){
-    console.log("set loadout ran")
-    console.log(loadoutFilename)
+   
     if (loadoutFilename == "none") {
         $("#loadoutImage").hide();
         $("#loadoutFilenameWrapper").hide();
@@ -414,9 +422,9 @@ model.setLoadout = function(loadoutFilename){
     } else {
         $.getJSON('coui:/mods/loadouts/' + loadoutFilename + '.json').then(function(importedloadout) {
             // Sets all ai's commanders to the selected com upon loadout load if they are not already
-           
+            model.alertChosenLoadout()
           
-           console.log(importedloadout)
+          
             
             $("#loadoutFilenameWrapper").show();
             $("#loadoutFilename").text(loadoutFilename);
@@ -447,7 +455,7 @@ model.setLoadout = function(loadoutFilename){
 
 model.commanderPrep =function(){
     var modeActive = model.annihilationModeShow()
-    console.log("running")
+
     if(modeActive == true){
 
         model.send_message('update_commander',
@@ -499,6 +507,40 @@ model.updatePlayersScenario = function(){
     model.send_message("json_message", data);
 }
 
+model.alertChosenLoadout = function(){
+    var data  = {};
+    data.identifier = scenariosIdentifier;
+    data.chosenLoadout = model.selectedLoadout();
+    data.playerLobbyName = model.displayName()
+    data.type = "alertLoadout"
+    model.send_message("json_message", data);
+}
+
+model.playerLoadouts = {};
+
+model.setPlayerLoadout = function(playerName, loadoutName){
+    console.log("setting loadouts with "+playerName+"and "+loadoutName)
+    if(model.playerLoadouts[playerName] == loadoutName){return}
+   
+    model.playerLoadouts[playerName] = loadoutName;
+    model.populatePlayerLoadouts();
+ 
+}
+
+model.populatePlayerLoadouts = function(){
+
+    $("#playerLoadoutTable")[0].innerHTML = "";
+    var playerLoadouts = model.playerLoadouts;
+    if(model.playerLoadouts == undefined){return}
+    var playerKeys = _.keys(playerLoadouts);
+    console.log(playerKeys)
+     $.each(playerKeys, function(playerKey){
+        var chosenLoadout = playerLoadouts[playerKeys[playerKey]];
+        var loadoutName = loadoutNameKeyMap[chosenLoadout];
+        $("#playerLoadoutTable").append('<tr><td class = "playerCellName">'+playerKeys[playerKey]+':</td>><td class = "loadoutCellName">'+loadoutName+'</td></tr>')
+     })
+}
+
 var scenarioHandler = function(msg)
 {
     //console.log(msg)
@@ -518,6 +560,9 @@ var scenarioHandler = function(msg)
             model.updatePlayersScenario();
 
             break;
+        case 'alertLoadout':
+            model.setPlayerLoadout(data.playerLobbyName, data.chosenLoadout)
+        break;
 
 // ignore our own messages
         case 'updateScenario':
@@ -535,6 +580,9 @@ var scenarioHandler = function(msg)
         switch (data.type)
         {
 // host is sending scenario to players
+        case 'alertLoadout':
+            model.setPlayerLoadout(data.playerLobbyName, data.chosenLoadout)
+        break;
         case 'updateScenario':
             // console.log("updating scenario")
             // console.log(data.chosenScenario)
@@ -561,7 +609,7 @@ function loopedScenarioUpdate(){
     _.delay(model.updateAi,500)
     if (model.isGameCreator() && model.slotsAreEmpty() == false && model.selectedScenario() !== -1 && model.sandbox() == false){model.toggleSandbox()}
 
-    _.delay(loopedScenarioUpdate, 10000)
+    _.delay(loopedScenarioUpdate, 5000)
 
 }
 loopedScenarioUpdate()

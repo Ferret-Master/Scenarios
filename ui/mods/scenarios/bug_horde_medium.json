@@ -16,6 +16,28 @@
     "requireBuilders":true,
     "objectives": [
         {
+            "name": "spawn loadout",
+            "id":13,
+            "description": "sets up loadout",
+            "hidden":true,
+            "type": "timed",
+            "time":0,
+            "startingObjective": true,
+            "successTriggers": [
+        
+               "loadout"
+            ],
+            "failureTriggers": [
+                ""
+            ],
+            "successObjectives": [
+                ""
+            ],
+            "failureObjectives": [
+                ""
+            ]
+        },
+        {
             "name": "timed win",
             "id":1,
             "visible":true,
@@ -410,6 +432,17 @@
                 "planet":0,
                 "type": "kill_all_invincible_ai"
                
+            },
+            {
+                "name": "loadout",
+                "id": 14,
+                "delay": 0,
+                "planet":0,
+                "type": "loadout",
+                "special":"unit type",
+                "unitType":"UNITTYPE_Commander"
+             
+                
             }
         
     ]

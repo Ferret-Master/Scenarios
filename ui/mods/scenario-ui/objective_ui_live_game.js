@@ -188,20 +188,17 @@ $.get("coui://ui/mods/scenario-ui/objective_ui_live_game.html", function (html) 
     ko.applyBindings(model, $html[0]);
 });
       
-    
+    var initialTimesCalled = undefined;
     handlers.scenarioWave = function(payload) {
-     
-        
+        if(initialTimesCalled == undefined){initialTimesCalled = payload.timesCalled}
+        var wavesSkipped = (Math.floor(initialTimesCalled/payload.waveInterval))
+        if(wavesSkipped < 0){wavesSkipped *= -1}
+        if(payload.timesCalled > 0){wavesSkipped = 0}
+        else{payload.waveInterval = (payload.waveInterval*wavesSkipped + payload.waveInterval)}
         var displayedSecondsSinceLanding = payload.waveInterval - Math.round(payload.elapsedTime%payload.waveInterval);
-
-        //only affects wave mode and commented out sections not working with changing wave times
-        
-        // if(model.waveTime == null){model.waveTime = payload.waveInterval}
-        // if(model.waveTime>payload.waveInterval){model.waveTime = payload.waveInterval}
-        // console.log(payload.waveTime)
-       
-        //if(model.waveTime<payload.waveInterval){return} 
-       
+       console.log(displayedSecondsSinceLanding)
+        //if(payload.timesCalled < 0){displayedSecondsSinceLanding += payload.waveInterval - Math.round(payload.waveInterval);}
+      
         if(displayedSecondsSinceLanding < 10){displayedSecondsSinceLanding =  "0"+displayedSecondsSinceLanding}
         $("#waveTime").text(displayedSecondsSinceLanding)
        

@@ -15,5 +15,42 @@
     "winCondition": "Default",
     "requireBuilders":true,
     "objectives": [
-    ]
+        {
+            "name": "spawn loadout",
+            "id":1,
+            "description": "sets up loadout",
+            "hidden":true,
+            "type": "timed",
+            "time":0,
+            "startingObjective": true,
+            "successTriggers": [
+        
+               "loadout"
+            ],
+            "failureTriggers": [
+                ""
+            ],
+            "successObjectives": [
+                ""
+            ],
+            "failureObjectives": [
+                ""
+            ]
+        }
+    ],
+    "triggers": [
+ 
+        
+        {
+            "name": "loadout",
+            "id": 2,
+            "delay": 0,
+            "planet":0,
+            "type": "loadout",
+            "special":"unit type",
+            "unitType":"UNITTYPE_Commander"
+         
+            
+        }
+]
 }

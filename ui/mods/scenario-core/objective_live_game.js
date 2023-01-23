@@ -85,7 +85,7 @@ if(objectiveObject.activeEffect !== true && objectiveObject.effect !== undefined
 if(objectiveObject.waveInterval!==undefined){
    
     
-    api.Panel.message("players", 'scenarioWave',{waveInterval:objectiveObject.waveInterval, elapsedTime: model.scenarioModel.RealTimeSinceLanding})
+    api.Panel.message("players", 'scenarioWave',{timesCalled:objectiveObject.timesCalled, waveInterval:objectiveObject.waveInterval, elapsedTime: model.scenarioModel.RealTimeSinceLanding})
         
         
 }

@@ -538,8 +538,6 @@ model.objectiveCheckFunctions["bug_mode_base"] = function (waveObject){
             
             bug_standard.spawnHiveWave(bug_standard.hivePointsAndTypes,1, waveObject);
         },3000)
-      
-
     }
     waveObject.lastCalled = model.scenarioModel.RealTimeSinceLanding;
     if(bug_standard.dontSpawnPoints.length<1 && bug_standard.startComplete == false){bug_standard.updateDontSpawnPoints();return 10}
