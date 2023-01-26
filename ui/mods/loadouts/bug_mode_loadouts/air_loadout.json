@@ -1,7 +1,7 @@
 {
     "name":"Air",
-    "description":"<center>An air based loadout</center><br><li>non titan air hp doubled <br><li>air fab hp doubled(4x overall) <br><li>Icarus range, vision, and health doubled(quad overall)<br><li>bombers aoe increased 1.5x<br><li>Hornet weapon replaced with missile barrage</li><br><li class = 'negativeChange'>You lose access to advanced bot and vehicles</li><li class = 'negativeChange'>You lose access to basic bot and vehicle fabs</li>",
-    "locked":["/pa/units/land/vehicle_factory/vehicle_factory.json","/pa/units/land/vehicle_factory_adv/vehicle_factory_adv.json","/pa/units/land/fabrication_vehicle/fabrication_vehicle.json","/pa/units/land/fabrication_bot/fabrication_bot.json"],
+    "description":"<center>An air based loadout</center><br><li>non titan air hp doubled <br><li>air fab hp 4x(8x overall) <br><li>Icarus range, vision, and health doubled(quad overall)<br><li>bombers aoe increased 1.5x<br><li>Hornet weapon replaced with missile barrage</li><br><li class = 'negativeChange'>You lose access to advanced bot and vehicles</li>",
+    "locked":["/pa/units/land/vehicle_factory/vehicle_factory.json","/pa/units/land/vehicle_factory_adv/vehicle_factory_adv.json"],
     "image":"air",
     "replace":[
         [
