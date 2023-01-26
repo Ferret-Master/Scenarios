@@ -573,6 +573,7 @@ var scenarioHandler = function(msg)
         case 'new':
 
             model.updatePlayersScenario();
+            model.alertChosenLoadout();
 
             break;
         case 'alertLoadout':
@@ -597,6 +598,11 @@ var scenarioHandler = function(msg)
 // host is sending scenario to players
         case 'alertLoadout':
             model.setPlayerLoadout(data.playerLobbyName, data.chosenLoadout)
+        break;
+        case 'new':
+
+        model.alertChosenLoadout();
+
         break;
         case 'updateScenario':
             // console.log("updating scenario")
