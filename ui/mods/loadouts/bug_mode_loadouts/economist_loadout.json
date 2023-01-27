@@ -4,6 +4,7 @@
     "image":"economist",
     "replace":[
         [
+        "/pa/units/air/solar_drone/solar_drone.json",
         "/pa/units/air/fabrication_aircraft_adv/fabrication_aircraft_adv.json",
         "/pa/units/land/fabrication_vehicle_adv/fabrication_vehicle_adv.json",
         "/pa/units/land/orbital_fabrication_bot/orbital_fabrication_bot.json",
@@ -17,6 +18,7 @@
         "/pa/units/land/energy_plant_adv/energy_plant_adv.json"
         ],
         [
+            "/pa/units/loadouts/economist/solar_drone/solar_drone.json",
             "/pa/units/loadouts/economist/fabs/advanced_air_fab.json",
             "/pa/units/loadouts/economist/fabs/advanced_vehicle_fab.json",
             "/pa/units/loadouts/economist/fabs/orbital_fab.json",
