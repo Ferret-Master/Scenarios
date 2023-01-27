@@ -1,10 +1,12 @@
 {
     "name":"Economist",
-    "description":"<center>An economic loadout</center><br><li>T2 Eco is slightly cheaper<br><li>All fabs consume 25% less power",
+    "description":"<center>An economy/growth focussed loadout</center><br><li>T2 Eco is slightly cheaper<br><li>All fabs consume 25% less power and have 2 extra move speed<br><li>Can make jigs anywhere<br><li>Icarus power gen increased 175 -> 200<br><li>Basic metal extractor is 20% cheaper<br>",
     "image":"economist",
     "replace":[
         [
         "/pa/units/air/solar_drone/solar_drone.json",
+        "/pa/units/land/metal_extractor/metal_extractor.json",
+        "/pa/units/orbital/mining_platform/mining_platform.json",
         "/pa/units/air/fabrication_aircraft_adv/fabrication_aircraft_adv.json",
         "/pa/units/land/fabrication_vehicle_adv/fabrication_vehicle_adv.json",
         "/pa/units/land/orbital_fabrication_bot/orbital_fabrication_bot.json",
@@ -19,6 +21,8 @@
         ],
         [
             "/pa/units/loadouts/economist/solar_drone/solar_drone.json",
+            "/pa/units/loadouts/economist/metal_extractor/metal_extractor.json",
+            "/pa/units/loadouts/economist/mining_platform/mining_platform.json",
             "/pa/units/loadouts/economist/fabs/advanced_air_fab.json",
             "/pa/units/loadouts/economist/fabs/advanced_vehicle_fab.json",
             "/pa/units/loadouts/economist/fabs/orbital_fab.json",
