@@ -220,6 +220,7 @@ var populateScenarios = function() {
 }
 var lastLoadedLoadout = undefined;
 var loadoutNameKeyMap = {};
+loadoutNameKeyMap["none"] = "None"
 var populateLoadouts = function(loadoutName) {
     if(loadoutName == "clear"){
         $("#loadout-panel").remove()
@@ -415,6 +416,7 @@ if(model.selectedScenario() !== -1){
 model.setLoadout = function(loadoutFilename){
    
     if (loadoutFilename == "none") {
+        model.alertChosenLoadout()
         $("#loadoutImage").hide();
         $("#loadoutFilenameWrapper").hide();
         $("#loadoutSetupWrapper").hide();
@@ -570,7 +572,7 @@ var scenarioHandler = function(msg)
         {
 
 // new player needs scenario
-        case 'new':
+        case 'justJoined':
 
             model.updatePlayersScenario();
             model.alertChosenLoadout();
@@ -599,7 +601,7 @@ var scenarioHandler = function(msg)
         case 'alertLoadout':
             model.setPlayerLoadout(data.playerLobbyName, data.chosenLoadout)
         break;
-        case 'new':
+        case 'justJoined':
 
         model.alertChosenLoadout();
 
@@ -633,4 +635,15 @@ function loopedScenarioUpdate(){
     _.delay(loopedScenarioUpdate, 5000)
 
 }
+
+model.justJoinedUpdate = function(){
+    var data  = {};
+    data.identifier = scenariosIdentifier;
+    data.type = "justJoined"
+    model.send_message("json_message", data);
+}
+
+
 loopedScenarioUpdate()
+
+_.delay(model.justJoinedUpdate,3000);
