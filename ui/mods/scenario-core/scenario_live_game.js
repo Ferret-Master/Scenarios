@@ -207,7 +207,7 @@ cursor_y = event.pageY;
 }
 
 model.setupScenario = function(scenarioJSON){ // sets up necessary components for the scenario
-
+  //if(model.isSpectator() == true){return}
     var planets = model.planetListState()
     console.log("setting up scenario")
 
