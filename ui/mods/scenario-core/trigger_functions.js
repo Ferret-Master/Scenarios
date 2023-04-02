@@ -111,7 +111,7 @@ model.triggerFunctions["build_at_existing_unit"] = function(triggerObject){
 
     players = model.players()
     for(var i = 0;i<players.length;i++){
-        if(players[i].id == model.armyId && players[i].slots.length>1){
+        if(players[i].id == model.armyId() && players[i].slots.length>1){
            if(model.playerName() !== players[i].slots[0]){return}
         } 
     }
@@ -152,7 +152,7 @@ model.triggerFunctions["build_at_existing_unit"] = function(triggerObject){
         var armyPromise = model.playerArmy(playerIndex,triggerObject.planet,"",true,unitTypeToBuildAt)
         planet = triggerObject.planet
         armyPromise.then(function(result){
-            console.log(result)
+     
             for(unitIndex in result){
                 unit = result[unitIndex]
                 if(unit !== undefined){if(unit == undefined){continue} if(unit.built_frac == undefined){
@@ -160,7 +160,7 @@ model.triggerFunctions["build_at_existing_unit"] = function(triggerObject){
                 }}
               
             }
-            console.log(locations)
+     
             for(locationIndex in locations){
                 for(unitNameIndex in unitToBuild){
                     var unitArray = unitToBuild[unitNameIndex]
@@ -173,14 +173,84 @@ model.triggerFunctions["build_at_existing_unit"] = function(triggerObject){
                 }
                
             }
-
-
         })
     }
     
     //api.build_preset.exactPreFab(avatarId,preset,playerIndex)
 
 
+
+}
+
+model.triggerFunctions["randomReward"] = function(triggerObject){//spawns a unit in on the focussed planet that destroys every enemy unit on it, wipe system varient would move it to each planet.
+
+    
+    $.getJSON('coui:/mods/rewards/' + triggerObject.rewardPath + '.json').then(function(importedReward) {
+
+    
+    var rewardUnits = _.keys(importedReward.unitValues)
+    var randomNum = Math.random()
+
+    var totalChance = 0
+    var pickedReward = false;
+    
+    for(rewardIndex in rewardUnits){
+        if(pickedReward == true){continue}
+        
+        var rewardChance = rewardObject.unitValues[rewardUnits[rewardIndex]].rewardChance
+        totalChance += rewardChance
+        
+        if(randomNum<=totalChance){
+
+            rewardUnits = rewardObject.unitValues[rewardUnits[rewardIndex]]
+            pickedReward = true
+            
+        }
+    }
+    
+    if(pickedReward == false){rewardUnits = rewardObject.unitValues[rewardUnits[0]]}
+    var unitsToBeSpawned = [];
+    for(groupIndex in rewardUnits){//for each unit group in the reward
+        if(groupIndex == "rewardChance"){continue}
+        
+        var unitGroupObject = rewardUnits[groupIndex]
+        var groupValue = triggerObject.value/unitGroupObject.value 
+     
+        for(unitIndex in unitGroupObject.units){// for each unit in the group
+            var unit = unitGroupObject.units[unitIndex]
+            var unitValue = unit[1]
+            var unitName = unit[0]
+            var unitScalingNumber = unit[2]
+            var unitRatio = unitScalingNumber/groupValue
+            
+            //if(unitGroupObject.units.length>1){unitRatio = unitRatio + (-0.1 * Math.pow((0.015*(groupValue/unitValue)),2)) + 0.004*groupValue}
+            if(unitRatio>1){unitRatio = 1}
+            if(unitRatio<0){unitRatio = 0}
+            
+            var unitsNeeded = unitRatio*groupValue/unitValue
+            unitsNeeded = Math.floor(unitsNeeded)
+            
+            console.log("Rewarding "+unitsNeeded+" "+unitName)
+
+            for(var points = 0; points<unitsNeeded;points++){// queuing up many random movement commands, move doesnt have the pausing of patrol
+                if(groupValue<0){ continue}
+                unitsToBeSpawned.push(unitName)
+                
+                groupValue -= unitValue
+                    
+                }
+
+        }
+
+    }
+
+    triggerObject.newUnitName = importedloadout.units;
+    model.triggerFunctions["build_at_existing_unit"](triggerObject);
+    })
+    
+       
+
+    return;
 
 }
 
